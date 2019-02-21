@@ -2,11 +2,12 @@ import rhino3dm
 import json
 import requests
 
-__version__ = '0.5.0'
+__version__ = '0.7.0'
 
 url = "https://compute.rhino3d.com/"
 authToken = None
 stopat = 0
+
 
 def ComputeFetch(endpoint, arglist) :
     class __Rhino3dmEncoder(json.JSONEncoder):
@@ -31,7 +32,7 @@ def ComputeFetch(endpoint, arglist) :
     return r.json()
 
 
-def PythonEvaluate(script, input):
+def PythonEvaluate(script, input_, output_names):
     """
     Evaluate a python script on the compute server. The script can reference an
     `input` parameter which is passed as a dictionary. The script also has access
@@ -39,15 +40,15 @@ def PythonEvaluate(script, input):
 
     Args:
         script (str): the python script to evaluate
-        input (dict): dictionary of data passed to the server for use by the script as an input variable
-
+        input_ (dict): dictionary of data passed to the server for use by the script as an input variable
+        output_names (list): list of strings defining which variables in the script to return
     Returns:
         dict: The script has access to an output dict variable that it can fill with values.
         This information is returned from the server to the client.
     """
-    encodedInput = rhino3dm.ArchivableDictionary.EncodeDict(input)
+    encodedInput = rhino3dm.ArchivableDictionary.EncodeDict(input_)
     url = "rhino/python/evaluate"
-    args = [script, json.dumps(encodedInput)]
+    args = [script, json.dumps(encodedInput), output_names]
     response = ComputeFetch(url, args)
     output = rhino3dm.ArchivableDictionary.DecodeDict(json.loads(response))
     return output
