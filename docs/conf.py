@@ -26,7 +26,7 @@ author = u'Robert McNeel & Associates'
 # The short X.Y version
 version = u''
 # The full version, including alpha/beta/rc tags
-release = u'0.5.0'
+release = u'0.8.0'
 
 
 # -- General configuration ---------------------------------------------------
