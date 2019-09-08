@@ -342,7 +342,7 @@ Brep
    :rtype: rhino3dm.Brep[]
 .. py:function:: CreateFromSweep(rail, shape, closed, tolerance, multiple=False)
 
-   Sweep1 function tht fits a surface through a profile curve that define the surface cross-sections
+   Sweep1 function that fits a surface through a profile curve that define the surface cross-sections
    and one curve that defines a surface edge.
 
    :param rhino3dm.Curve rail: Rail to sweep shapes along
@@ -355,7 +355,7 @@ Brep
    :rtype: rhino3dm.Brep[]
 .. py:function:: CreateFromSweep1(rail, shapes, closed, tolerance, multiple=False)
 
-   Sweep1 function tht fits a surface through a profile curve that define the surface cross-sections
+   Sweep1 function that fits a surface through profile curves that define the surface cross-sections
    and one curve that defines a surface edge.
 
    :param rhino3dm.Curve rail: Rail to sweep shapes along
@@ -366,37 +366,9 @@ Brep
 
    :return: Array of Brep sweep results
    :rtype: rhino3dm.Brep[]
-.. py:function:: CreateFromSweep2(rail1, rail2, shape, closed, tolerance, multiple=False)
-
-   General 2 rail sweep. If you are not producing the sweep results that you are after, then
-   use the SweepTwoRail class with options to generate the swept geometry
-
-   :param rhino3dm.Curve rail1: Rail to sweep shapes along
-   :param rhino3dm.Curve rail2: Rail to sweep shapes along
-   :param rhino3dm.Curve shape: Shape curve
-   :param bool closed: Only matters if shape is closed
-   :param float tolerance: Tolerance for fitting surface and rails
-   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
-
-   :return: Array of Brep sweep results
-   :rtype: rhino3dm.Brep[]
-.. py:function:: CreateFromSweep3(rail1, rail2, shapes, closed, tolerance, multiple=False)
-
-   General 2 rail sweep. If you are not producing the sweep results that you are after, then
-   use the SweepTwoRail class with options to generate the swept geometry
-
-   :param rhino3dm.Curve rail1: Rail to sweep shapes along
-   :param rhino3dm.Curve rail2: Rail to sweep shapes along
-   :param list[rhino3dm.Curve] shapes: Shape curves
-   :param bool closed: Only matters if shapes are closed
-   :param float tolerance: Tolerance for fitting surface and rails
-   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
-
-   :return: Array of Brep sweep results
-   :rtype: rhino3dm.Brep[]
 .. py:function:: CreateFromSweepSegmented(rail, shape, closed, tolerance, multiple=False)
 
-   Sweep1 function tht fits a surface through a profile curve that define the surface cross-sections
+   Sweep1 function that fits a surface through a profile curve that define the surface cross-sections
    and one curve that defines a surface edge. The Segmented version breaks the rail at curvature kinks
    and sweeps each piece separately, then put the results together into a Brep.
 
@@ -410,7 +382,7 @@ Brep
    :rtype: rhino3dm.Brep[]
 .. py:function:: CreateFromSweepSegmented1(rail, shapes, closed, tolerance, multiple=False)
 
-   Sweep1 function tht fits a surface through a series of profile curves that define the surface cross-sections
+   Sweep1 function that fits a surface through a series of profile curves that define the surface cross-sections
    and one curve that defines a surface edge. The Segmented version breaks the rail at curvature kinks
    and sweeps each piece separately, then put the results together into a Brep.
 
@@ -422,9 +394,57 @@ Brep
 
    :return: Array of Brep sweep results
    :rtype: rhino3dm.Brep[]
+.. py:function:: CreateFromSweep2(rail1, rail2, shape, closed, tolerance, multiple=False)
+
+   General 2 rail sweep. If you are not producing the sweep results that you are after, then
+   use the SweepTwoRail class with options to generate the swept geometry.
+
+   :param rhino3dm.Curve rail1: Rail to sweep shapes along
+   :param rhino3dm.Curve rail2: Rail to sweep shapes along
+   :param rhino3dm.Curve shape: Shape curve
+   :param bool closed: Only matters if shape is closed
+   :param float tolerance: Tolerance for fitting surface and rails
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Array of Brep sweep results
+   :rtype: rhino3dm.Brep[]
+.. py:function:: CreateFromSweep3(rail1, rail2, shapes, closed, tolerance, multiple=False)
+
+   General 2 rail sweep. If you are not producing the sweep results that you are after, then
+   use the SweepTwoRail class with options to generate the swept geometry.
+
+   :param rhino3dm.Curve rail1: Rail to sweep shapes along
+   :param rhino3dm.Curve rail2: Rail to sweep shapes along
+   :param list[rhino3dm.Curve] shapes: Shape curves
+   :param bool closed: Only matters if shapes are closed
+   :param float tolerance: Tolerance for fitting surface and rails
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Array of Brep sweep results
+   :rtype: rhino3dm.Brep[]
+.. py:function:: CreateFromSweep4(rail1, rail2, shapes, start, end, closed, tolerance, rebuild, rebuildPointCount, refitTolerance, preserveHeight, multiple=False)
+
+   Sweep2 function that fits a surface through profile curves that define the surface cross-sections
+   and two curves that defines a surface edge.
+
+   :param rhino3dm.Curve rail1: Rail to sweep shapes along
+   :param rhino3dm.Curve rail2: Rail to sweep shapes along
+   :param list[rhino3dm.Curve] shapes: Shape curves
+   :param rhino3dm.Point3d start: Optional starting point of sweep. Use Point3d.Unset if you do not want to include a start point.
+   :param rhino3dm.Point3d end: Optional ending point of sweep. Use Point3d.Unset if you do not want to include an end point.
+   :param bool closed: Only matters if shapes are closed.
+   :param float tolerance: Tolerance for fitting surface and rails.
+   :param SweepRebuild rebuild: The rebuild style.
+   :param int rebuildPointCount: If rebuild == SweepRebuild.Rebuild, the number of points. Otherwise specify 0.
+   :param float refitTolerance: If rebuild == SweepRebuild.Refit, the refit tolerenace. Otherwise, specify 0.0
+   :param bool preserveHeight: Removes the association between the height scaling from the width scaling
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Array of Brep sweep results
+   :rtype: rhino3dm.Brep[]
 .. py:function:: CreateFromSweepInParts(rail1, rail2, shapes, rail_params, closed, tolerance, multiple=False)
 
-   Makes a 2 rail sweep.  Like CreateFromSweep but the result is split where parameterization along a rail changes abruptly
+   Makes a 2 rail sweep. Like CreateFromSweep but the result is split where parameterization along a rail changes abruptly.
 
    :param rhino3dm.Curve rail1: Rail to sweep shapes along
    :param rhino3dm.Curve rail2: Rail to sweep shapes along
@@ -463,6 +483,23 @@ Brep
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
    :return: array of breps on success
+   :rtype: rhino3dm.Brep[]
+.. py:function:: CreateFromTaperedExtrudeWithRef(curve, direction, distance, draftAngle, plane, tolerance, multiple=False)
+
+   Creates one or more Breps by extruding a curve a distance along an axis with draft angle.
+
+   :param rhino3dm.Curve curve: The curve to extrude.
+   :param rhino3dm.Vector3d direction: The extrusion direction.
+   :param float distance: The extrusion distance.
+   :param float draftAngle: The extrusion draft angle in radians.
+   :param rhino3dm.Plane plane: The end of the extrusion will be parallel to this plane, and "distance" from the plane's origin. \
+      The plane's origin is generally be a point on the curve. For planar curves, a natural choice for the \
+      plane's normal direction will be the normal direction of the curve's plane. In any case, \
+      plane.Normal = direction may make sense.
+   :param float tolerance: The intersecting and trimming tolerance.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: An array of Breps if successful.
    :rtype: rhino3dm.Brep[]
 .. py:function:: CreateBlendSurface(face0, edge0, domain0, rev0, continuity0, face1, edge1, domain1, rev1, continuity1, multiple=False)
 
@@ -784,6 +821,28 @@ Brep
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
    :return: An array of Brep results or None on failure.
+   :rtype: rhino3dm.Brep[]
+.. py:function:: CreateBooleanSplit(firstBrep, secondBrep, tolerance, multiple=False)
+
+   Splits shared areas of Breps and creates separate Breps from the shared and unshared parts.
+
+   :param rhino3dm.Brep firstBrep: The Brep to split.
+   :param rhino3dm.Brep secondBrep: The cutting Brep.
+   :param float tolerance: Tolerance to use for splitting operation. When in doubt, use the document's model absolute tolerance.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: An array of Brep if successful, an empty array on failure.
+   :rtype: rhino3dm.Brep[]
+.. py:function:: CreateBooleanSplit1(firstSet, secondSet, tolerance, multiple=False)
+
+   Splits shared areas of Breps and creates separate Breps from the shared and unshared parts.
+
+   :param list[rhino3dm.Brep] firstSet: The Breps to split.
+   :param list[rhino3dm.Brep] secondSet: The cutting Breps.
+   :param float tolerance: Tolerance to use for splitting operation. When in doubt, use the document's model absolute tolerance.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: An array of Brep if successful, an empty array on failure.
    :rtype: rhino3dm.Brep[]
 .. py:function:: CreateShell(brep, facesToRemove, distance, tolerance, multiple=False)
 

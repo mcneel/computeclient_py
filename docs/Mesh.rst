@@ -94,12 +94,38 @@ Mesh
    :rtype: rhino3dm.Mesh
 .. py:function:: CreateFromCylinder(cylinder, vertical, around, multiple=False)
 
-   Constructs a mesh cylinder
+   Constructs a capped mesh cylinder.
 
-   :param int vertical: Number of faces in the top-to-bottom direction
-   :param int around: Number of faces around the cylinder
+   :param int vertical: Number of faces in the top-to-bottom direction.
+   :param int around: Number of faces around the cylinder.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
+   :return: Returns a mesh cylinder if successful, None otherwise.
+   :rtype: rhino3dm.Mesh
+.. py:function:: CreateFromCylinder1(cylinder, vertical, around, capBottom, capTop, multiple=False)
+
+   Constructs a mesh cylinder.
+
+   :param int vertical: Number of faces in the top-to-bottom direction.
+   :param int around: Number of faces around the cylinder.
+   :param bool capBottom: If True end at Cylinder.Height1 should be capped.
+   :param bool capTop: If True end at Cylinder.Height2 should be capped.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Returns a mesh cylinder if successful, None otherwise.
+   :rtype: rhino3dm.Mesh
+.. py:function:: CreateFromCylinder2(cylinder, vertical, around, capBottom, capTop, quadCaps, multiple=False)
+
+   Constructs a mesh cylinder.
+
+   :param int vertical: Number of faces in the top-to-bottom direction.
+   :param int around: Number of faces around the cylinder.
+   :param bool capBottom: If True end at Cylinder.Height1 should be capped.
+   :param bool capTop: If True end at Cylinder.Height2 should be capped.
+   :param bool quadCaps: If True and it's possible to make quad caps, ie. around is even, then caps will have quad faces.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Returns a mesh cylinder if successful, None otherwise.
    :rtype: rhino3dm.Mesh
 .. py:function:: CreateFromCone(cone, vertical, around, multiple=False)
 
@@ -121,6 +147,29 @@ Mesh
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
    :return: A valid mesh if successful.
+   :rtype: rhino3dm.Mesh
+.. py:function:: CreateFromCone2(cone, vertical, around, solid, quadCaps, multiple=False)
+
+   Constructs a mesh cone.
+
+   :param int vertical: Number of faces in the top-to-bottom direction.
+   :param int around: Number of faces around the cone.
+   :param bool solid: If False the mesh will be open with no faces on the circular planar portion.
+   :param bool quadCaps: If True and it's possible to make quad caps, ie. around is even, then caps will have quad faces.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: A valid mesh if successful.
+   :rtype: rhino3dm.Mesh
+.. py:function:: CreateFromTorus(torus, vertical, around, multiple=False)
+
+   Constructs a mesh torus.
+
+   :param Torus torus: The torus.
+   :param int vertical: Number of faces in the top-to-bottom direction.
+   :param int around: Number of faces around the torus.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Returns a mesh torus if successful, None otherwise.
    :rtype: rhino3dm.Mesh
 .. py:function:: CreateFromPlanarBoundary(boundary, parameters, multiple=False)
 
@@ -204,6 +253,20 @@ Mesh
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
    :return: New mesh representing the surface
+   :rtype: rhino3dm.Mesh
+.. py:function:: CreateFromSubD(subd, displayDensity, multiple=False)
+
+   Create a mesh from a SubD limit surface
+
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :rtype: rhino3dm.Mesh
+.. py:function:: CreateFromSubDControlNet(subd, multiple=False)
+
+   Create a mesh from a SubD control net
+
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
    :rtype: rhino3dm.Mesh
 .. py:function:: CreatePatch(outerBoundary, angleToleranceRadians, pullbackSurface, innerBoundaryCurves, innerBothSideCurves, innerPoints, trimback, divisions, multiple=False)
 
@@ -715,6 +778,20 @@ Mesh
 
    :return: A new mesh on success, or None on failure.
    :rtype: rhino3dm.Mesh
+.. py:function:: Offset3(thisMesh, distance, solidify, direction, multiple=False)
+
+   Makes a new mesh with vertices offset a distance along the direction parameter.
+   Optionally, based on the value of solidify, adds the input mesh and a ribbon of faces along any naked edges.
+   If solidify is False it acts exactly as the Offset(distance) function. Returns list of wall faces, i.e. the
+   faces that connect original and offset mesh when solidified.
+
+   :param float distance: A distance value.
+   :param bool solidify: True if the mesh should be solidified.
+   :param rhino3dm.Vector3d direction: Direction of offset for all vertices.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: A new mesh on success, or None on failure.
+   :rtype: rhino3dm.Mesh
 .. py:function:: CollapseFacesByEdgeLength(thisMesh, bGreaterThan, edgeLength, multiple=False)
 
    Collapses multiple mesh faces, with greater/less than edge length, based on the principles
@@ -800,6 +877,88 @@ Mesh
 
    :return: A new mesh with soft edges.
    :rtype: rhino3dm.Mesh
+.. py:function:: QuadRemeshBrep(brep, parameters, multiple=False)
+
+   Create QuadRemesh from a Brep
+   Set Brep Face Mode by setting QuadRemeshParameters.PreserveMeshArrayEdgesMode
+
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :rtype: rhino3dm.Mesh
+.. py:function:: QuadRemeshBrep1(brep, parameters, guideCurves, multiple=False)
+
+   Create Quad Remesh from a Brep
+
+   :param rhino3dm.Brep brep: Set Brep Face Mode by setting QuadRemeshParameters.PreserveMeshArrayEdgesMode
+   :param list[rhino3dm.Curve] guideCurves: A curve array used to influence mesh face layout \
+      The curves should touch the input mesh \
+      Set Guide Curve Influence by using QuadRemeshParameters.GuideCurveInfluence
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :rtype: rhino3dm.Mesh
+.. py:function:: QuadRemeshBrepAsync(brep, parameters, progress, cancelToken, multiple=False)
+
+   Quad remesh this brep async
+
+   :param rhino3dm.Brep brep: Set Brep Face Mode by setting QuadRemeshParameters.PreserveMeshArrayEdgesMode
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :rtype: Task<Mesh>
+.. py:function:: QuadRemeshBrepAsync1(brep, parameters, guideCurves, progress, cancelToken, multiple=False)
+
+   Quad remesh this brep async
+
+   :param rhino3dm.Brep brep: Set Brep Face Mode by setting QuadRemeshParameters.PreserveMeshArrayEdgesMode
+   :param list[rhino3dm.Curve] guideCurves: A curve array used to influence mesh face layout \
+      The curves should touch the input mesh \
+      Set Guide Curve Influence by using QuadRemeshParameters.GuideCurveInfluence
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :rtype: Task<Mesh>
+.. py:function:: QuadRemesh(thisMesh, parameters, multiple=False)
+
+   Quad remesh this mesh
+
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :rtype: rhino3dm.Mesh
+.. py:function:: QuadRemesh1(thisMesh, parameters, guideCurves, multiple=False)
+
+   Quad remesh this mesh
+
+   :param list[rhino3dm.Curve] guideCurves: A curve array used to influence mesh face layout \
+      The curves should touch the input mesh \
+      Set Guide Curve Influence by using QuadRemeshParameters.GuideCurveInfluence
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :rtype: rhino3dm.Mesh
+.. py:function:: QuadRemeshAsync(thisMesh, parameters, progress, cancelToken, multiple=False)
+
+   Quad remesh this mesh async
+
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :rtype: Task<Mesh>
+.. py:function:: QuadRemeshAsync1(thisMesh, parameters, guideCurves, progress, cancelToken, multiple=False)
+
+   Quad remesh this mesh async
+
+   :param list[rhino3dm.Curve] guideCurves: A curve array used to influence mesh face layout \
+      The curves should touch the input mesh \
+      Set Guide Curve Influence by using QuadRemeshParameters.GuideCurveInfluence
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :rtype: Task<Mesh>
+.. py:function:: QuadRemeshAsync2(thisMesh, faceBlocks, parameters, guideCurves, progress, cancelToken, multiple=False)
+
+   Quad remesh this mesh async
+
+   :param list[rhino3dm.Curve] guideCurves: A curve array used to influence mesh face layout \
+      The curves should touch the input mesh \
+      Set Guide Curve Influence by using QuadRemeshParameters.GuideCurveInfluence
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :rtype: Task<Mesh>
 .. py:function:: Reduce(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, multiple=False)
 
    Reduce polygon count
@@ -813,7 +972,22 @@ Mesh
 
    :return: True if mesh is successfully reduced and False if mesh could not be reduced for some reason.
    :rtype: bool
-.. py:function:: Reduce1(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, cancelToken, progress, multiple=False)
+.. py:function:: Reduce1(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, threaded, multiple=False)
+
+   Reduce polygon count
+
+   :param int desiredPolygonCount: desired or target number of faces
+   :param bool allowDistortion: If True mesh appearance is not changed even if the target polygon count is not reached
+   :param int accuracy: Integer from 1 to 10 telling how accurate reduction algorithm \
+      to use. Greater number gives more accurate results
+   :param bool normalizeSize: If True mesh is fitted to an axis aligned unit cube until reduction is complete
+   :param bool threaded: If True then will run computation inside a worker thread and ignore any provided CancellationTokens and ProgressReporters. \
+      If False then will run on main thread.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: True if mesh is successfully reduced and False if mesh could not be reduced for some reason.
+   :rtype: bool
+.. py:function:: Reduce2(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, cancelToken, progress, multiple=False)
 
    Reduce polygon count
 
@@ -826,11 +1000,37 @@ Mesh
 
    :return: True if mesh is successfully reduced and False if mesh could not be reduced for some reason.
    :rtype: bool
-.. py:function:: Reduce2(thisMesh, parameters, multiple=False)
+.. py:function:: Reduce3(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, cancelToken, progress, threaded, multiple=False)
+
+   Reduce polygon count
+
+   :param int desiredPolygonCount: desired or target number of faces
+   :param bool allowDistortion: If True mesh appearance is not changed even if the target polygon count is not reached
+   :param int accuracy: Integer from 1 to 10 telling how accurate reduction algorithm \
+      to use. Greater number gives more accurate results
+   :param bool normalizeSize: If True mesh is fitted to an axis aligned unit cube until reduction is complete
+   :param bool threaded: If True then will run computation inside a worker thread and ignore any provided CancellationTokens and ProgressReporters. \
+      If False then will run on main thread.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: True if mesh is successfully reduced and False if mesh could not be reduced for some reason.
+   :rtype: bool
+.. py:function:: Reduce4(thisMesh, parameters, multiple=False)
 
    Reduce polygon count
 
    :param ReduceMeshParameters parameters: Parameters
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: True if mesh is successfully reduced and False if mesh could not be reduced for some reason.
+   :rtype: bool
+.. py:function:: Reduce5(thisMesh, parameters, threaded, multiple=False)
+
+   Reduce polygon count
+
+   :param ReduceMeshParameters parameters: Parameters
+   :param bool threaded: If True then will run computation inside a worker thread and ignore any provided CancellationTokens and ProgressReporters. \
+      If False then will run on main thread.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
    :return: True if mesh is successfully reduced and False if mesh could not be reduced for some reason.

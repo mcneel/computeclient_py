@@ -84,6 +84,39 @@ def CreateFromArc(arc, degree, cvCount, multiple=False):
     return response
 
 
+def CreateHSpline(points, multiple=False):
+    """
+    Construct an H-spline from a sequence of interpolation points
+
+    Args:
+        points (IEnumerable<Point3d>): Points to interpolate
+    """
+    url = "rhino/geometry/nurbscurve/createhspline-point3darray"
+    if multiple: url += "?multiple=true"
+    args = [points]
+    if multiple: args = [[item] for item in points]
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CreateHSpline1(points, startTangent, endTangent, multiple=False):
+    """
+    Construct an H-spline from a sequence of interpolation points and
+    optional start and end derivative information
+
+    Args:
+        points (IEnumerable<Point3d>): Points to interpolate
+        startTangent (Vector3d): Unit tangent vector or Unset
+        endTangent (Vector3d): Unit tangent vector or Unset
+    """
+    url = "rhino/geometry/nurbscurve/createhspline-point3darray_vector3d_vector3d"
+    if multiple: url += "?multiple=true"
+    args = [points, startTangent, endTangent]
+    if multiple: args = zip(points, startTangent, endTangent)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
 def CreateFromCircle(circle, degree, cvCount, multiple=False):
     """
     Create a uniform non-ratonal cubic NURBS approximation of a circle.
@@ -146,13 +179,31 @@ def SetEndCondition1(thisNurbsCurve, bSetEnd, continuity, point, tangent, curvat
     return response
 
 
+def GrevillePoints(thisNurbsCurve, all, multiple=False):
+    """
+    Gets Greville points for this curve.
+
+    Args:
+        all (bool): If true, then all Greville points are returnd. If false, only edit points are returned.
+
+    Returns:
+        Point3dList: A list of points if successful, None otherwise.
+    """
+    url = "rhino/geometry/nurbscurve/grevillepoints-nurbscurve_bool"
+    if multiple: url += "?multiple=true"
+    args = [thisNurbsCurve, all]
+    if multiple: args = zip(thisNurbsCurve, all)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
 def SetGrevillePoints(thisNurbsCurve, points, multiple=False):
     """
-    Sets all Greville (Edit) points for this curve.
+    Sets all Greville edit points for this curve.
 
     Args:
         points (IEnumerable<Point3d>): The new point locations. The number of points should match
-            the number of point returned by NurbsCurve.GrevillePoints().
+            the number of point returned by NurbsCurve.GrevillePoints(false).
 
     Returns:
         bool: True if successful, False otherwise.

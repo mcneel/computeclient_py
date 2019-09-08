@@ -343,22 +343,25 @@ def MeshMeshFast(meshA, meshB, multiple=False):
     return response
 
 
-def MeshMesh(meshes, tolerance, mode, multiple=False):
+def MeshMesh(meshes, tolerance, mode, performPreprocessing, textLog, multiple=False):
     """
     Intersects two meshes. Overlaps and perforations are handled in the output list.
 
     Args:
         meshes (IEnumerable<Mesh>): The mesh input list. It cannot be null.
         tolerance (double): A tolerance value. If negative, the positive value will be used.
+            WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10.
+        performPreprocessing (bool): Indicates if preprocessing should be executed.
         mode (SetsCombinations): The required working mode.
+        textLog (FileIO.TextLog): A text log, or null.
 
     Returns:
         Polyline[]: An array of both intersects, and overlaps.
     """
-    url = "rhino/geometry/intersect/intersection/meshmesh-mesharray_double_setscombinations"
+    url = "rhino/geometry/intersect/intersection/meshmesh-mesharray_double_setscombinations_bool_fileio.textlog"
     if multiple: url += "?multiple=true"
-    args = [meshes, tolerance, mode]
-    if multiple: args = zip(meshes, tolerance, mode)
+    args = [meshes, tolerance, mode, performPreprocessing, textLog]
+    if multiple: args = zip(meshes, tolerance, mode, performPreprocessing, textLog)
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -370,7 +373,8 @@ def MeshMeshAccurate(meshA, meshB, tolerance, multiple=False):
     Args:
         meshA (Mesh): First mesh for intersection.
         meshB (Mesh): Second mesh for intersection.
-        tolerance (double): Intersection tolerance.
+        tolerance (double): A tolerance value. If negative, the positive value will be used.
+            WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10.
 
     Returns:
         Polyline[]: An array of intersection polylines.

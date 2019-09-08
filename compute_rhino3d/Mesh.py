@@ -150,16 +150,62 @@ def CreateQuadSphere(sphere, subdivisions, multiple=False):
 
 def CreateFromCylinder(cylinder, vertical, around, multiple=False):
     """
-    Constructs a mesh cylinder
+    Constructs a capped mesh cylinder.
 
     Args:
-        vertical (int): Number of faces in the top-to-bottom direction
-        around (int): Number of faces around the cylinder
+        vertical (int): Number of faces in the top-to-bottom direction.
+        around (int): Number of faces around the cylinder.
+
+    Returns:
+        Mesh: Returns a mesh cylinder if successful, None otherwise.
     """
     url = "rhino/geometry/mesh/createfromcylinder-cylinder_int_int"
     if multiple: url += "?multiple=true"
     args = [cylinder, vertical, around]
     if multiple: args = zip(cylinder, vertical, around)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CreateFromCylinder1(cylinder, vertical, around, capBottom, capTop, multiple=False):
+    """
+    Constructs a mesh cylinder.
+
+    Args:
+        vertical (int): Number of faces in the top-to-bottom direction.
+        around (int): Number of faces around the cylinder.
+        capBottom (bool): If True end at Cylinder.Height1 should be capped.
+        capTop (bool): If True end at Cylinder.Height2 should be capped.
+
+    Returns:
+        Mesh: Returns a mesh cylinder if successful, None otherwise.
+    """
+    url = "rhino/geometry/mesh/createfromcylinder-cylinder_int_int_bool_bool"
+    if multiple: url += "?multiple=true"
+    args = [cylinder, vertical, around, capBottom, capTop]
+    if multiple: args = zip(cylinder, vertical, around, capBottom, capTop)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CreateFromCylinder2(cylinder, vertical, around, capBottom, capTop, quadCaps, multiple=False):
+    """
+    Constructs a mesh cylinder.
+
+    Args:
+        vertical (int): Number of faces in the top-to-bottom direction.
+        around (int): Number of faces around the cylinder.
+        capBottom (bool): If True end at Cylinder.Height1 should be capped.
+        capTop (bool): If True end at Cylinder.Height2 should be capped.
+        quadCaps (bool): If True and it's possible to make quad caps, ie. around is even, then caps will have quad faces.
+
+    Returns:
+        Mesh: Returns a mesh cylinder if successful, None otherwise.
+    """
+    url = "rhino/geometry/mesh/createfromcylinder-cylinder_int_int_bool_bool_bool"
+    if multiple: url += "?multiple=true"
+    args = [cylinder, vertical, around, capBottom, capTop, quadCaps]
+    if multiple: args = zip(cylinder, vertical, around, capBottom, capTop, quadCaps)
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -199,6 +245,47 @@ def CreateFromCone1(cone, vertical, around, solid, multiple=False):
     if multiple: url += "?multiple=true"
     args = [cone, vertical, around, solid]
     if multiple: args = zip(cone, vertical, around, solid)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CreateFromCone2(cone, vertical, around, solid, quadCaps, multiple=False):
+    """
+    Constructs a mesh cone.
+
+    Args:
+        vertical (int): Number of faces in the top-to-bottom direction.
+        around (int): Number of faces around the cone.
+        solid (bool): If False the mesh will be open with no faces on the circular planar portion.
+        quadCaps (bool): If True and it's possible to make quad caps, ie. around is even, then caps will have quad faces.
+
+    Returns:
+        Mesh: A valid mesh if successful.
+    """
+    url = "rhino/geometry/mesh/createfromcone-cone_int_int_bool_bool"
+    if multiple: url += "?multiple=true"
+    args = [cone, vertical, around, solid, quadCaps]
+    if multiple: args = zip(cone, vertical, around, solid, quadCaps)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CreateFromTorus(torus, vertical, around, multiple=False):
+    """
+    Constructs a mesh torus.
+
+    Args:
+        torus (Torus): The torus.
+        vertical (int): Number of faces in the top-to-bottom direction.
+        around (int): Number of faces around the torus.
+
+    Returns:
+        Mesh: Returns a mesh torus if successful, None otherwise.
+    """
+    url = "rhino/geometry/mesh/createfromtorus-torus_int_int"
+    if multiple: url += "?multiple=true"
+    args = [torus, vertical, around]
+    if multiple: args = zip(torus, vertical, around)
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -354,6 +441,30 @@ def CreateFromSurface1(surface, meshingParameters, multiple=False):
     if multiple: url += "?multiple=true"
     args = [surface, meshingParameters]
     if multiple: args = zip(surface, meshingParameters)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CreateFromSubD(subd, displayDensity, multiple=False):
+    """
+    Create a mesh from a SubD limit surface
+    """
+    url = "rhino/geometry/mesh/createfromsubd-subd_int"
+    if multiple: url += "?multiple=true"
+    args = [subd, displayDensity]
+    if multiple: args = zip(subd, displayDensity)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CreateFromSubDControlNet(subd, multiple=False):
+    """
+    Create a mesh from a SubD control net
+    """
+    url = "rhino/geometry/mesh/createfromsubdcontrolnet-subd"
+    if multiple: url += "?multiple=true"
+    args = [subd]
+    if multiple: args = [[item] for item in subd]
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -1238,6 +1349,30 @@ def Offset2(thisMesh, distance, solidify, direction, multiple=False):
     return response
 
 
+def Offset3(thisMesh, distance, solidify, direction, multiple=False):
+    """
+    Makes a new mesh with vertices offset a distance along the direction parameter.
+    Optionally, based on the value of solidify, adds the input mesh and a ribbon of faces along any naked edges.
+    If solidify is False it acts exactly as the Offset(distance) function. Returns list of wall faces, i.e. the
+    faces that connect original and offset mesh when solidified.
+
+    Args:
+        distance (double): A distance value.
+        solidify (bool): True if the mesh should be solidified.
+        direction (Vector3d): Direction of offset for all vertices.
+
+    Returns:
+        Mesh: A new mesh on success, or None on failure.
+        wallFacesOut (List<int>): Returns list of wall faces.
+    """
+    url = "rhino/geometry/mesh/offset-mesh_double_bool_vector3d_intarray"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, distance, solidify, direction]
+    if multiple: args = zip(thisMesh, distance, solidify, direction)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
 def CollapseFacesByEdgeLength(thisMesh, bGreaterThan, edgeLength, multiple=False):
     """
     Collapses multiple mesh faces, with greater/less than edge length, based on the principles
@@ -1393,6 +1528,145 @@ def WithEdgeSoftening(thisMesh, softeningRadius, chamfer, faceted, force, angleT
     return response
 
 
+def QuadRemeshBrep(brep, parameters, multiple=False):
+    """
+    Create QuadRemesh from a Brep
+    Set Brep Face Mode by setting QuadRemeshParameters.PreserveMeshArrayEdgesMode
+    """
+    url = "rhino/geometry/mesh/quadremeshbrep-brep_quadremeshparameters"
+    if multiple: url += "?multiple=true"
+    args = [brep, parameters]
+    if multiple: args = zip(brep, parameters)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def QuadRemeshBrep1(brep, parameters, guideCurves, multiple=False):
+    """
+    Create Quad Remesh from a Brep
+
+    Args:
+        brep (Brep): Set Brep Face Mode by setting QuadRemeshParameters.PreserveMeshArrayEdgesMode
+        guideCurves (IEnumerable<Curve>): A curve array used to influence mesh face layout
+            The curves should touch the input mesh
+            Set Guide Curve Influence by using QuadRemeshParameters.GuideCurveInfluence
+    """
+    url = "rhino/geometry/mesh/quadremeshbrep-brep_quadremeshparameters_curvearray"
+    if multiple: url += "?multiple=true"
+    args = [brep, parameters, guideCurves]
+    if multiple: args = zip(brep, parameters, guideCurves)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def QuadRemeshBrepAsync(brep, parameters, progress, cancelToken, multiple=False):
+    """
+    Quad remesh this brep async
+
+    Args:
+        brep (Brep): Set Brep Face Mode by setting QuadRemeshParameters.PreserveMeshArrayEdgesMode
+    """
+    url = "rhino/geometry/mesh/quadremeshbrepasync-brep_quadremeshparameters_intarray_cancellationtoken"
+    if multiple: url += "?multiple=true"
+    args = [brep, parameters, progress, cancelToken]
+    if multiple: args = zip(brep, parameters, progress, cancelToken)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def QuadRemeshBrepAsync1(brep, parameters, guideCurves, progress, cancelToken, multiple=False):
+    """
+    Quad remesh this brep async
+
+    Args:
+        brep (Brep): Set Brep Face Mode by setting QuadRemeshParameters.PreserveMeshArrayEdgesMode
+        guideCurves (IEnumerable<Curve>): A curve array used to influence mesh face layout
+            The curves should touch the input mesh
+            Set Guide Curve Influence by using QuadRemeshParameters.GuideCurveInfluence
+    """
+    url = "rhino/geometry/mesh/quadremeshbrepasync-brep_quadremeshparameters_curvearray_intarray_cancellationtoken"
+    if multiple: url += "?multiple=true"
+    args = [brep, parameters, guideCurves, progress, cancelToken]
+    if multiple: args = zip(brep, parameters, guideCurves, progress, cancelToken)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def QuadRemesh(thisMesh, parameters, multiple=False):
+    """
+    Quad remesh this mesh
+    """
+    url = "rhino/geometry/mesh/quadremesh-mesh_quadremeshparameters"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, parameters]
+    if multiple: args = zip(thisMesh, parameters)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def QuadRemesh1(thisMesh, parameters, guideCurves, multiple=False):
+    """
+    Quad remesh this mesh
+
+    Args:
+        guideCurves (IEnumerable<Curve>): A curve array used to influence mesh face layout
+            The curves should touch the input mesh
+            Set Guide Curve Influence by using QuadRemeshParameters.GuideCurveInfluence
+    """
+    url = "rhino/geometry/mesh/quadremesh-mesh_quadremeshparameters_curvearray"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, parameters, guideCurves]
+    if multiple: args = zip(thisMesh, parameters, guideCurves)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def QuadRemeshAsync(thisMesh, parameters, progress, cancelToken, multiple=False):
+    """
+    Quad remesh this mesh async
+    """
+    url = "rhino/geometry/mesh/quadremeshasync-mesh_quadremeshparameters_intarray_cancellationtoken"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, parameters, progress, cancelToken]
+    if multiple: args = zip(thisMesh, parameters, progress, cancelToken)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def QuadRemeshAsync1(thisMesh, parameters, guideCurves, progress, cancelToken, multiple=False):
+    """
+    Quad remesh this mesh async
+
+    Args:
+        guideCurves (IEnumerable<Curve>): A curve array used to influence mesh face layout
+            The curves should touch the input mesh
+            Set Guide Curve Influence by using QuadRemeshParameters.GuideCurveInfluence
+    """
+    url = "rhino/geometry/mesh/quadremeshasync-mesh_quadremeshparameters_curvearray_intarray_cancellationtoken"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, parameters, guideCurves, progress, cancelToken]
+    if multiple: args = zip(thisMesh, parameters, guideCurves, progress, cancelToken)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def QuadRemeshAsync2(thisMesh, faceBlocks, parameters, guideCurves, progress, cancelToken, multiple=False):
+    """
+    Quad remesh this mesh async
+
+    Args:
+        guideCurves (IEnumerable<Curve>): A curve array used to influence mesh face layout
+            The curves should touch the input mesh
+            Set Guide Curve Influence by using QuadRemeshParameters.GuideCurveInfluence
+    """
+    url = "rhino/geometry/mesh/quadremeshasync-mesh_intarray_quadremeshparameters_curvearray_intarray_cancellationtoken"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, faceBlocks, parameters, guideCurves, progress, cancelToken]
+    if multiple: args = zip(thisMesh, faceBlocks, parameters, guideCurves, progress, cancelToken)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
 def Reduce(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, multiple=False):
     """
     Reduce polygon count
@@ -1415,7 +1689,31 @@ def Reduce(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSi
     return response
 
 
-def Reduce1(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, cancelToken, progress, multiple=False):
+def Reduce1(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, threaded, multiple=False):
+    """
+    Reduce polygon count
+
+    Args:
+        desiredPolygonCount (int): desired or target number of faces
+        allowDistortion (bool): If True mesh appearance is not changed even if the target polygon count is not reached
+        accuracy (int): Integer from 1 to 10 telling how accurate reduction algorithm
+            to use. Greater number gives more accurate results
+        normalizeSize (bool): If True mesh is fitted to an axis aligned unit cube until reduction is complete
+        threaded (bool): If True then will run computation inside a worker thread and ignore any provided CancellationTokens and ProgressReporters.
+            If False then will run on main thread.
+
+    Returns:
+        bool: True if mesh is successfully reduced and False if mesh could not be reduced for some reason.
+    """
+    url = "rhino/geometry/mesh/reduce-mesh_int_bool_int_bool_bool"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, threaded]
+    if multiple: args = zip(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, threaded)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def Reduce2(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, cancelToken, progress, multiple=False):
     """
     Reduce polygon count
 
@@ -1429,7 +1727,7 @@ def Reduce1(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeS
     Returns:
         bool: True if mesh is successfully reduced and False if mesh could not be reduced for some reason.
     """
-    url = "rhino/geometry/mesh/reduce-mesh_int_bool_int_bool_system.threading.cancellationtoken_doublearray_string"
+    url = "rhino/geometry/mesh/reduce-mesh_int_bool_int_bool_cancellationtoken_doublearray_string"
     if multiple: url += "?multiple=true"
     args = [thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, cancelToken, progress]
     if multiple: args = zip(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, cancelToken, progress)
@@ -1437,7 +1735,31 @@ def Reduce1(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeS
     return response
 
 
-def Reduce2(thisMesh, parameters, multiple=False):
+def Reduce3(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, cancelToken, progress, threaded, multiple=False):
+    """
+    Reduce polygon count
+
+    Args:
+        desiredPolygonCount (int): desired or target number of faces
+        allowDistortion (bool): If True mesh appearance is not changed even if the target polygon count is not reached
+        accuracy (int): Integer from 1 to 10 telling how accurate reduction algorithm
+            to use. Greater number gives more accurate results
+        normalizeSize (bool): If True mesh is fitted to an axis aligned unit cube until reduction is complete
+        threaded (bool): If True then will run computation inside a worker thread and ignore any provided CancellationTokens and ProgressReporters.
+            If False then will run on main thread.
+
+    Returns:
+        bool: True if mesh is successfully reduced and False if mesh could not be reduced for some reason.
+    """
+    url = "rhino/geometry/mesh/reduce-mesh_int_bool_int_bool_cancellationtoken_doublearray_string_bool"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, cancelToken, progress, threaded]
+    if multiple: args = zip(thisMesh, desiredPolygonCount, allowDistortion, accuracy, normalizeSize, cancelToken, progress, threaded)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def Reduce4(thisMesh, parameters, multiple=False):
     """
     Reduce polygon count
 
@@ -1451,6 +1773,26 @@ def Reduce2(thisMesh, parameters, multiple=False):
     if multiple: url += "?multiple=true"
     args = [thisMesh, parameters]
     if multiple: args = zip(thisMesh, parameters)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def Reduce5(thisMesh, parameters, threaded, multiple=False):
+    """
+    Reduce polygon count
+
+    Args:
+        parameters (ReduceMeshParameters): Parameters
+        threaded (bool): If True then will run computation inside a worker thread and ignore any provided CancellationTokens and ProgressReporters.
+            If False then will run on main thread.
+
+    Returns:
+        bool: True if mesh is successfully reduced and False if mesh could not be reduced for some reason.
+    """
+    url = "rhino/geometry/mesh/reduce-mesh_reducemeshparameters_bool"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, parameters, threaded]
+    if multiple: args = zip(thisMesh, parameters, threaded)
     response = Util.ComputeFetch(url, args)
     return response
 

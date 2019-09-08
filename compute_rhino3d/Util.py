@@ -2,17 +2,17 @@ import rhino3dm
 import json
 import requests
 
-__version__ = '0.7.0'
+__version__ = '0.8.0'
 
 url = "https://compute.rhino3d.com/"
 authToken = None
 stopat = 0
 
 
-def ComputeFetch(endpoint, arglist) :
+def ComputeFetch(endpoint, arglist):
     class __Rhino3dmEncoder(json.JSONEncoder):
         def default(self, o):
-            if hasattr(o, "Encode") :
+            if hasattr(o, "Encode"):
                 return o.Encode()
             return json.JSONEncoder.default(self, o)
     global authToken

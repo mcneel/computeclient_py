@@ -1164,6 +1164,39 @@ def GetLocalTangentPoint1(thisCurve, testPoint, seedParmameter, subDomain, multi
     return response
 
 
+def InflectionPoints(thisCurve, multiple=False):
+    """
+    Returns a curve's inflection points. An inflection point is a location on
+    a curve at which the sign of the curvature (i.e., the concavity) changes.
+    The curvature at these locations is always 0.
+
+    Returns:
+        Point3d[]: An array of points if successful, None if not successful or on error.
+    """
+    url = "rhino/geometry/curve/inflectionpoints-curve"
+    if multiple: url += "?multiple=true"
+    args = [thisCurve]
+    if multiple: args = [[item] for item in thisCurve]
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def MaxCurvaturePoints(thisCurve, multiple=False):
+    """
+    Returns a curve's maximum curvature points. The maximum curvature points identify
+    where the curvature starts to decrease in both directions from the points.
+
+    Returns:
+        Point3d[]: An array of points if successful, None if not successful or on error.
+    """
+    url = "rhino/geometry/curve/maxcurvaturepoints-curve"
+    if multiple: url += "?multiple=true"
+    args = [thisCurve]
+    if multiple: args = [[item] for item in thisCurve]
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
 def MakeClosed(thisCurve, tolerance, multiple=False):
     """
     If IsClosed, just return true. Otherwise, decide if curve can be closed as
@@ -1201,6 +1234,28 @@ def LcoalClosestPoint(thisCurve, testPoint, seed, multiple=False):
         t (double): >Parameter of the curve that is closest to testPoint.
     """
     url = "rhino/geometry/curve/lcoalclosestpoint-curve_point3d_double_double"
+    if multiple: url += "?multiple=true"
+    args = [thisCurve, testPoint, seed]
+    if multiple: args = zip(thisCurve, testPoint, seed)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def LocalClosestPoint(thisCurve, testPoint, seed, multiple=False):
+    """
+    Find parameter of the point on a curve that is locally closest to
+    the testPoint.  The search for a local close point starts at
+    a seed parameter.
+
+    Args:
+        testPoint (Point3d): A point to test against.
+        seed (double): The seed parameter.
+
+    Returns:
+        bool: True if the search is successful, False if the search fails.
+        t (double): >Parameter of the curve that is closest to testPoint.
+    """
+    url = "rhino/geometry/curve/localclosestpoint-curve_point3d_double_double"
     if multiple: url += "?multiple=true"
     args = [thisCurve, testPoint, seed]
     if multiple: args = zip(thisCurve, testPoint, seed)

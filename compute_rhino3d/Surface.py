@@ -454,19 +454,48 @@ def Fit(thisSurface, uDegree, vDegree, fitTolerance, multiple=False):
 
 def InterpolatedCurveOnSurfaceUV(thisSurface, points, tolerance, multiple=False):
     """
-    Constructs an interpolated curve on a surface, using 2D surface points.
+    Returns a curve that interpolates points on a surface. The interpolant lies on the surface.
 
     Args:
-        points (System.Collections.Generic.IEnumerable<Point2d>): A list, an array or any enumerable set of 2D points.
-        tolerance (double): A tolerance value.
+        points (System.Collections.Generic.IEnumerable<Point2d>): List of at least two UV parameter locations on the surface.
+        tolerance (double): Tolerance used for the fit of the pushup curve. Generally, the resulting interpolating curve will be within tolerabce of the surface.
 
     Returns:
-        NurbsCurve: A new nurbs curve, or None on error.
+        NurbsCurve: A new NURBS curve if successful, or None on error.
     """
     url = "rhino/geometry/surface/interpolatedcurveonsurfaceuv-surface_point2darray_double"
     if multiple: url += "?multiple=true"
     args = [thisSurface, points, tolerance]
     if multiple: args = zip(thisSurface, points, tolerance)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def InterpolatedCurveOnSurfaceUV1(thisSurface, points, tolerance, closed, closedSurfaceHandling, multiple=False):
+    """
+    Returns a curve that interpolates points on a surface. The interpolant lies on the surface.
+
+    Args:
+        points (System.Collections.Generic.IEnumerable<Point2d>): List of at least two UV parameter locations on the surface.
+        tolerance (double): Tolerance used for the fit of the pushup curve. Generally, the resulting interpolating curve will be within tolerabce of the surface.
+        closed (bool): If false, the interpolating curve is not closed. If true, the interpolating curve is closed, and the last point and first point should generally not be equal.
+        closedSurfaceHandling (int): If 0, all points must be in the rectangular domain of the surface. If the surface is closed in some direction,
+            then this routine will interpret each point and place it at an appropriate location in the the covering space.
+            This is the simplest option and should give good results.
+            If 1, then more options for more control of handling curves going across seams are available.
+            If the surface is closed in some direction, then the points are taken as points in the covering space.
+            Example, if srf.IsClosed(0)=True and srf.IsClosed(1)=False and srf.Domain(0)=srf.Domain(1)=Interval(0,1)
+            then if closedSurfaceHandling=1 a point(u, v) in points can have any value for the u coordinate, but must have 0<=v<=1.
+            In particular, if points = { (0.0,0.5), (2.0,0.5) } then the interpolating curve will wrap around the surface two times in the closed direction before ending at start of the curve.
+            If closed=True the last point should equal the first point plus an integer multiple of the period on a closed direction.
+
+    Returns:
+        NurbsCurve: A new NURBS curve if successful, or None on error.
+    """
+    url = "rhino/geometry/surface/interpolatedcurveonsurfaceuv-surface_point2darray_double_bool_int"
+    if multiple: url += "?multiple=true"
+    args = [thisSurface, points, tolerance, closed, closedSurfaceHandling]
+    if multiple: args = zip(thisSurface, points, tolerance, closed, closedSurfaceHandling)
     response = Util.ComputeFetch(url, args)
     return response
 

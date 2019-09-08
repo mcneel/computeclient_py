@@ -55,6 +55,24 @@ def RemoveHoles(thisBrepFace, tolerance, multiple=False):
     return response
 
 
+def ShrinkSurfaceToEdge(thisBrepFace, multiple=False):
+    """
+    Shrinks the underlying untrimmed surface of this Brep face right to the trimming boundaries.
+    Note, shrinking the trimmed surface can sometimes cause problems later since having
+    the edges so close to the trimming boundaries can cause commands that use the surface
+    edges as input to fail.
+
+    Returns:
+        bool: True on success, False on failure.
+    """
+    url = "rhino/geometry/brepface/shrinksurfacetoedge-brepface"
+    if multiple: url += "?multiple=true"
+    args = [thisBrepFace]
+    if multiple: args = [[item] for item in thisBrepFace]
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
 def Split(thisBrepFace, curves, tolerance, multiple=False):
     """
     Split this face using 3D trimming curves.

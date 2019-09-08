@@ -574,7 +574,7 @@ def CreatePipe1(rail, railRadiiParameters, radii, localBlending, cap, fitRail, a
 
 def CreateFromSweep(rail, shape, closed, tolerance, multiple=False):
     """
-    Sweep1 function tht fits a surface through a profile curve that define the surface cross-sections
+    Sweep1 function that fits a surface through a profile curve that define the surface cross-sections
     and one curve that defines a surface edge.
 
     Args:
@@ -596,7 +596,7 @@ def CreateFromSweep(rail, shape, closed, tolerance, multiple=False):
 
 def CreateFromSweep1(rail, shapes, closed, tolerance, multiple=False):
     """
-    Sweep1 function tht fits a surface through a profile curve that define the surface cross-sections
+    Sweep1 function that fits a surface through profile curves that define the surface cross-sections
     and one curve that defines a surface edge.
 
     Args:
@@ -616,55 +616,9 @@ def CreateFromSweep1(rail, shapes, closed, tolerance, multiple=False):
     return response
 
 
-def CreateFromSweep2(rail1, rail2, shape, closed, tolerance, multiple=False):
-    """
-    General 2 rail sweep. If you are not producing the sweep results that you are after, then
-    use the SweepTwoRail class with options to generate the swept geometry
-
-    Args:
-        rail1 (Curve): Rail to sweep shapes along
-        rail2 (Curve): Rail to sweep shapes along
-        shape (Curve): Shape curve
-        closed (bool): Only matters if shape is closed
-        tolerance (double): Tolerance for fitting surface and rails
-
-    Returns:
-        Brep[]: Array of Brep sweep results
-    """
-    url = "rhino/geometry/brep/createfromsweep-curve_curve_curve_bool_double"
-    if multiple: url += "?multiple=true"
-    args = [rail1, rail2, shape, closed, tolerance]
-    if multiple: args = zip(rail1, rail2, shape, closed, tolerance)
-    response = Util.ComputeFetch(url, args)
-    return response
-
-
-def CreateFromSweep3(rail1, rail2, shapes, closed, tolerance, multiple=False):
-    """
-    General 2 rail sweep. If you are not producing the sweep results that you are after, then
-    use the SweepTwoRail class with options to generate the swept geometry
-
-    Args:
-        rail1 (Curve): Rail to sweep shapes along
-        rail2 (Curve): Rail to sweep shapes along
-        shapes (IEnumerable<Curve>): Shape curves
-        closed (bool): Only matters if shapes are closed
-        tolerance (double): Tolerance for fitting surface and rails
-
-    Returns:
-        Brep[]: Array of Brep sweep results
-    """
-    url = "rhino/geometry/brep/createfromsweep-curve_curve_curvearray_bool_double"
-    if multiple: url += "?multiple=true"
-    args = [rail1, rail2, shapes, closed, tolerance]
-    if multiple: args = zip(rail1, rail2, shapes, closed, tolerance)
-    response = Util.ComputeFetch(url, args)
-    return response
-
-
 def CreateFromSweepSegmented(rail, shape, closed, tolerance, multiple=False):
     """
-    Sweep1 function tht fits a surface through a profile curve that define the surface cross-sections
+    Sweep1 function that fits a surface through a profile curve that define the surface cross-sections
     and one curve that defines a surface edge. The Segmented version breaks the rail at curvature kinks
     and sweeps each piece separately, then put the results together into a Brep.
 
@@ -687,7 +641,7 @@ def CreateFromSweepSegmented(rail, shape, closed, tolerance, multiple=False):
 
 def CreateFromSweepSegmented1(rail, shapes, closed, tolerance, multiple=False):
     """
-    Sweep1 function tht fits a surface through a series of profile curves that define the surface cross-sections
+    Sweep1 function that fits a surface through a series of profile curves that define the surface cross-sections
     and one curve that defines a surface edge. The Segmented version breaks the rail at curvature kinks
     and sweeps each piece separately, then put the results together into a Brep.
 
@@ -708,9 +662,84 @@ def CreateFromSweepSegmented1(rail, shapes, closed, tolerance, multiple=False):
     return response
 
 
+def CreateFromSweep2(rail1, rail2, shape, closed, tolerance, multiple=False):
+    """
+    General 2 rail sweep. If you are not producing the sweep results that you are after, then
+    use the SweepTwoRail class with options to generate the swept geometry.
+
+    Args:
+        rail1 (Curve): Rail to sweep shapes along
+        rail2 (Curve): Rail to sweep shapes along
+        shape (Curve): Shape curve
+        closed (bool): Only matters if shape is closed
+        tolerance (double): Tolerance for fitting surface and rails
+
+    Returns:
+        Brep[]: Array of Brep sweep results
+    """
+    url = "rhino/geometry/brep/createfromsweep-curve_curve_curve_bool_double"
+    if multiple: url += "?multiple=true"
+    args = [rail1, rail2, shape, closed, tolerance]
+    if multiple: args = zip(rail1, rail2, shape, closed, tolerance)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CreateFromSweep3(rail1, rail2, shapes, closed, tolerance, multiple=False):
+    """
+    General 2 rail sweep. If you are not producing the sweep results that you are after, then
+    use the SweepTwoRail class with options to generate the swept geometry.
+
+    Args:
+        rail1 (Curve): Rail to sweep shapes along
+        rail2 (Curve): Rail to sweep shapes along
+        shapes (IEnumerable<Curve>): Shape curves
+        closed (bool): Only matters if shapes are closed
+        tolerance (double): Tolerance for fitting surface and rails
+
+    Returns:
+        Brep[]: Array of Brep sweep results
+    """
+    url = "rhino/geometry/brep/createfromsweep-curve_curve_curvearray_bool_double"
+    if multiple: url += "?multiple=true"
+    args = [rail1, rail2, shapes, closed, tolerance]
+    if multiple: args = zip(rail1, rail2, shapes, closed, tolerance)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CreateFromSweep4(rail1, rail2, shapes, start, end, closed, tolerance, rebuild, rebuildPointCount, refitTolerance, preserveHeight, multiple=False):
+    """
+    Sweep2 function that fits a surface through profile curves that define the surface cross-sections
+    and two curves that defines a surface edge.
+
+    Args:
+        rail1 (Curve): Rail to sweep shapes along
+        rail2 (Curve): Rail to sweep shapes along
+        shapes (IEnumerable<Curve>): Shape curves
+        start (Point3d): Optional starting point of sweep. Use Point3d.Unset if you do not want to include a start point.
+        end (Point3d): Optional ending point of sweep. Use Point3d.Unset if you do not want to include an end point.
+        closed (bool): Only matters if shapes are closed.
+        tolerance (double): Tolerance for fitting surface and rails.
+        rebuild (SweepRebuild): The rebuild style.
+        rebuildPointCount (int): If rebuild == SweepRebuild.Rebuild, the number of points. Otherwise specify 0.
+        refitTolerance (double): If rebuild == SweepRebuild.Refit, the refit tolerenace. Otherwise, specify 0.0
+        preserveHeight (bool): Removes the association between the height scaling from the width scaling
+
+    Returns:
+        Brep[]: Array of Brep sweep results
+    """
+    url = "rhino/geometry/brep/createfromsweep-curve_curve_curvearray_point3d_point3d_bool_double_sweeprebuild_int_double_bool"
+    if multiple: url += "?multiple=true"
+    args = [rail1, rail2, shapes, start, end, closed, tolerance, rebuild, rebuildPointCount, refitTolerance, preserveHeight]
+    if multiple: args = zip(rail1, rail2, shapes, start, end, closed, tolerance, rebuild, rebuildPointCount, refitTolerance, preserveHeight)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
 def CreateFromSweepInParts(rail1, rail2, shapes, rail_params, closed, tolerance, multiple=False):
     """
-    Makes a 2 rail sweep.  Like CreateFromSweep but the result is split where parameterization along a rail changes abruptly
+    Makes a 2 rail sweep. Like CreateFromSweep but the result is split where parameterization along a rail changes abruptly.
 
     Args:
         rail1 (Curve): Rail to sweep shapes along
@@ -773,6 +802,32 @@ def CreateFromTaperedExtrude1(curveToExtrude, distance, direction, basePoint, dr
     if multiple: url += "?multiple=true"
     args = [curveToExtrude, distance, direction, basePoint, draftAngleRadians, cornerType]
     if multiple: args = zip(curveToExtrude, distance, direction, basePoint, draftAngleRadians, cornerType)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CreateFromTaperedExtrudeWithRef(curve, direction, distance, draftAngle, plane, tolerance, multiple=False):
+    """
+    Creates one or more Breps by extruding a curve a distance along an axis with draft angle.
+
+    Args:
+        curve (Curve): The curve to extrude.
+        direction (Vector3d): The extrusion direction.
+        distance (double): The extrusion distance.
+        draftAngle (double): The extrusion draft angle in radians.
+        plane (Plane): The end of the extrusion will be parallel to this plane, and "distance" from the plane's origin.
+            The plane's origin is generally be a point on the curve. For planar curves, a natural choice for the
+            plane's normal direction will be the normal direction of the curve's plane. In any case,
+            plane.Normal = direction may make sense.
+        tolerance (double): The intersecting and trimming tolerance.
+
+    Returns:
+        Brep[]: An array of Breps if successful.
+    """
+    url = "rhino/geometry/brep/createfromtaperedextrudewithref-curve_vector3d_double_double_plane_double"
+    if multiple: url += "?multiple=true"
+    args = [curve, direction, distance, draftAngle, plane, tolerance]
+    if multiple: args = zip(curve, direction, distance, draftAngle, plane, tolerance)
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -1298,6 +1353,46 @@ def CreateBooleanDifference3(firstBrep, secondBrep, tolerance, manifoldOnly, mul
     if multiple: url += "?multiple=true"
     args = [firstBrep, secondBrep, tolerance, manifoldOnly]
     if multiple: args = zip(firstBrep, secondBrep, tolerance, manifoldOnly)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CreateBooleanSplit(firstBrep, secondBrep, tolerance, multiple=False):
+    """
+    Splits shared areas of Breps and creates separate Breps from the shared and unshared parts.
+
+    Args:
+        firstBrep (Brep): The Brep to split.
+        secondBrep (Brep): The cutting Brep.
+        tolerance (double): Tolerance to use for splitting operation. When in doubt, use the document's model absolute tolerance.
+
+    Returns:
+        Brep[]: An array of Brep if successful, an empty array on failure.
+    """
+    url = "rhino/geometry/brep/createbooleansplit-brep_brep_double"
+    if multiple: url += "?multiple=true"
+    args = [firstBrep, secondBrep, tolerance]
+    if multiple: args = zip(firstBrep, secondBrep, tolerance)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CreateBooleanSplit1(firstSet, secondSet, tolerance, multiple=False):
+    """
+    Splits shared areas of Breps and creates separate Breps from the shared and unshared parts.
+
+    Args:
+        firstSet (IEnumerable<Brep>): The Breps to split.
+        secondSet (IEnumerable<Brep>): The cutting Breps.
+        tolerance (double): Tolerance to use for splitting operation. When in doubt, use the document's model absolute tolerance.
+
+    Returns:
+        Brep[]: An array of Brep if successful, an empty array on failure.
+    """
+    url = "rhino/geometry/brep/createbooleansplit-breparray_breparray_double"
+    if multiple: url += "?multiple=true"
+    args = [firstSet, secondSet, tolerance]
+    if multiple: args = zip(firstSet, secondSet, tolerance)
     response = Util.ComputeFetch(url, args)
     return response
 

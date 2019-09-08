@@ -679,6 +679,25 @@ Curve
 
    :return: True if a solution is found, False otherwise.
    :rtype: bool
+.. py:function:: InflectionPoints(thisCurve, multiple=False)
+
+   Returns a curve's inflection points. An inflection point is a location on
+   a curve at which the sign of the curvature (i.e., the concavity) changes.
+   The curvature at these locations is always 0.
+
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: An array of points if successful, None if not successful or on error.
+   :rtype: rhino3dm.Point3d[]
+.. py:function:: MaxCurvaturePoints(thisCurve, multiple=False)
+
+   Returns a curve's maximum curvature points. The maximum curvature points identify
+   where the curvature starts to decrease in both directions from the points.
+
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: An array of points if successful, None if not successful or on error.
+   :rtype: rhino3dm.Point3d[]
 .. py:function:: MakeClosed(thisCurve, tolerance, multiple=False)
 
    If IsClosed, just return true. Otherwise, decide if curve can be closed as
@@ -693,6 +712,18 @@ Curve
    :return: True on success, False on failure.
    :rtype: bool
 .. py:function:: LcoalClosestPoint(thisCurve, testPoint, seed, multiple=False)
+
+   Find parameter of the point on a curve that is locally closest to
+   the testPoint.  The search for a local close point starts at
+   a seed parameter.
+
+   :param rhino3dm.Point3d testPoint: A point to test against.
+   :param float seed: The seed parameter.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: True if the search is successful, False if the search fails.
+   :rtype: bool
+.. py:function:: LocalClosestPoint(thisCurve, testPoint, seed, multiple=False)
 
    Find parameter of the point on a curve that is locally closest to
    the testPoint.  The search for a local close point starts at
