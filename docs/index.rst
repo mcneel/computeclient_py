@@ -20,6 +20,7 @@ Welcome to compute_rhino3d's documentation!
    Mesh
    NurbsCurve
    NurbsSurface
+   SubD
    Surface
    VolumeMassProperties
 
