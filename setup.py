@@ -39,7 +39,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/mcneel/compute.rhino3d",
-    install_requires=['requests', 'rhino3dm'],
+    install_requires=['requests'],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
