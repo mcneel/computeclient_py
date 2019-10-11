@@ -1,5 +1,6 @@
 from . import Util
 import base64
+import io
 import os
 
 
@@ -40,7 +41,7 @@ def EvaluateDefinition(definition, trees):
         args['pointer'] = definition
     else:
         if os.path.isfile(definition):
-            with open(definition, 'r') as content_file:
+            with io.open(definition, 'r', encoding='utf-8-sig') as content_file:
                 definition = content_file.read()
         encoded = base64.b64encode(definition.encode('utf-8'))
         args['algo'] = str(encoded, 'utf-8')
