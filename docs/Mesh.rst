@@ -365,6 +365,29 @@ Mesh
 
    :return: A new mesh, or None on failure.
    :rtype: rhino3dm.Mesh
+.. py:function:: CreateFromCurveExtrusion(curve, direction, parameters, boundingBox, multiple=False)
+
+   Constructs a new extrusion from a curve.
+
+   :param rhino3dm.Curve curve: A curve to extrude.
+   :param rhino3dm.Vector3d direction: The direction of extrusion.
+   :param rhino3dm.MeshingParameters parameters: The parameters of meshing.
+   :param rhino3dm.BoundingBox boundingBox: The bounding box controls the length of the estrusion.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: A new mesh, or None on failure.
+   :rtype: rhino3dm.Mesh
+.. py:function:: CreateFromMeshArrayCleanUp(meshes, tolerance, mendSinglePrecisionVertexJump, multiple=False)
+
+   Repairs meshes with vertices that are too near, using a tolerance value.
+
+   :param list[rhino3dm.Mesh] meshes: The meshes to be repared.
+   :param float tolerance: A minimum distance for clean vertices.
+   :param bool mendSinglePrecisionVertexJump: If true, operations are performed on double precision vertices so that, when single precision vertices are computed, they will keep consistent.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: A valid meshes array if successful. If no change was required, some meshes can be null. Otherwise, null, when no changes were done.
+   :rtype: rhino3dm.Mesh[]
 .. py:function:: Volume(thisMesh, multiple=False)
 
    Compute volume of the mesh.
@@ -559,6 +582,23 @@ Mesh
 
    :return: An array of mesh segments representing the split result.
    :rtype: rhino3dm.Mesh[]
+.. py:function:: Split3(thisMesh, meshes, tolerance, preprocessing, textLog, cancel, progress, multiple=False)
+
+   Split a mesh with a collection of meshes.
+
+   :param list[rhino3dm.Mesh] meshes: Meshes to split with.
+   :param float tolerance: A value for intersection tolerance. \
+      WARNING! Correct values are typically in the (10e-8 - 10e-4) range.An option is to use the document tolerance diminished by a few orders or magnitude.
+   :param bool preprocessing: Indicates if a preprocessing step can be executed. \
+      Some groups of meshes have distances between vertices and edges that are below the tolerance indicated. In this case, this parameter allows the function \
+      to improve the mesh in order to increase likelihood of intersection success. The mesh topology might change slightly, but not the overall shape.If meshes have no distances between vertices and edges laying below the tolerance that is indicated, this parameter will do nothing.
+   :param TextLog textLog: A text log to write onto.
+   :param CancellationToken cancel: A cancellation token.
+   :param IProgress<double> progress: A progress reporter item. This can be null.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: An array of mesh parts representing the split result, or null: when no mesh intersected, or if a cancel stopped the computation.
+   :rtype: rhino3dm.Mesh[]
 .. py:function:: GetOutlines(thisMesh, plane, multiple=False)
 
    Constructs the outlines of a mesh projected against a plane.
@@ -743,6 +783,42 @@ Mesh
 
    :return: An array of points. This can be empty.
    :rtype: rhino3dm.Point3d[]
+.. py:function:: PullCurve(thisMesh, curve, tolerance, multiple=False)
+
+   Gets a polyline approximation of the input curve and then moves its control points to the closest point on the mesh.
+   Then it "connects the points" over edges so that a polyline on the mesh is formed.
+
+   :param rhino3dm.Curve curve: A curve to pull.
+   :param float tolerance: A tolerance value.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: A polyline curve, or None if none could be constructed.
+   :rtype: PolylineCurve
+.. py:function:: SplitWithProjectedPolylines(thisMesh, curves, tolerance, multiple=False)
+
+   Splits a mesh by adding edges in correspondance with input polylines, and divides the mesh at partitioned areas.
+   Polyline segments that are measured not to be on the mesh will be ignored.
+
+   :param IEnumerable<PolylineCurve> curves: An array, a list or any enumerable of polyline curves.
+   :param float tolerance: A tolerance value.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: An array of meshes, or None if no change would happen.
+   :rtype: rhino3dm.Mesh[]
+.. py:function:: SplitWithProjectedPolylines1(thisMesh, curves, tolerance, textLog, cancel, progress, multiple=False)
+
+   Splits a mesh by adding edges in correspondance with input polylines, and divides the mesh at partitioned areas.
+   Polyline segments that are measured not to be on the mesh will be ignored.
+
+   :param IEnumerable<PolylineCurve> curves: An array, a list or any enumerable of polyline curves.
+   :param float tolerance: A tolerance value.
+   :param TextLog textLog: A text log, or null.
+   :param CancellationToken cancel: A cancellation token to stop the computation at a given point.
+   :param IProgress<double> progress: A progress reporter to inform the user about progress. The reported value is indicative.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: An array of meshes, or None if no change would happen.
+   :rtype: rhino3dm.Mesh[]
 .. py:function:: Offset(thisMesh, distance, multiple=False)
 
    Makes a new mesh with vertices offset a distance in the opposite direction of the existing vertex normals.

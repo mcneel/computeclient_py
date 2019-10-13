@@ -414,6 +414,31 @@ Curve
 
    :return: Result curves on success, empty array if no difference could be calculated.
    :rtype: rhino3dm.Curve[]
+.. py:function:: CreateBooleanRegions(curves, plane, points, combineRegions, tolerance, multiple=False)
+
+   Curve Boolean method, which trims and splits curves based on their overlapping regions.
+
+   :param list[rhino3dm.Curve] curves: The input curves.
+   :param rhino3dm.Plane plane: Regions will be found in the projection of the curves to this plane.
+   :param list[rhino3dm.Point3d] points: These points will be projected to plane. All regions that contain at least one of these points will be found.
+   :param bool combineRegions: If true, then adjacent regions will be combined.
+   :param float tolerance: Function tolerance. When in doubt, use the document's model absolute tolerance.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: The curve Boolean regions if successful, None of no successful.
+   :rtype: CurveBooleanRegions
+.. py:function:: CreateBooleanRegions1(curves, plane, combineRegions, tolerance, multiple=False)
+
+   Calculates curve Boolean regions, which trims and splits curves based on their overlapping regions.
+
+   :param list[rhino3dm.Curve] curves: The input curves.
+   :param rhino3dm.Plane plane: Regions will be found in the projection of the curves to this plane.
+   :param bool combineRegions: If true, then adjacent regions will be combined.
+   :param float tolerance: Function tolerance. When in doubt, use the document's model absolute tolerance.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: The curve Boolean regions if successful, None of no successful.
+   :rtype: CurveBooleanRegions
 .. py:function:: CreateTextOutlines(text, font, textHeight, textStyle, closeLoops, plane, smallCapsScale, tolerance, multiple=False)
 
    Creates outline curves created from a text string. The functionality is similar to what you find in Rhino's TextObject command or TextEntity.Explode() in RhinoCommon.
