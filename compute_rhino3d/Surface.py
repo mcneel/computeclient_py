@@ -19,6 +19,7 @@ def CreateRollingBallFillet(surfaceA, surfaceB, radius, tolerance, multiple=Fals
     args = [surfaceA, surfaceB, radius, tolerance]
     if multiple: args = zip(surfaceA, surfaceB, radius, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -42,6 +43,7 @@ def CreateRollingBallFillet1(surfaceA, flipA, surfaceB, flipB, radius, tolerance
     args = [surfaceA, flipA, surfaceB, flipB, radius, tolerance]
     if multiple: args = zip(surfaceA, flipA, surfaceB, flipB, radius, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -65,6 +67,7 @@ def CreateRollingBallFillet2(surfaceA, uvA, surfaceB, uvB, radius, tolerance, mu
     args = [surfaceA, uvA, surfaceB, uvB, radius, tolerance]
     if multiple: args = zip(surfaceA, uvA, surfaceB, uvB, radius, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -84,6 +87,7 @@ def CreateExtrusion(profile, direction, multiple=False):
     args = [profile, direction]
     if multiple: args = zip(profile, direction)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -103,6 +107,7 @@ def CreateExtrusionToPoint(profile, apexPoint, multiple=False):
     args = [profile, apexPoint]
     if multiple: args = zip(profile, apexPoint)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -122,6 +127,7 @@ def CreatePeriodicSurface(surface, direction, multiple=False):
     args = [surface, direction]
     if multiple: args = zip(surface, direction)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -144,6 +150,7 @@ def CreatePeriodicSurface1(surface, direction, bSmooth, multiple=False):
     args = [surface, direction, bSmooth]
     if multiple: args = zip(surface, direction, bSmooth)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -172,6 +179,7 @@ def CreateSoftEditSurface(surface, uv, delta, uLength, vLength, tolerance, fixEn
     args = [surface, uv, delta, uLength, vLength, tolerance, fixEnds]
     if multiple: args = zip(surface, uv, delta, uLength, vLength, tolerance, fixEnds)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -195,6 +203,7 @@ def Smooth(thisSurface, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundari
     args = [thisSurface, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries, coordinateSystem]
     if multiple: args = zip(thisSurface, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries, coordinateSystem)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -219,6 +228,7 @@ def Smooth1(thisSurface, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundar
     args = [thisSurface, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries, coordinateSystem, plane]
     if multiple: args = zip(thisSurface, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries, coordinateSystem, plane)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -241,6 +251,7 @@ def VariableOffset(thisSurface, uMinvMin, uMinvMax, uMaxvMin, uMaxvMax, toleranc
     args = [thisSurface, uMinvMin, uMinvMax, uMaxvMin, uMaxvMax, tolerance]
     if multiple: args = zip(thisSurface, uMinvMin, uMinvMax, uMaxvMin, uMaxvMax, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -265,6 +276,7 @@ def VariableOffset1(thisSurface, uMinvMin, uMinvMax, uMaxvMin, uMaxvMax, interio
     args = [thisSurface, uMinvMin, uMinvMax, uMaxvMin, uMaxvMax, interiorParameters, interiorDistances, tolerance]
     if multiple: args = zip(thisSurface, uMinvMin, uMinvMax, uMaxvMin, uMaxvMax, interiorParameters, interiorDistances, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -323,6 +335,7 @@ def Extend(thisSurface, edge, extensionLength, smooth, multiple=False):
     args = [thisSurface, edge, extensionLength, smooth]
     if multiple: args = zip(thisSurface, edge, extensionLength, smooth)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -346,6 +359,7 @@ def Rebuild(thisSurface, uDegree, vDegree, uPointCount, vPointCount, multiple=Fa
     args = [thisSurface, uDegree, vDegree, uPointCount, vPointCount]
     if multiple: args = zip(thisSurface, uDegree, vDegree, uPointCount, vPointCount)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -367,6 +381,7 @@ def RebuildOneDirection(thisSurface, direction, pointCount, loftType, refitToler
     args = [thisSurface, direction, pointCount, loftType, refitTolerance]
     if multiple: args = zip(thisSurface, direction, pointCount, loftType, refitTolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -429,6 +444,7 @@ def Offset(thisSurface, distance, tolerance, multiple=False):
     args = [thisSurface, distance, tolerance]
     if multiple: args = zip(thisSurface, distance, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -449,6 +465,7 @@ def Fit(thisSurface, uDegree, vDegree, fitTolerance, multiple=False):
     args = [thisSurface, uDegree, vDegree, fitTolerance]
     if multiple: args = zip(thisSurface, uDegree, vDegree, fitTolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -468,6 +485,7 @@ def InterpolatedCurveOnSurfaceUV(thisSurface, points, tolerance, multiple=False)
     args = [thisSurface, points, tolerance]
     if multiple: args = zip(thisSurface, points, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -497,6 +515,7 @@ def InterpolatedCurveOnSurfaceUV1(thisSurface, points, tolerance, closed, closed
     args = [thisSurface, points, tolerance, closed, closedSurfaceHandling]
     if multiple: args = zip(thisSurface, points, tolerance, closed, closedSurfaceHandling)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -516,6 +535,7 @@ def InterpolatedCurveOnSurface(thisSurface, points, tolerance, multiple=False):
     args = [thisSurface, points, tolerance]
     if multiple: args = zip(thisSurface, points, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -536,6 +556,7 @@ def ShortPath(thisSurface, start, end, tolerance, multiple=False):
     args = [thisSurface, start, end, tolerance]
     if multiple: args = zip(thisSurface, start, end, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -556,6 +577,7 @@ def Pushup(thisSurface, curve2d, tolerance, curve2dSubdomain, multiple=False):
     args = [thisSurface, curve2d, tolerance, curve2dSubdomain]
     if multiple: args = zip(thisSurface, curve2d, tolerance, curve2dSubdomain)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -575,6 +597,7 @@ def Pushup1(thisSurface, curve2d, tolerance, multiple=False):
     args = [thisSurface, curve2d, tolerance]
     if multiple: args = zip(thisSurface, curve2d, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -595,6 +618,7 @@ def Pullback(thisSurface, curve3d, tolerance, multiple=False):
     args = [thisSurface, curve3d, tolerance]
     if multiple: args = zip(thisSurface, curve3d, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -616,5 +640,6 @@ def Pullback1(thisSurface, curve3d, tolerance, curve3dSubdomain, multiple=False)
     args = [thisSurface, curve3d, tolerance, curve3dSubdomain]
     if multiple: args = zip(thisSurface, curve3d, tolerance, curve3dSubdomain)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 

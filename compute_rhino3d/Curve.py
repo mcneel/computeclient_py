@@ -30,6 +30,7 @@ def CreateInterpolatedCurve(points, degree, multiple=False):
     args = [points, degree]
     if multiple: args = zip(points, degree)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -52,6 +53,7 @@ def CreateInterpolatedCurve1(points, degree, knots, multiple=False):
     args = [points, degree, knots]
     if multiple: args = zip(points, degree, knots)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -76,6 +78,7 @@ def CreateInterpolatedCurve2(points, degree, knots, startTangent, endTangent, mu
     args = [points, degree, knots, startTangent, endTangent]
     if multiple: args = zip(points, degree, knots, startTangent, endTangent)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -99,6 +102,7 @@ def CreateSoftEditCurve(curve, t, delta, length, fixEnds, multiple=False):
     args = [curve, t, delta, length, fixEnds]
     if multiple: args = zip(curve, t, delta, length, fixEnds)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -120,6 +124,7 @@ def CreateFilletCornersCurve(curve, radius, tolerance, angleTolerance, multiple=
     args = [curve, radius, tolerance, angleTolerance]
     if multiple: args = zip(curve, radius, tolerance, angleTolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -143,6 +148,7 @@ def CreateArcBlend(startPt, startDir, endPt, endDir, controlPointLengthRatio, mu
     args = [startPt, startDir, endPt, endDir, controlPointLengthRatio]
     if multiple: args = zip(startPt, startDir, endPt, endDir, controlPointLengthRatio)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -166,6 +172,7 @@ def CreateMeanCurve(curveA, curveB, angleToleranceRadians, multiple=False):
     args = [curveA, curveB, angleToleranceRadians]
     if multiple: args = zip(curveA, curveB, angleToleranceRadians)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -185,6 +192,7 @@ def CreateMeanCurve1(curveA, curveB, multiple=False):
     args = [curveA, curveB]
     if multiple: args = zip(curveA, curveB)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -205,6 +213,7 @@ def CreateBlendCurve(curveA, curveB, continuity, multiple=False):
     args = [curveA, curveB, continuity]
     if multiple: args = zip(curveA, curveB, continuity)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -227,6 +236,7 @@ def CreateBlendCurve1(curveA, curveB, continuity, bulgeA, bulgeB, multiple=False
     args = [curveA, curveB, continuity, bulgeA, bulgeB]
     if multiple: args = zip(curveA, curveB, continuity, bulgeA, bulgeB)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -255,6 +265,7 @@ def CreateBlendCurve2(curve0, t0, reverse0, continuity0, curve1, t1, reverse1, c
     args = [curve0, t0, reverse0, continuity0, curve1, t1, reverse1, continuity1]
     if multiple: args = zip(curve0, t0, reverse0, continuity0, curve1, t1, reverse1, continuity1)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -277,6 +288,7 @@ def CreateTweenCurves(curve0, curve1, numCurves, multiple=False):
     args = [curve0, curve1, numCurves]
     if multiple: args = zip(curve0, curve1, numCurves)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -299,6 +311,7 @@ def CreateTweenCurves1(curve0, curve1, numCurves, tolerance, multiple=False):
     args = [curve0, curve1, numCurves, tolerance]
     if multiple: args = zip(curve0, curve1, numCurves, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -322,6 +335,7 @@ def CreateTweenCurvesWithMatching(curve0, curve1, numCurves, multiple=False):
     args = [curve0, curve1, numCurves]
     if multiple: args = zip(curve0, curve1, numCurves)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -345,6 +359,7 @@ def CreateTweenCurvesWithMatching1(curve0, curve1, numCurves, tolerance, multipl
     args = [curve0, curve1, numCurves, tolerance]
     if multiple: args = zip(curve0, curve1, numCurves, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -369,6 +384,7 @@ def CreateTweenCurvesWithSampling(curve0, curve1, numCurves, numSamples, multipl
     args = [curve0, curve1, numCurves, numSamples]
     if multiple: args = zip(curve0, curve1, numCurves, numSamples)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -393,6 +409,7 @@ def CreateTweenCurvesWithSampling1(curve0, curve1, numCurves, numSamples, tolera
     args = [curve0, curve1, numCurves, numSamples, tolerance]
     if multiple: args = zip(curve0, curve1, numCurves, numSamples, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -411,6 +428,7 @@ def JoinCurves(inputCurves, multiple=False):
     args = [inputCurves]
     if multiple: args = [[item] for item in inputCurves]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -431,6 +449,7 @@ def JoinCurves1(inputCurves, joinTolerance, multiple=False):
     args = [inputCurves, joinTolerance]
     if multiple: args = zip(inputCurves, joinTolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -452,6 +471,7 @@ def JoinCurves2(inputCurves, joinTolerance, preserveDirection, multiple=False):
     args = [inputCurves, joinTolerance, preserveDirection]
     if multiple: args = zip(inputCurves, joinTolerance, preserveDirection)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -535,6 +555,7 @@ def CreateFilletCurves(curve0, point0, curve1, point1, radius, join, trim, arcEx
     args = [curve0, point0, curve1, point1, radius, join, trim, arcExtension, tolerance, angleTolerance]
     if multiple: args = zip(curve0, point0, curve1, point1, radius, join, trim, arcExtension, tolerance, angleTolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -554,6 +575,7 @@ def CreateBooleanUnion(curves, multiple=False):
     args = [curves]
     if multiple: args = [[item] for item in curves]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -573,6 +595,7 @@ def CreateBooleanUnion1(curves, tolerance, multiple=False):
     args = [curves, tolerance]
     if multiple: args = zip(curves, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -593,6 +616,7 @@ def CreateBooleanIntersection(curveA, curveB, multiple=False):
     args = [curveA, curveB]
     if multiple: args = zip(curveA, curveB)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -613,6 +637,7 @@ def CreateBooleanIntersection1(curveA, curveB, tolerance, multiple=False):
     args = [curveA, curveB, tolerance]
     if multiple: args = zip(curveA, curveB, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -633,6 +658,7 @@ def CreateBooleanDifference(curveA, curveB, multiple=False):
     args = [curveA, curveB]
     if multiple: args = zip(curveA, curveB)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -653,6 +679,7 @@ def CreateBooleanDifference1(curveA, curveB, tolerance, multiple=False):
     args = [curveA, curveB, tolerance]
     if multiple: args = zip(curveA, curveB, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -673,6 +700,7 @@ def CreateBooleanDifference2(curveA, subtractors, multiple=False):
     args = [curveA, subtractors]
     if multiple: args = zip(curveA, subtractors)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -692,6 +720,50 @@ def CreateBooleanDifference3(curveA, subtractors, tolerance, multiple=False):
     if multiple: url += "?multiple=true"
     args = [curveA, subtractors, tolerance]
     if multiple: args = zip(curveA, subtractors, tolerance)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreateBooleanRegions(curves, plane, points, combineRegions, tolerance, multiple=False):
+    """
+    Curve Boolean method, which trims and splits curves based on their overlapping regions.
+
+    Args:
+        curves (IEnumerable<Curve>): The input curves.
+        plane (Plane): Regions will be found in the projection of the curves to this plane.
+        points (IEnumerable<Point3d>): These points will be projected to plane. All regions that contain at least one of these points will be found.
+        combineRegions (bool): If true, then adjacent regions will be combined.
+        tolerance (double): Function tolerance. When in doubt, use the document's model absolute tolerance.
+
+    Returns:
+        CurveBooleanRegions: The curve Boolean regions if successful, None of no successful.
+    """
+    url = "rhino/geometry/curve/createbooleanregions-curvearray_plane_point3darray_bool_double"
+    if multiple: url += "?multiple=true"
+    args = [curves, plane, points, combineRegions, tolerance]
+    if multiple: args = zip(curves, plane, points, combineRegions, tolerance)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CreateBooleanRegions1(curves, plane, combineRegions, tolerance, multiple=False):
+    """
+    Calculates curve Boolean regions, which trims and splits curves based on their overlapping regions.
+
+    Args:
+        curves (IEnumerable<Curve>): The input curves.
+        plane (Plane): Regions will be found in the projection of the curves to this plane.
+        combineRegions (bool): If true, then adjacent regions will be combined.
+        tolerance (double): Function tolerance. When in doubt, use the document's model absolute tolerance.
+
+    Returns:
+        CurveBooleanRegions: The curve Boolean regions if successful, None of no successful.
+    """
+    url = "rhino/geometry/curve/createbooleanregions-curvearray_plane_bool_double"
+    if multiple: url += "?multiple=true"
+    args = [curves, plane, combineRegions, tolerance]
+    if multiple: args = zip(curves, plane, combineRegions, tolerance)
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -718,6 +790,7 @@ def CreateTextOutlines(text, font, textHeight, textStyle, closeLoops, plane, sma
     args = [text, font, textHeight, textStyle, closeLoops, plane, smallCapsScale, tolerance]
     if multiple: args = zip(text, font, textHeight, textStyle, closeLoops, plane, smallCapsScale, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -742,6 +815,7 @@ def CreateCurve2View(curveA, curveB, vectorA, vectorB, tolerance, angleTolerance
     args = [curveA, curveB, vectorA, vectorB, tolerance, angleTolerance]
     if multiple: args = zip(curveA, curveB, vectorA, vectorB, tolerance, angleTolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -783,6 +857,7 @@ def ProjectToMesh(curve, mesh, direction, tolerance, multiple=False):
     args = [curve, mesh, direction, tolerance]
     if multiple: args = zip(curve, mesh, direction, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -804,6 +879,7 @@ def ProjectToMesh1(curve, meshes, direction, tolerance, multiple=False):
     args = [curve, meshes, direction, tolerance]
     if multiple: args = zip(curve, meshes, direction, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -825,6 +901,7 @@ def ProjectToMesh2(curves, meshes, direction, tolerance, multiple=False):
     args = [curves, meshes, direction, tolerance]
     if multiple: args = zip(curves, meshes, direction, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -846,6 +923,7 @@ def ProjectToBrep(curve, brep, direction, tolerance, multiple=False):
     args = [curve, brep, direction, tolerance]
     if multiple: args = zip(curve, brep, direction, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -867,6 +945,7 @@ def ProjectToBrep1(curve, breps, direction, tolerance, multiple=False):
     args = [curve, breps, direction, tolerance]
     if multiple: args = zip(curve, breps, direction, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -910,6 +989,7 @@ def ProjectToBrep3(curves, breps, direction, tolerance, multiple=False):
     args = [curves, breps, direction, tolerance]
     if multiple: args = zip(curves, breps, direction, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -952,6 +1032,7 @@ def ProjectToPlane(curve, plane, multiple=False):
     args = [curve, plane]
     if multiple: args = zip(curve, plane)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -972,6 +1053,7 @@ def PullToBrepFace(curve, face, tolerance, multiple=False):
     args = [curve, face, tolerance]
     if multiple: args = zip(curve, face, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1032,6 +1114,7 @@ def DuplicateSegments(thisCurve, multiple=False):
     args = [thisCurve]
     if multiple: args = [[item] for item in thisCurve]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1055,6 +1138,7 @@ def Smooth(thisCurve, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries
     args = [thisCurve, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries, coordinateSystem]
     if multiple: args = zip(thisCurve, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries, coordinateSystem)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1079,6 +1163,7 @@ def Smooth1(thisCurve, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundarie
     args = [thisCurve, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries, coordinateSystem, plane]
     if multiple: args = zip(thisCurve, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries, coordinateSystem, plane)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1178,6 +1263,7 @@ def InflectionPoints(thisCurve, multiple=False):
     args = [thisCurve]
     if multiple: args = [[item] for item in thisCurve]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToPoint3d(response)
     return response
 
 
@@ -1194,6 +1280,7 @@ def MaxCurvaturePoints(thisCurve, multiple=False):
     args = [thisCurve]
     if multiple: args = [[item] for item in thisCurve]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToPoint3d(response)
     return response
 
 
@@ -1426,6 +1513,7 @@ def CreatePeriodicCurve(curve, multiple=False):
     args = [curve]
     if multiple: args = [[item] for item in curve]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1446,6 +1534,7 @@ def CreatePeriodicCurve1(curve, smooth, multiple=False):
     args = [curve, smooth]
     if multiple: args = zip(curve, smooth)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1466,6 +1555,7 @@ def PointAtLength(thisCurve, length, multiple=False):
     args = [thisCurve, length]
     if multiple: args = zip(thisCurve, length)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToPoint3d(response)
     return response
 
 
@@ -1486,6 +1576,7 @@ def PointAtNormalizedLength(thisCurve, length, multiple=False):
     args = [thisCurve, length]
     if multiple: args = zip(thisCurve, length)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToPoint3d(response)
     return response
 
 
@@ -2062,6 +2153,7 @@ def DivideEquidistant(thisCurve, distance, multiple=False):
     args = [thisCurve, distance]
     if multiple: args = zip(thisCurve, distance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToPoint3d(response)
     return response
 
 
@@ -2082,6 +2174,7 @@ def DivideAsContour(thisCurve, contourStart, contourEnd, interval, multiple=Fals
     args = [thisCurve, contourStart, contourEnd, interval]
     if multiple: args = zip(thisCurve, contourStart, contourEnd, interval)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToPoint3d(response)
     return response
 
 
@@ -2097,6 +2190,7 @@ def Trim(thisCurve, side, length, multiple=False):
     args = [thisCurve, side, length]
     if multiple: args = zip(thisCurve, side, length)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2116,6 +2210,7 @@ def Split(thisCurve, cutter, tolerance, multiple=False):
     args = [thisCurve, cutter, tolerance]
     if multiple: args = zip(thisCurve, cutter, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2135,6 +2230,7 @@ def Split1(thisCurve, cutter, tolerance, angleToleranceRadians, multiple=False):
     args = [thisCurve, cutter, tolerance, angleToleranceRadians]
     if multiple: args = zip(thisCurve, cutter, tolerance, angleToleranceRadians)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2154,6 +2250,7 @@ def Split2(thisCurve, cutter, tolerance, multiple=False):
     args = [thisCurve, cutter, tolerance]
     if multiple: args = zip(thisCurve, cutter, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2173,6 +2270,7 @@ def Split3(thisCurve, cutter, tolerance, angleToleranceRadians, multiple=False):
     args = [thisCurve, cutter, tolerance, angleToleranceRadians]
     if multiple: args = zip(thisCurve, cutter, tolerance, angleToleranceRadians)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2196,6 +2294,7 @@ def Extend(thisCurve, t0, t1, multiple=False):
     args = [thisCurve, t0, t1]
     if multiple: args = zip(thisCurve, t0, t1)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2216,6 +2315,7 @@ def Extend1(thisCurve, domain, multiple=False):
     args = [thisCurve, domain]
     if multiple: args = zip(thisCurve, domain)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2236,6 +2336,7 @@ def Extend2(thisCurve, side, length, style, multiple=False):
     args = [thisCurve, side, length, style]
     if multiple: args = zip(thisCurve, side, length, style)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2256,6 +2357,7 @@ def Extend3(thisCurve, side, style, geometry, multiple=False):
     args = [thisCurve, side, style, geometry]
     if multiple: args = zip(thisCurve, side, style, geometry)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2276,6 +2378,7 @@ def Extend4(thisCurve, side, style, endPoint, multiple=False):
     args = [thisCurve, side, style, endPoint]
     if multiple: args = zip(thisCurve, side, style, endPoint)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2295,6 +2398,7 @@ def ExtendOnSurface(thisCurve, side, surface, multiple=False):
     args = [thisCurve, side, surface]
     if multiple: args = zip(thisCurve, side, surface)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2314,6 +2418,7 @@ def ExtendOnSurface1(thisCurve, side, face, multiple=False):
     args = [thisCurve, side, face]
     if multiple: args = zip(thisCurve, side, face)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2333,6 +2438,7 @@ def ExtendByLine(thisCurve, side, geometry, multiple=False):
     args = [thisCurve, side, geometry]
     if multiple: args = zip(thisCurve, side, geometry)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2352,6 +2458,7 @@ def ExtendByArc(thisCurve, side, geometry, multiple=False):
     args = [thisCurve, side, geometry]
     if multiple: args = zip(thisCurve, side, geometry)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2386,6 +2493,7 @@ def Simplify(thisCurve, options, distanceTolerance, angleToleranceRadians, multi
     args = [thisCurve, options, distanceTolerance, angleToleranceRadians]
     if multiple: args = zip(thisCurve, options, distanceTolerance, angleToleranceRadians)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2408,6 +2516,7 @@ def SimplifyEnd(thisCurve, end, options, distanceTolerance, angleToleranceRadian
     args = [thisCurve, end, options, distanceTolerance, angleToleranceRadians]
     if multiple: args = zip(thisCurve, end, options, distanceTolerance, angleToleranceRadians)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2433,6 +2542,7 @@ def Fair(thisCurve, distanceTolerance, angleTolerance, clampStart, clampEnd, ite
     args = [thisCurve, distanceTolerance, angleTolerance, clampStart, clampEnd, iterations]
     if multiple: args = zip(thisCurve, distanceTolerance, angleTolerance, clampStart, clampEnd, iterations)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2455,6 +2565,7 @@ def Fit(thisCurve, degree, fitTolerance, angleTolerance, multiple=False):
     args = [thisCurve, degree, fitTolerance, angleTolerance]
     if multiple: args = zip(thisCurve, degree, fitTolerance, angleTolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2475,6 +2586,7 @@ def Rebuild(thisCurve, pointCount, degree, preserveTangents, multiple=False):
     args = [thisCurve, pointCount, degree, preserveTangents]
     if multiple: args = zip(thisCurve, pointCount, degree, preserveTangents)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2647,6 +2759,7 @@ def Offset(thisCurve, plane, distance, tolerance, cornerStyle, multiple=False):
     args = [thisCurve, plane, distance, tolerance, cornerStyle]
     if multiple: args = zip(thisCurve, plane, distance, tolerance, cornerStyle)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2671,6 +2784,7 @@ def Offset1(thisCurve, directionPoint, normal, distance, tolerance, cornerStyle,
     args = [thisCurve, directionPoint, normal, distance, tolerance, cornerStyle]
     if multiple: args = zip(thisCurve, directionPoint, normal, distance, tolerance, cornerStyle)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2699,6 +2813,7 @@ def RibbonOffset(thisCurve, distance, blendRadius, directionPoint, normal, toler
     args = [thisCurve, distance, blendRadius, directionPoint, normal, tolerance]
     if multiple: args = zip(thisCurve, distance, blendRadius, directionPoint, normal, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2719,6 +2834,7 @@ def OffsetOnSurface(thisCurve, face, distance, fittingTolerance, multiple=False)
     args = [thisCurve, face, distance, fittingTolerance]
     if multiple: args = zip(thisCurve, face, distance, fittingTolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2740,6 +2856,7 @@ def OffsetOnSurface1(thisCurve, face, throughPoint, fittingTolerance, multiple=F
     args = [thisCurve, face, throughPoint, fittingTolerance]
     if multiple: args = zip(thisCurve, face, throughPoint, fittingTolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2762,6 +2879,7 @@ def OffsetOnSurface2(thisCurve, face, curveParameters, offsetDistances, fittingT
     args = [thisCurve, face, curveParameters, offsetDistances, fittingTolerance]
     if multiple: args = zip(thisCurve, face, curveParameters, offsetDistances, fittingTolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2782,6 +2900,7 @@ def OffsetOnSurface3(thisCurve, surface, distance, fittingTolerance, multiple=Fa
     args = [thisCurve, surface, distance, fittingTolerance]
     if multiple: args = zip(thisCurve, surface, distance, fittingTolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2803,6 +2922,7 @@ def OffsetOnSurface4(thisCurve, surface, throughPoint, fittingTolerance, multipl
     args = [thisCurve, surface, throughPoint, fittingTolerance]
     if multiple: args = zip(thisCurve, surface, throughPoint, fittingTolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2825,6 +2945,7 @@ def OffsetOnSurface5(thisCurve, surface, curveParameters, offsetDistances, fitti
     args = [thisCurve, surface, curveParameters, offsetDistances, fittingTolerance]
     if multiple: args = zip(thisCurve, surface, curveParameters, offsetDistances, fittingTolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2844,6 +2965,7 @@ def PullToBrepFace1(thisCurve, face, tolerance, multiple=False):
     args = [thisCurve, face, tolerance]
     if multiple: args = zip(thisCurve, face, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2866,5 +2988,6 @@ def OffsetNormalToSurface(thisCurve, surface, height, multiple=False):
     args = [thisCurve, surface, height]
     if multiple: args = zip(thisCurve, surface, height)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 

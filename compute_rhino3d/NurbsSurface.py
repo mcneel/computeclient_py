@@ -46,6 +46,7 @@ def CreateCurveOnSurface(surface, points, tolerance, periodic, multiple=False):
     args = [surface, points, tolerance, periodic]
     if multiple: args = zip(surface, points, tolerance, periodic)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -89,6 +90,7 @@ def CreateFromPoints(points, uCount, vCount, uDegree, vDegree, multiple=False):
     args = [points, uCount, vCount, uDegree, vDegree]
     if multiple: args = zip(points, uCount, vCount, uDegree, vDegree)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -113,6 +115,7 @@ def CreateThroughPoints(points, uCount, vCount, uDegree, vDegree, uClosed, vClos
     args = [points, uCount, vCount, uDegree, vDegree, uClosed, vClosed]
     if multiple: args = zip(points, uCount, vCount, uDegree, vDegree, uClosed, vClosed)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -135,6 +138,7 @@ def CreateFromCorners(corner1, corner2, corner3, corner4, multiple=False):
     args = [corner1, corner2, corner3, corner4]
     if multiple: args = zip(corner1, corner2, corner3, corner4)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -157,6 +161,7 @@ def CreateFromCorners1(corner1, corner2, corner3, corner4, tolerance, multiple=F
     args = [corner1, corner2, corner3, corner4, tolerance]
     if multiple: args = zip(corner1, corner2, corner3, corner4, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -177,6 +182,7 @@ def CreateFromCorners2(corner1, corner2, corner3, multiple=False):
     args = [corner1, corner2, corner3]
     if multiple: args = zip(corner1, corner2, corner3)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -198,6 +204,7 @@ def CreateRailRevolvedSurface(profile, rail, axis, scaleHeight, multiple=False):
     args = [profile, rail, axis, scaleHeight]
     if multiple: args = zip(profile, rail, axis, scaleHeight)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 

@@ -13,5 +13,6 @@ def GetWireframe(thisExtrusion, multiple=False):
     args = [thisExtrusion]
     if multiple: args = [[item] for item in thisExtrusion]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 

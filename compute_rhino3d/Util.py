@@ -4,7 +4,7 @@ import requests
 
 __version__ = '0.9.0'
 
-url = "https://compute.rhino3d.com/"
+url = 'https://compute.rhino3d.com/'
 authToken = ''
 stopat = 0
 
@@ -46,14 +46,47 @@ def PythonEvaluate(script, inputs, output_names):
                        script to return
     Returns:
         dict: The script has access to an output dict variable that it can
-              fill with values. This information is returned from the server to
-              the client.
+              fill with values. This information is returned from the server
+              to the client.
     """
     encodedInput = rhino3dm.ArchivableDictionary.EncodeDict(inputs)
-    url = "rhino/python/evaluate"
+    url = 'rhino/python/evaluate'
     args = [script, json.dumps(encodedInput), output_names]
     response = ComputeFetch(url, args)
     output = rhino3dm.ArchivableDictionary.DecodeDict(json.loads(response))
     return output
 
+
+def DecodeToCommonObject(item):
+    if item is None:
+        return None
+    if isinstance(item, list):
+        return [rhino3dm.CommonObject.Decode(x) for x in item]
+    return rhino3dm.CommonObject.Decode(item)
+
+
+def DecodeToPoint3d(item):
+    if item is None:
+        return None
+    if isinstance(item, list):
+        return [DecodeToPoint3d(x) for x in item]
+    return rhino3dm.Point3d(item['X'], item['Y'], item['Z'])
+
+
+def DecodeToVector3d(item):
+    if item is None:
+        return None
+    if isinstance(item, list):
+        return [DecodeToVector3d(x) for x in item]
+    return rhino3dm.Vector3d(item['X'], item['Y'], item['Z'])
+
+
+def DecodeToLine(item):
+    if item is None:
+        return None
+    if isinstance(item, list):
+        return [DecodeToLine(x) for x in item]
+    start = DecodeToPoint3d(item['From'])
+    end = DecodeToPoint3d(item['To'])
+    return rhino3dm.Line(start,end)
 

@@ -22,6 +22,7 @@ def MakeCompatible(curves, startPt, endPt, simplifyMethod, numPoints, refitToler
     args = [curves, startPt, endPt, simplifyMethod, numPoints, refitTolerance, angleTolerance]
     if multiple: args = zip(curves, startPt, endPt, simplifyMethod, numPoints, refitTolerance, angleTolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -42,6 +43,7 @@ def CreateParabolaFromVertex(vertex, startPoint, endPoint, multiple=False):
     args = [vertex, startPoint, endPoint]
     if multiple: args = zip(vertex, startPoint, endPoint)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -62,6 +64,7 @@ def CreateParabolaFromFocus(focus, startPoint, endPoint, multiple=False):
     args = [focus, startPoint, endPoint]
     if multiple: args = zip(focus, startPoint, endPoint)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -81,6 +84,7 @@ def CreateFromArc(arc, degree, cvCount, multiple=False):
     args = [arc, degree, cvCount]
     if multiple: args = zip(arc, degree, cvCount)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -96,6 +100,7 @@ def CreateHSpline(points, multiple=False):
     args = [points]
     if multiple: args = [[item] for item in points]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -114,6 +119,7 @@ def CreateHSpline1(points, startTangent, endTangent, multiple=False):
     args = [points, startTangent, endTangent]
     if multiple: args = zip(points, startTangent, endTangent)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -133,6 +139,7 @@ def CreateFromCircle(circle, degree, cvCount, multiple=False):
     args = [circle, degree, cvCount]
     if multiple: args = zip(circle, degree, cvCount)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -244,6 +251,7 @@ def CreateSpiral(axisStart, axisDir, radiusPoint, pitch, turnCount, radius0, rad
     args = [axisStart, axisDir, radiusPoint, pitch, turnCount, radius0, radius1]
     if multiple: args = zip(axisStart, axisDir, radiusPoint, pitch, turnCount, radius0, radius1)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -278,5 +286,6 @@ def CreateSpiral1(railCurve, t0, t1, radiusPoint, pitch, turnCount, radius0, rad
     args = [railCurve, t0, t1, radiusPoint, pitch, turnCount, radius0, radius1, pointsPerTurn]
     if multiple: args = zip(railCurve, t0, t1, radiusPoint, pitch, turnCount, radius0, radius1, pointsPerTurn)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
