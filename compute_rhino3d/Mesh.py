@@ -17,6 +17,7 @@ def CreateFromPlane(plane, xInterval, yInterval, xCount, yCount, multiple=False)
     args = [plane, xInterval, yInterval, xCount, yCount]
     if multiple: args = zip(plane, xInterval, yInterval, xCount, yCount)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -38,6 +39,7 @@ def CreateFromBox(box, xCount, yCount, zCount, multiple=False):
     args = [box, xCount, yCount, zCount]
     if multiple: args = zip(box, xCount, yCount, zCount)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -56,6 +58,7 @@ def CreateFromBox1(box, xCount, yCount, zCount, multiple=False):
     args = [box, xCount, yCount, zCount]
     if multiple: args = zip(box, xCount, yCount, zCount)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -65,6 +68,7 @@ def CreateFromBox2(corners, xCount, yCount, zCount, multiple=False):
 
     Args:
         corners (IEnumerable<Point3d>): 8 points defining the box corners arranged as the vN labels indicate.
+            v7_____________v6|\             |\| \            | \|  \ _____________\|   v4         |   v5|   |          |   ||   |          |   |v3--|----------v2  | \  |           \  |  \ |            \ |   \|             \|    v0_____________v1
         xCount (int): Number of faces in x-direction.
         yCount (int): Number of faces in y-direction.
         zCount (int): Number of faces in z-direction.
@@ -80,6 +84,7 @@ def CreateFromBox2(corners, xCount, yCount, zCount, multiple=False):
     args = [corners, xCount, yCount, zCount]
     if multiple: args = zip(corners, xCount, yCount, zCount)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -97,6 +102,7 @@ def CreateFromSphere(sphere, xCount, yCount, multiple=False):
     args = [sphere, xCount, yCount]
     if multiple: args = zip(sphere, xCount, yCount)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -121,6 +127,7 @@ def CreateIcoSphere(sphere, subdivisions, multiple=False):
     args = [sphere, subdivisions]
     if multiple: args = zip(sphere, subdivisions)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -145,6 +152,7 @@ def CreateQuadSphere(sphere, subdivisions, multiple=False):
     args = [sphere, subdivisions]
     if multiple: args = zip(sphere, subdivisions)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -164,6 +172,7 @@ def CreateFromCylinder(cylinder, vertical, around, multiple=False):
     args = [cylinder, vertical, around]
     if multiple: args = zip(cylinder, vertical, around)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -185,6 +194,7 @@ def CreateFromCylinder1(cylinder, vertical, around, capBottom, capTop, multiple=
     args = [cylinder, vertical, around, capBottom, capTop]
     if multiple: args = zip(cylinder, vertical, around, capBottom, capTop)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -207,6 +217,7 @@ def CreateFromCylinder2(cylinder, vertical, around, capBottom, capTop, quadCaps,
     args = [cylinder, vertical, around, capBottom, capTop, quadCaps]
     if multiple: args = zip(cylinder, vertical, around, capBottom, capTop, quadCaps)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -226,6 +237,7 @@ def CreateFromCone(cone, vertical, around, multiple=False):
     args = [cone, vertical, around]
     if multiple: args = zip(cone, vertical, around)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -246,6 +258,7 @@ def CreateFromCone1(cone, vertical, around, solid, multiple=False):
     args = [cone, vertical, around, solid]
     if multiple: args = zip(cone, vertical, around, solid)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -267,6 +280,7 @@ def CreateFromCone2(cone, vertical, around, solid, quadCaps, multiple=False):
     args = [cone, vertical, around, solid, quadCaps]
     if multiple: args = zip(cone, vertical, around, solid, quadCaps)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -287,6 +301,7 @@ def CreateFromTorus(torus, vertical, around, multiple=False):
     args = [torus, vertical, around]
     if multiple: args = zip(torus, vertical, around)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -306,6 +321,7 @@ def CreateFromPlanarBoundary(boundary, parameters, multiple=False):
     args = [boundary, parameters]
     if multiple: args = zip(boundary, parameters)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -326,6 +342,7 @@ def CreateFromPlanarBoundary1(boundary, parameters, tolerance, multiple=False):
     args = [boundary, parameters, tolerance]
     if multiple: args = zip(boundary, parameters, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -344,6 +361,7 @@ def CreateFromClosedPolyline(polyline, multiple=False):
     args = [polyline]
     if multiple: args = [[item] for item in polyline]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -368,6 +386,7 @@ def CreateFromTessellation(points, edges, plane, allowNewVertices, multiple=Fals
     args = [points, edges, plane, allowNewVertices]
     if multiple: args = zip(points, edges, plane, allowNewVertices)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -386,6 +405,7 @@ def CreateFromBrep(brep, multiple=False):
     args = [brep]
     if multiple: args = [[item] for item in brep]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -405,6 +425,7 @@ def CreateFromBrep1(brep, meshingParameters, multiple=False):
     args = [brep, meshingParameters]
     if multiple: args = zip(brep, meshingParameters)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -423,6 +444,7 @@ def CreateFromSurface(surface, multiple=False):
     args = [surface]
     if multiple: args = [[item] for item in surface]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -442,6 +464,7 @@ def CreateFromSurface1(surface, meshingParameters, multiple=False):
     args = [surface, meshingParameters]
     if multiple: args = zip(surface, meshingParameters)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -454,6 +477,7 @@ def CreateFromSubD(subd, displayDensity, multiple=False):
     args = [subd, displayDensity]
     if multiple: args = zip(subd, displayDensity)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -466,6 +490,7 @@ def CreateFromSubDControlNet(subd, multiple=False):
     args = [subd]
     if multiple: args = [[item] for item in subd]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -518,6 +543,7 @@ def CreatePatch(outerBoundary, angleToleranceRadians, pullbackSurface, innerBoun
     args = [outerBoundary, angleToleranceRadians, pullbackSurface, innerBoundaryCurves, innerBothSideCurves, innerPoints, trimback, divisions]
     if multiple: args = zip(outerBoundary, angleToleranceRadians, pullbackSurface, innerBoundaryCurves, innerBothSideCurves, innerPoints, trimback, divisions)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -536,6 +562,7 @@ def CreateBooleanUnion(meshes, multiple=False):
     args = [meshes]
     if multiple: args = [[item] for item in meshes]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -555,6 +582,7 @@ def CreateBooleanDifference(firstSet, secondSet, multiple=False):
     args = [firstSet, secondSet]
     if multiple: args = zip(firstSet, secondSet)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -574,6 +602,7 @@ def CreateBooleanIntersection(firstSet, secondSet, multiple=False):
     args = [firstSet, secondSet]
     if multiple: args = zip(firstSet, secondSet)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -593,6 +622,7 @@ def CreateBooleanSplit(meshesToSplit, meshSplitters, multiple=False):
     args = [meshesToSplit, meshSplitters]
     if multiple: args = zip(meshesToSplit, meshSplitters)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -617,6 +647,50 @@ def CreateFromCurvePipe(curve, radius, segments, accuracy, capType, faceted, int
     args = [curve, radius, segments, accuracy, capType, faceted, intervals]
     if multiple: args = zip(curve, radius, segments, accuracy, capType, faceted, intervals)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreateFromCurveExtrusion(curve, direction, parameters, boundingBox, multiple=False):
+    """
+    Constructs a new extrusion from a curve.
+
+    Args:
+        curve (Curve): A curve to extrude.
+        direction (Vector3d): The direction of extrusion.
+        parameters (MeshingParameters): The parameters of meshing.
+        boundingBox (BoundingBox): The bounding box controls the length of the estrusion.
+
+    Returns:
+        Mesh: A new mesh, or None on failure.
+    """
+    url = "rhino/geometry/mesh/createfromcurveextrusion-curve_vector3d_meshingparameters_boundingbox"
+    if multiple: url += "?multiple=true"
+    args = [curve, direction, parameters, boundingBox]
+    if multiple: args = zip(curve, direction, parameters, boundingBox)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreateFromMeshArrayCleanUp(meshes, tolerance, mendSinglePrecisionVertexJump, multiple=False):
+    """
+    Repairs meshes with vertices that are too near, using a tolerance value.
+
+    Args:
+        meshes (IEnumerable<Mesh>): The meshes to be repared.
+        tolerance (double): A minimum distance for clean vertices.
+        mendSinglePrecisionVertexJump (bool): If true, operations are performed on double precision vertices so that, when single precision vertices are computed, they will keep consistent.
+
+    Returns:
+        Mesh[]: A valid meshes array if successful. If no change was required, some meshes can be null. Otherwise, null, when no changes were done.
+    """
+    url = "rhino/geometry/mesh/createfrommesharraycleanup-mesharray_double_bool"
+    if multiple: url += "?multiple=true"
+    args = [meshes, tolerance, mendSinglePrecisionVertexJump]
+    if multiple: args = zip(meshes, tolerance, mendSinglePrecisionVertexJump)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -791,6 +865,7 @@ def ExtractNonManifoldEdges(thisMesh, selective, multiple=False):
     args = [thisMesh, selective]
     if multiple: args = zip(thisMesh, selective)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -903,6 +978,7 @@ def SplitDisjointPieces(thisMesh, multiple=False):
     args = [thisMesh]
     if multiple: args = [[item] for item in thisMesh]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -921,6 +997,7 @@ def Split(thisMesh, plane, multiple=False):
     args = [thisMesh, plane]
     if multiple: args = zip(thisMesh, plane)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -939,6 +1016,7 @@ def Split1(thisMesh, mesh, multiple=False):
     args = [thisMesh, mesh]
     if multiple: args = zip(thisMesh, mesh)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -957,6 +1035,34 @@ def Split2(thisMesh, meshes, multiple=False):
     args = [thisMesh, meshes]
     if multiple: args = zip(thisMesh, meshes)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def Split3(thisMesh, meshes, tolerance, preprocessing, textLog, cancel, progress, multiple=False):
+    """
+    Split a mesh with a collection of meshes.
+
+    Args:
+        meshes (IEnumerable<Mesh>): Meshes to split with.
+        tolerance (double): A value for intersection tolerance.
+            WARNING! Correct values are typically in the (10e-8 - 10e-4) range.An option is to use the document tolerance diminished by a few orders or magnitude.
+        preprocessing (bool): Indicates if a preprocessing step can be executed.
+            Some groups of meshes have distances between vertices and edges that are below the tolerance indicated. In this case, this parameter allows the function
+            to improve the mesh in order to increase likelihood of intersection success. The mesh topology might change slightly, but not the overall shape.If meshes have no distances between vertices and edges laying below the tolerance that is indicated, this parameter will do nothing.
+        textLog (TextLog): A text log to write onto.
+        cancel (CancellationToken): A cancellation token.
+        progress (IProgress<double>): A progress reporter item. This can be null.
+
+    Returns:
+        Mesh[]: An array of mesh parts representing the split result, or null: when no mesh intersected, or if a cancel stopped the computation.
+    """
+    url = "rhino/geometry/mesh/split-mesh_mesharray_double_bool_textlog_cancellationtoken_doublearray"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, meshes, tolerance, preprocessing, textLog, cancel, progress]
+    if multiple: args = zip(thisMesh, meshes, tolerance, preprocessing, textLog, cancel, progress)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1047,6 +1153,7 @@ def ExplodeAtUnweldedEdges(thisMesh, multiple=False):
     args = [thisMesh]
     if multiple: args = [[item] for item in thisMesh]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1065,6 +1172,7 @@ def ClosestPoint(thisMesh, testPoint, multiple=False):
     args = [thisMesh, testPoint]
     if multiple: args = zip(thisMesh, testPoint)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToPoint3d(response)
     return response
 
 
@@ -1159,6 +1267,7 @@ def PointAt(thisMesh, meshPoint, multiple=False):
     args = [thisMesh, meshPoint]
     if multiple: args = zip(thisMesh, meshPoint)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToPoint3d(response)
     return response
 
 
@@ -1182,6 +1291,7 @@ def PointAt1(thisMesh, faceIndex, t0, t1, t2, t3, multiple=False):
     args = [thisMesh, faceIndex, t0, t1, t2, t3]
     if multiple: args = zip(thisMesh, faceIndex, t0, t1, t2, t3)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToPoint3d(response)
     return response
 
 
@@ -1284,6 +1394,72 @@ def PullPointsToMesh(thisMesh, points, multiple=False):
     args = [thisMesh, points]
     if multiple: args = zip(thisMesh, points)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToPoint3d(response)
+    return response
+
+
+def PullCurve(thisMesh, curve, tolerance, multiple=False):
+    """
+    Gets a polyline approximation of the input curve and then moves its control points to the closest point on the mesh.
+    Then it "connects the points" over edges so that a polyline on the mesh is formed.
+
+    Args:
+        curve (Curve): A curve to pull.
+        tolerance (double): A tolerance value.
+
+    Returns:
+        PolylineCurve: A polyline curve, or None if none could be constructed.
+    """
+    url = "rhino/geometry/mesh/pullcurve-mesh_curve_double"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, curve, tolerance]
+    if multiple: args = zip(thisMesh, curve, tolerance)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def SplitWithProjectedPolylines(thisMesh, curves, tolerance, multiple=False):
+    """
+    Splits a mesh by adding edges in correspondance with input polylines, and divides the mesh at partitioned areas.
+    Polyline segments that are measured not to be on the mesh will be ignored.
+
+    Args:
+        curves (IEnumerable<PolylineCurve>): An array, a list or any enumerable of polyline curves.
+        tolerance (double): A tolerance value.
+
+    Returns:
+        Mesh[]: An array of meshes, or None if no change would happen.
+    """
+    url = "rhino/geometry/mesh/splitwithprojectedpolylines-mesh_polylinecurvearray_double"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, curves, tolerance]
+    if multiple: args = zip(thisMesh, curves, tolerance)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def SplitWithProjectedPolylines1(thisMesh, curves, tolerance, textLog, cancel, progress, multiple=False):
+    """
+    Splits a mesh by adding edges in correspondance with input polylines, and divides the mesh at partitioned areas.
+    Polyline segments that are measured not to be on the mesh will be ignored.
+
+    Args:
+        curves (IEnumerable<PolylineCurve>): An array, a list or any enumerable of polyline curves.
+        tolerance (double): A tolerance value.
+        textLog (TextLog): A text log, or null.
+        cancel (CancellationToken): A cancellation token to stop the computation at a given point.
+        progress (IProgress<double>): A progress reporter to inform the user about progress. The reported value is indicative.
+
+    Returns:
+        Mesh[]: An array of meshes, or None if no change would happen.
+    """
+    url = "rhino/geometry/mesh/splitwithprojectedpolylines-mesh_polylinecurvearray_double_textlog_cancellationtoken_doublearray"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, curves, tolerance, textLog, cancel, progress]
+    if multiple: args = zip(thisMesh, curves, tolerance, textLog, cancel, progress)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1303,6 +1479,7 @@ def Offset(thisMesh, distance, multiple=False):
     args = [thisMesh, distance]
     if multiple: args = zip(thisMesh, distance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1324,6 +1501,7 @@ def Offset1(thisMesh, distance, solidify, multiple=False):
     args = [thisMesh, distance, solidify]
     if multiple: args = zip(thisMesh, distance, solidify)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1346,6 +1524,7 @@ def Offset2(thisMesh, distance, solidify, direction, multiple=False):
     args = [thisMesh, distance, solidify, direction]
     if multiple: args = zip(thisMesh, distance, solidify, direction)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1484,6 +1663,7 @@ def WithShutLining(thisMesh, faceted, tolerance, curves, multiple=False):
     args = [thisMesh, faceted, tolerance, curves]
     if multiple: args = zip(thisMesh, faceted, tolerance, curves)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1502,6 +1682,7 @@ def WithDisplacement(thisMesh, displacement, multiple=False):
     args = [thisMesh, displacement]
     if multiple: args = zip(thisMesh, displacement)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1525,6 +1706,7 @@ def WithEdgeSoftening(thisMesh, softeningRadius, chamfer, faceted, force, angleT
     args = [thisMesh, softeningRadius, chamfer, faceted, force, angleThreshold]
     if multiple: args = zip(thisMesh, softeningRadius, chamfer, faceted, force, angleThreshold)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1538,6 +1720,7 @@ def QuadRemeshBrep(brep, parameters, multiple=False):
     args = [brep, parameters]
     if multiple: args = zip(brep, parameters)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1556,6 +1739,7 @@ def QuadRemeshBrep1(brep, parameters, guideCurves, multiple=False):
     args = [brep, parameters, guideCurves]
     if multiple: args = zip(brep, parameters, guideCurves)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1601,6 +1785,7 @@ def QuadRemesh(thisMesh, parameters, multiple=False):
     args = [thisMesh, parameters]
     if multiple: args = zip(thisMesh, parameters)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1618,6 +1803,7 @@ def QuadRemesh1(thisMesh, parameters, guideCurves, multiple=False):
     args = [thisMesh, parameters, guideCurves]
     if multiple: args = zip(thisMesh, parameters, guideCurves)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1875,6 +2061,7 @@ def CreateContourCurves(meshToContour, contourStart, contourEnd, interval, multi
     args = [meshToContour, contourStart, contourEnd, interval]
     if multiple: args = zip(meshToContour, contourStart, contourEnd, interval)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1894,5 +2081,6 @@ def CreateContourCurves1(meshToContour, sectionPlane, multiple=False):
     args = [meshToContour, sectionPlane]
     if multiple: args = zip(meshToContour, sectionPlane)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 

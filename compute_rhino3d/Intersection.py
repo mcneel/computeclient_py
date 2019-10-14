@@ -326,7 +326,7 @@ def BrepSurface(brep, surface, tolerance, multiple=False):
 
 def MeshMeshFast(meshA, meshB, multiple=False):
     """
-    Quickly intersects two meshes. Overlaps and near misses are ignored.
+    This is an old overload kept for compatibility. Overlaps and near misses are ignored.
 
     Args:
         meshA (Mesh): First mesh for intersection.
@@ -340,35 +340,72 @@ def MeshMeshFast(meshA, meshB, multiple=False):
     args = [meshA, meshB]
     if multiple: args = zip(meshA, meshB)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToLine(response)
     return response
 
 
-def MeshMesh(meshes, tolerance, mode, performPreprocessing, textLog, multiple=False):
+def MeshMesh(meshes, tolerance, preprocessing, sets, overlaps, textLog, cancel, progress, multiple=False):
     """
-    Intersects two meshes. Overlaps and perforations are handled in the output list.
+    Intersects meshes. Overlaps and perforations are provided in the output list.
 
     Args:
-        meshes (IEnumerable<Mesh>): The mesh input list. It cannot be null.
+        meshes (IEnumerable<Mesh>): The mesh input list. This cannot be null. Null entries are tolerated.
         tolerance (double): A tolerance value. If negative, the positive value will be used.
             WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10.
-        performPreprocessing (bool): Indicates if preprocessing should be executed.
-        mode (SetsCombinations): The required working mode.
+        preprocessing (bool): Indicates if a preprocessing step can be executed.
+            Some groups of meshes have distances between vertices and edges that are below the tolerance indicated. In this case, this parameter allows the function
+            to improve the mesh in order to increase likelihood of intersection success. The mesh topology might change slightly, but not the overall shape.If meshes have no distances between vertices and edges laying below the tolerance that is indicated, this parameter will do nothing.
+        sets (SetsCombinations): Determines which sets of intersections are considered. See SetsCombinations for definitions.
+        overlaps (bool): If true, overlaps are computed and returned.
         textLog (FileIO.TextLog): A text log, or null.
+        cancel (System.Threading.CancellationToken): A cancellation token to stop the computation at a given point.
+        progress (IProgress<double>): A progress reporter to inform the user about progress. The reported value is indicative.
 
     Returns:
-        Polyline[]: An array of both intersects, and overlaps.
+        bool: True, if the operation succeeded, otherwise false.
+        intersections (Polyline[]): If true, overlaps are computed and returned.
+        overlapsResult (Polyline[]): If requested, overlaps are returned here.
     """
-    url = "rhino/geometry/intersect/intersection/meshmesh-mesharray_double_setscombinations_bool_fileio.textlog"
+    url = "rhino/geometry/intersect/intersection/meshmesh-mesharray_double_bool_setscombinations_polylinearray_bool_polylinearray_fileio.textlog_system.threading.cancellationtoken_doublearray"
     if multiple: url += "?multiple=true"
-    args = [meshes, tolerance, mode, performPreprocessing, textLog]
-    if multiple: args = zip(meshes, tolerance, mode, performPreprocessing, textLog)
+    args = [meshes, tolerance, preprocessing, sets, overlaps, textLog, cancel, progress]
+    if multiple: args = zip(meshes, tolerance, preprocessing, sets, overlaps, textLog, cancel, progress)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def MeshMesh1(meshes, tolerance, preprocessing, sets, textLog, cancel, progress, multiple=False):
+    """
+    Intersects meshes. Overlaps and perforations are provided in the output list.
+
+    Args:
+        meshes (IEnumerable<Mesh>): The mesh input list. This cannot be null. Null entries are tolerated.
+        tolerance (double): A tolerance value. If negative, the positive value will be used.
+            WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10.
+        preprocessing (bool): Indicates if a preprocessing step can be executed.
+            Some groups of meshes have distances between vertices and edges that are below the tolerance indicated. In this case, this parameter allows the function
+            to improve the mesh in order to increase likelihood of intersection success. The mesh topology might change slightly, but not the overall shape.If meshes have no distances between vertices and edges laying below the tolerance that is indicated, this parameter will do nothing.
+        sets (SetsCombinations): Determines which sets of intersections are considered. See SetsCombinations for definitions.
+        textLog (FileIO.TextLog): A text log, or null.
+        cancel (System.Threading.CancellationToken): A cancellation token to stop the computation at a given point.
+        progress (IProgress<double>): A progress reporter to inform the user about progress. The reported value is indicative.
+
+    Returns:
+        bool: True, if the operation succeeded, otherwise false.
+        intersections (Polyline[]): If true, overlaps are computed and returned.
+        overlapsResult (Mesh): If requested, overlaps are returned here.
+    """
+    url = "rhino/geometry/intersect/intersection/meshmesh-mesharray_double_bool_setscombinations_polylinearray_mesh_fileio.textlog_system.threading.cancellationtoken_doublearray"
+    if multiple: url += "?multiple=true"
+    args = [meshes, tolerance, preprocessing, sets, textLog, cancel, progress]
+    if multiple: args = zip(meshes, tolerance, preprocessing, sets, textLog, cancel, progress)
     response = Util.ComputeFetch(url, args)
     return response
 
 
 def MeshMeshAccurate(meshA, meshB, tolerance, multiple=False):
     """
-    Intersects two meshes. Overlaps and near misses are handled.
+    Intersects two meshes. Overlaps and near misses are handled. This is an old method kept for compatibility.
 
     Args:
         meshA (Mesh): First mesh for intersection.
@@ -377,7 +414,7 @@ def MeshMeshAccurate(meshA, meshB, tolerance, multiple=False):
             WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10.
 
     Returns:
-        Polyline[]: An array of intersection polylines.
+        Polyline[]: An array of intersection and overlaps polylines.
     """
     url = "rhino/geometry/intersect/intersection/meshmeshaccurate-mesh_mesh_double"
     if multiple: url += "?multiple=true"
@@ -485,6 +522,7 @@ def RayShoot(ray, geometry, maxReflections, multiple=False):
     args = [ray, geometry, maxReflections]
     if multiple: args = zip(ray, geometry, maxReflections)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToPoint3d(response)
     return response
 
 
@@ -506,6 +544,7 @@ def ProjectPointsToMeshes(meshes, points, direction, tolerance, multiple=False):
     args = [meshes, points, direction, tolerance]
     if multiple: args = zip(meshes, points, direction, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToPoint3d(response)
     return response
 
 
@@ -549,6 +588,7 @@ def ProjectPointsToBreps(breps, points, direction, tolerance, multiple=False):
     args = [breps, points, direction, tolerance]
     if multiple: args = zip(breps, points, direction, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToPoint3d(response)
     return response
 
 

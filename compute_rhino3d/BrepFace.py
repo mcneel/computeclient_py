@@ -17,6 +17,7 @@ def PullPointsToFace(thisBrepFace, points, tolerance, multiple=False):
     args = [thisBrepFace, points, tolerance]
     if multiple: args = zip(thisBrepFace, points, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToPoint3d(response)
     return response
 
 
@@ -52,6 +53,7 @@ def RemoveHoles(thisBrepFace, tolerance, multiple=False):
     args = [thisBrepFace, tolerance]
     if multiple: args = zip(thisBrepFace, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -89,6 +91,7 @@ def Split(thisBrepFace, curves, tolerance, multiple=False):
     args = [thisBrepFace, curves, tolerance]
     if multiple: args = zip(thisBrepFace, curves, tolerance)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -152,6 +155,7 @@ def TrimAwareIsoCurve(thisBrepFace, direction, constantParameter, multiple=False
     args = [thisBrepFace, direction, constantParameter]
     if multiple: args = zip(thisBrepFace, direction, constantParameter)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 

@@ -939,8 +939,8 @@ Brep
    :rtype: rhino3dm.Point3d
 .. py:function:: IsPointInside(thisBrep, point, tolerance, strictlyIn, multiple=False)
 
-   Determines if point is inside Brep.  This question only makes sense when
-   the brep is a closed manifold.  This function does not not check for
+   Determines if point is inside a Brep.  This question only makes sense when
+   the brep is a closed and manifold.  This function does not not check for
    closed or manifold, so result is not valid in those cases.  Intersects
    a line through point with brep, finds the intersection point Q closest
    to point, and looks at face normal at Q.  If the point Q is on an edge
@@ -954,6 +954,17 @@ Brep
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
    :return: True if point is in, False if not.
+   :rtype: bool
+.. py:function:: GetPointInside(thisBrep, tolerance, multiple=False)
+
+   Finds a point inside of a solid Brep.
+
+   :param float tolerance: Used for intersecting rays and is not necessarily related to the distance from the brep to the found point. \
+      When in doubt, use the document's model absolute tolerance.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Returns False if the input is not solid and manifold, if the Brep's bounding box is less than 2.0 * tolerance wide, \
+      or if no point could be found due to ray shooting or other errors. Otherwise, True is returned.
    :rtype: bool
 .. py:function:: CapPlanarHoles(thisBrep, tolerance, multiple=False)
 

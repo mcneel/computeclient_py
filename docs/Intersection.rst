@@ -180,7 +180,7 @@ Intersection
    :rtype: bool
 .. py:function:: MeshMeshFast(meshA, meshB, multiple=False)
 
-   Quickly intersects two meshes. Overlaps and near misses are ignored.
+   This is an old overload kept for compatibility. Overlaps and near misses are ignored.
 
    :param rhino3dm.Mesh meshA: First mesh for intersection.
    :param rhino3dm.Mesh meshB: Second mesh for intersection.
@@ -188,23 +188,46 @@ Intersection
 
    :return: An array of intersection line segments, or null.
    :rtype: Line[]
-.. py:function:: MeshMesh(meshes, tolerance, mode, performPreprocessing, textLog, multiple=False)
+.. py:function:: MeshMesh(meshes, tolerance, preprocessing, sets, overlaps, textLog, cancel, progress, multiple=False)
 
-   Intersects two meshes. Overlaps and perforations are handled in the output list.
+   Intersects meshes. Overlaps and perforations are provided in the output list.
 
-   :param list[rhino3dm.Mesh] meshes: The mesh input list. It cannot be null.
+   :param list[rhino3dm.Mesh] meshes: The mesh input list. This cannot be null. Null entries are tolerated.
    :param float tolerance: A tolerance value. If negative, the positive value will be used. \
       WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10.
-   :param bool performPreprocessing: Indicates if preprocessing should be executed.
-   :param SetsCombinations mode: The required working mode.
+   :param bool preprocessing: Indicates if a preprocessing step can be executed. \
+      Some groups of meshes have distances between vertices and edges that are below the tolerance indicated. In this case, this parameter allows the function \
+      to improve the mesh in order to increase likelihood of intersection success. The mesh topology might change slightly, but not the overall shape.If meshes have no distances between vertices and edges laying below the tolerance that is indicated, this parameter will do nothing.
+   :param SetsCombinations sets: Determines which sets of intersections are considered. See SetsCombinations for definitions.
+   :param bool overlaps: If true, overlaps are computed and returned.
    :param FileIO.TextLog textLog: A text log, or null.
+   :param System.Threading.CancellationToken cancel: A cancellation token to stop the computation at a given point.
+   :param IProgress<double> progress: A progress reporter to inform the user about progress. The reported value is indicative.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
-   :return: An array of both intersects, and overlaps.
-   :rtype: rhino3dm.Polyline[]
+   :return: True, if the operation succeeded, otherwise false.
+   :rtype: bool
+.. py:function:: MeshMesh1(meshes, tolerance, preprocessing, sets, textLog, cancel, progress, multiple=False)
+
+   Intersects meshes. Overlaps and perforations are provided in the output list.
+
+   :param list[rhino3dm.Mesh] meshes: The mesh input list. This cannot be null. Null entries are tolerated.
+   :param float tolerance: A tolerance value. If negative, the positive value will be used. \
+      WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10.
+   :param bool preprocessing: Indicates if a preprocessing step can be executed. \
+      Some groups of meshes have distances between vertices and edges that are below the tolerance indicated. In this case, this parameter allows the function \
+      to improve the mesh in order to increase likelihood of intersection success. The mesh topology might change slightly, but not the overall shape.If meshes have no distances between vertices and edges laying below the tolerance that is indicated, this parameter will do nothing.
+   :param SetsCombinations sets: Determines which sets of intersections are considered. See SetsCombinations for definitions.
+   :param FileIO.TextLog textLog: A text log, or null.
+   :param System.Threading.CancellationToken cancel: A cancellation token to stop the computation at a given point.
+   :param IProgress<double> progress: A progress reporter to inform the user about progress. The reported value is indicative.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: True, if the operation succeeded, otherwise false.
+   :rtype: bool
 .. py:function:: MeshMeshAccurate(meshA, meshB, tolerance, multiple=False)
 
-   Intersects two meshes. Overlaps and near misses are handled.
+   Intersects two meshes. Overlaps and near misses are handled. This is an old method kept for compatibility.
 
    :param rhino3dm.Mesh meshA: First mesh for intersection.
    :param rhino3dm.Mesh meshB: Second mesh for intersection.
@@ -212,7 +235,7 @@ Intersection
       WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
-   :return: An array of intersection polylines.
+   :return: An array of intersection and overlaps polylines.
    :rtype: rhino3dm.Polyline[]
 .. py:function:: MeshRay(mesh, ray, multiple=False)
 

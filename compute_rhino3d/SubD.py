@@ -10,6 +10,7 @@ def ToBrep(thisSubD, multiple=False):
     args = [thisSubD]
     if multiple: args = [[item] for item in thisSubD]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -22,6 +23,7 @@ def CreateFromMesh(mesh, multiple=False):
     args = [mesh]
     if multiple: args = [[item] for item in mesh]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -34,5 +36,6 @@ def CreateFromMesh1(mesh, options, multiple=False):
     args = [mesh, options]
     if multiple: args = zip(mesh, options)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
