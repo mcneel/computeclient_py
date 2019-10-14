@@ -31,7 +31,7 @@ def EvaluateDefinition(definition, trees):
     Evaluate a grasshopper definition on the compute server.
 
     Args:
-        definition (str): path to a grasshopper defition
+        definition (str): path to a grasshopper definition
         trees (iter): list of DataTree instances
     Returns:
     """
@@ -40,10 +40,17 @@ def EvaluateDefinition(definition, trees):
     if definition.startswith('http:') or definition.startswith('https:'):
         args['pointer'] = definition
     else:
+        encoded = None
         if os.path.isfile(definition):
-            with io.open(definition, 'r', encoding='utf-8-sig') as content_file:
-                definition = content_file.read()
-        encoded = base64.b64encode(definition.encode('utf-8'))
+            if(definition.endswith('gh')):
+                with open(definition, 'rb') as gh:
+                    content_bytes = gh.read()
+                    encoded = base64.b64encode(content_bytes)
+            else:
+                with io.open(definition, 'r', encoding='utf-8-sig') as ghx:
+                    definition = ghx.read()
+        if not encoded:
+            encoded = base64.b64encode(definition.encode('utf-8'))
         args['algo'] = str(encoded, 'utf-8')
 
     args['values'] = [tree.data for tree in trees]
