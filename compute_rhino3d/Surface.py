@@ -156,14 +156,14 @@ def CreatePeriodicSurface1(surface, direction, bSmooth, multiple=False):
 
 def CreateSoftEditSurface(surface, uv, delta, uLength, vLength, tolerance, fixEnds, multiple=False):
     """
-    Creates a soft edited surface from an exising surface using a smooth field of influence.
+    Creates a soft edited surface from an existing surface using a smooth field of influence.
 
     Args:
         surface (Surface): The surface to soft edit.
         uv (Point2d): A point in the parameter space to move from. This location on the surface is moved,
             and the move is smoothly tapered off with increasing distance along the surface from
             this parameter.
-        delta (Vector3d): The direction and magitude, or maximum distance, of the move.
+        delta (Vector3d): The direction and magnitude, or maximum distance, of the move.
         uLength (double): The distance along the surface's u-direction from the editing point over which the
             strength of the editing falls off smoothly.
         vLength (double): The distance along the surface's v-direction from the editing point over which the
@@ -264,8 +264,8 @@ def VariableOffset1(thisSurface, uMinvMin, uMinvMax, uMaxvMin, uMaxvMax, interio
         uMinvMax (double): Offset distance at Domain(0).Min, Domain(1).Max.
         uMaxvMin (double): Offset distance at Domain(0).Max, Domain(1).Min.
         uMaxvMax (double): Offset distance at Domain(0).Max, Domain(1).Max.
-        interiorParameters (IEnumerable<Point2d>): An array of interior uv parameters to offset from.
-        interiorDistances (IEnumerable<double>): >An array of offset distances at the interior uv parameters.
+        interiorParameters (IEnumerable<Point2d>): An array of interior UV parameters to offset from.
+        interiorDistances (IEnumerable<double>): >An array of offset distances at the interior UV parameters.
         tolerance (double): The offset tolerance.
 
     Returns:
@@ -437,7 +437,7 @@ def Offset(thisSurface, distance, tolerance, multiple=False):
         tolerance (double): Offset accuracy.
 
     Returns:
-        Surface: The offsetted surface or None on failure.
+        Surface: The offset surface or None on failure.
     """
     url = "rhino/geometry/surface/offset-surface_double_double"
     if multiple: url += "?multiple=true"
@@ -475,7 +475,7 @@ def InterpolatedCurveOnSurfaceUV(thisSurface, points, tolerance, multiple=False)
 
     Args:
         points (System.Collections.Generic.IEnumerable<Point2d>): List of at least two UV parameter locations on the surface.
-        tolerance (double): Tolerance used for the fit of the pushup curve. Generally, the resulting interpolating curve will be within tolerabce of the surface.
+        tolerance (double): Tolerance used for the fit of the push-up curve. Generally, the resulting interpolating curve will be within tolerance of the surface.
 
     Returns:
         NurbsCurve: A new NURBS curve if successful, or None on error.
@@ -495,10 +495,10 @@ def InterpolatedCurveOnSurfaceUV1(thisSurface, points, tolerance, closed, closed
 
     Args:
         points (System.Collections.Generic.IEnumerable<Point2d>): List of at least two UV parameter locations on the surface.
-        tolerance (double): Tolerance used for the fit of the pushup curve. Generally, the resulting interpolating curve will be within tolerabce of the surface.
+        tolerance (double): Tolerance used for the fit of the push-up curve. Generally, the resulting interpolating curve will be within tolerance of the surface.
         closed (bool): If false, the interpolating curve is not closed. If true, the interpolating curve is closed, and the last point and first point should generally not be equal.
         closedSurfaceHandling (int): If 0, all points must be in the rectangular domain of the surface. If the surface is closed in some direction,
-            then this routine will interpret each point and place it at an appropriate location in the the covering space.
+            then this routine will interpret each point and place it at an appropriate location in the covering space.
             This is the simplest option and should give good results.
             If 1, then more options for more control of handling curves going across seams are available.
             If the surface is closed in some direction, then the points are taken as points in the covering space.
@@ -528,7 +528,7 @@ def InterpolatedCurveOnSurface(thisSurface, points, tolerance, multiple=False):
         tolerance (double): A tolerance value.
 
     Returns:
-        NurbsCurve: A new nurbs curve, or None on error.
+        NurbsCurve: A new NURBS curve, or None on error.
     """
     url = "rhino/geometry/surface/interpolatedcurveonsurface-surface_point3darray_double"
     if multiple: url += "?multiple=true"
@@ -544,8 +544,8 @@ def ShortPath(thisSurface, start, end, tolerance, multiple=False):
     Constructs a geodesic between 2 points, used by ShortPath command in Rhino.
 
     Args:
-        start (Point2d): start point of curve in parameter space. Points must be distinct in the domain of thie surface.
-        end (Point2d): end point of curve in parameter space. Points must be distinct in the domain of thie surface.
+        start (Point2d): start point of curve in parameter space. Points must be distinct in the domain of the surface.
+        end (Point2d): end point of curve in parameter space. Points must be distinct in the domain of the surface.
         tolerance (double): tolerance used in fitting discrete solution.
 
     Returns:
@@ -630,7 +630,7 @@ def Pullback1(thisSurface, curve3d, tolerance, curve3dSubdomain, multiple=False)
         curve3d (Curve): A curve.
         tolerance (double): the maximum acceptable 3d distance between from surface(curve_2d(t))
             to the locus of points on the surface that are closest to curve_3d.
-        curve3dSubdomain (Interval): A subdomain of the curve to sample.
+        curve3dSubdomain (Interval): A sub-domain of the curve to sample.
 
     Returns:
         Curve: 2d curve.

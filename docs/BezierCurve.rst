@@ -5,7 +5,7 @@ BezierCurve
 
 .. py:function:: CreateCubicBeziers(sourceCurve, distanceTolerance, kinkTolerance, multiple=False)
 
-   Constructs an array of cubic, non-rational beziers that fit a curve to a tolerance.
+   Constructs an array of cubic, non-rational Beziers that fit a curve to a tolerance.
 
    :param rhino3dm.Curve sourceCurve: A curve to approximate.
    :param float distanceTolerance: The max fitting error. Use RhinoMath.SqrtEpsilon as a minimum.

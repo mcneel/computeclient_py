@@ -84,13 +84,13 @@ def CreateInterpolatedCurve2(points, degree, knots, startTangent, endTangent, mu
 
 def CreateSoftEditCurve(curve, t, delta, length, fixEnds, multiple=False):
     """
-    Creates a soft edited curve from an exising curve using a smooth field of influence.
+    Creates a soft edited curve from an existing curve using a smooth field of influence.
 
     Args:
         curve (Curve): The curve to soft edit.
         t (double): A parameter on the curve to move from. This location on the curve is moved, and the move
             is smoothly tapered off with increasing distance along the curve from this parameter.
-        delta (Vector3d): The direction and magitude, or maximum distance, of the move.
+        delta (Vector3d): The direction and magnitude, or maximum distance, of the move.
         length (double): The distance along the curve from the editing point over which the strength
             of the editing falls off smoothly.
 
@@ -366,7 +366,7 @@ def CreateTweenCurvesWithMatching1(curve0, curve1, numCurves, tolerance, multipl
 def CreateTweenCurvesWithSampling(curve0, curve1, numCurves, numSamples, multiple=False):
     """
     Creates curves between two open or closed input curves. Use sample points method to make curves compatible.
-    This is how the algorithm workd: Divides the two curves into an equal number of points, finds the midpoint between the
+    This is how the algorithm works: Divides the two curves into an equal number of points, finds the midpoint between the
     corresponding points on the curves and interpolates the tween curve through those points. There is no matching of curves
     direction. Caller must match input curves direction before calling the function.
 
@@ -391,7 +391,7 @@ def CreateTweenCurvesWithSampling(curve0, curve1, numCurves, numSamples, multipl
 def CreateTweenCurvesWithSampling1(curve0, curve1, numCurves, numSamples, tolerance, multiple=False):
     """
     Creates curves between two open or closed input curves. Use sample points method to make curves compatible.
-    This is how the algorithm workd: Divides the two curves into an equal number of points, finds the midpoint between the
+    This is how the algorithm works: Divides the two curves into an equal number of points, finds the midpoint between the
     corresponding points on the curves and interpolates the tween curve through those points. There is no matching of curves
     direction. Caller must match input curves direction before calling the function.
 
@@ -461,7 +461,7 @@ def JoinCurves2(inputCurves, joinTolerance, preserveDirection, multiple=False):
         inputCurves (IEnumerable<Curve>): An array, a list or any enumerable set of curve segments to join.
         joinTolerance (double): Joining tolerance,
             i.e. the distance between segment end-points that is allowed.
-        preserveDirection (bool): If true, curve endpoints will be compared to curve startpoints.If false, all start and endpoints will be compared and copies of input curves may be reversed in output.
+        preserveDirection (bool): If true, curve endpoints will be compared to curve start points.If false, all start and endpoints will be compared and copies of input curves may be reversed in output.
 
     Returns:
         Curve[]: An array of joint curves. This array can be empty.
@@ -803,7 +803,7 @@ def CreateCurve2View(curveA, curveB, vectorA, vectorB, tolerance, angleTolerance
         curveA (Curve): The first curve.
         curveB (Curve): The second curve.
         vectorA (Vector3d): A vector defining the normal direction of the plane which the first curve is drawn upon.
-        vectorB (Vector3d): A vector defining the normal direction of the plane which the seconf curve is drawn upon.
+        vectorB (Vector3d): A vector defining the normal direction of the plane which the second curve is drawn upon.
         tolerance (double): The tolerance for the operation.
         angleTolerance (double): The angle tolerance for the operation.
 
@@ -1042,7 +1042,7 @@ def PullToBrepFace(curve, face, tolerance, multiple=False):
 
     Args:
         curve (Curve): Curve to pull.
-        face (BrepFace): Brepface that pulls.
+        face (BrepFace): Brep face that pulls.
         tolerance (double): Tolerance to use for pulling.
 
     Returns:
@@ -1287,7 +1287,7 @@ def MaxCurvaturePoints(thisCurve, multiple=False):
 def MakeClosed(thisCurve, tolerance, multiple=False):
     """
     If IsClosed, just return true. Otherwise, decide if curve can be closed as
-    follows: Linear curves polylinear curves with 2 segments, Nurbs with 3 or less
+    follows: Linear curves polylinear curves with 2 segments, NURBS with 3 or less
     control points cannot be made closed. Also, if tolerance > 0 and the gap between
     start and end is larger than tolerance, curve cannot be made closed.
     Adjust the curve's endpoint to match its start point.
@@ -1443,7 +1443,7 @@ def Contains1(thisCurve, testPoint, plane, multiple=False):
 
     Args:
         testPoint (Point3d): Point to test.
-        plane (Plane): Plane in in which to compare point and region.
+        plane (Plane): Plane in which to compare point and region.
 
     Returns:
         PointContainment: Relationship between point and curve region.
@@ -1463,7 +1463,7 @@ def Contains2(thisCurve, testPoint, plane, tolerance, multiple=False):
 
     Args:
         testPoint (Point3d): Point to test.
-        plane (Plane): Plane in in which to compare point and region.
+        plane (Plane): Plane in which to compare point and region.
         tolerance (double): Tolerance to use during comparison.
 
     Returns:
@@ -1716,7 +1716,7 @@ def IsShort1(thisCurve, tolerance, subdomain, multiple=False):
 
     Args:
         tolerance (double): Length threshold value for "shortness".
-        subdomain (Interval): The test is performed on the interval that is the intersection of subdomain with Domain()
+        subdomain (Interval): The test is performed on the interval that is the intersection of sub-domain with Domain()
 
     Returns:
         bool: True if the length of the curve is <= tolerance.
@@ -1796,12 +1796,12 @@ def LengthParameter2(thisCurve, segmentLength, subdomain, multiple=False):
     A fractional tolerance of 1e-8 is used in this version of the function.
 
     Args:
-        segmentLength (double): Length of segment to measure. Must be less than or equal to the length of the subdomain.
+        segmentLength (double): Length of segment to measure. Must be less than or equal to the length of the sub-domain.
         subdomain (Interval): The calculation is performed on the specified sub-domain of the curve rather than the whole curve.
 
     Returns:
         bool: True on success, False on failure.
-        t (double): Parameter such that the length of the curve from the start of the subdomain to t is s.
+        t (double): Parameter such that the length of the curve from the start of the sub-domain to t is s.
     """
     url = "rhino/geometry/curve/lengthparameter-curve_double_double_interval"
     if multiple: url += "?multiple=true"
@@ -1816,14 +1816,14 @@ def LengthParameter3(thisCurve, segmentLength, fractionalTolerance, subdomain, m
     Gets the parameter along the curve which coincides with a given length along the curve.
 
     Args:
-        segmentLength (double): Length of segment to measure. Must be less than or equal to the length of the subdomain.
+        segmentLength (double): Length of segment to measure. Must be less than or equal to the length of the sub-domain.
         fractionalTolerance (double): Desired fractional precision.
             fabs(("exact" length from start to t) - arc_length)/arc_length <= fractionalTolerance.
         subdomain (Interval): The calculation is performed on the specified sub-domain of the curve rather than the whole curve.
 
     Returns:
         bool: True on success, False on failure.
-        t (double): Parameter such that the length of the curve from the start of the subdomain to t is s.
+        t (double): Parameter such that the length of the curve from the start of the sub-domain to t is s.
     """
     url = "rhino/geometry/curve/lengthparameter-curve_double_double_double_interval"
     if multiple: url += "?multiple=true"
@@ -1979,7 +1979,7 @@ def NormalizedLengthParameters2(thisCurve, s, absoluteTolerance, subdomain, mult
         absoluteTolerance (double): If absoluteTolerance > 0, then the difference between (s[i+1]-s[i])*curve_length
             and the length of the curve segment from t[i] to t[i+1] will be <= absoluteTolerance.
         subdomain (Interval): The calculation is performed on the specified sub-domain of the curve.
-            A 0.0 s value corresponds to subdomain->Min() and a 1.0 s value corresponds to subdomain->Max().
+            A 0.0 s value corresponds to sub-domain->Min() and a 1.0 s value corresponds to sub-domain->Max().
 
     Returns:
         double[]: If successful, array of curve parameters such that the length of the curve from its start to t[i] is s[i]*curve_length.
@@ -2005,7 +2005,7 @@ def NormalizedLengthParameters3(thisCurve, s, absoluteTolerance, fractionalToler
         fractionalTolerance (double): Desired fractional precision for each segment.
             fabs("true" length - actual length)/(actual length) <= fractionalTolerance.
         subdomain (Interval): The calculation is performed on the specified sub-domain of the curve.
-            A 0.0 s value corresponds to subdomain->Min() and a 1.0 s value corresponds to subdomain->Max().
+            A 0.0 s value corresponds to sub-domain->Min() and a 1.0 s value corresponds to sub-domain->Max().
 
     Returns:
         double[]: If successful, array of curve parameters such that the length of the curve from its start to t[i] is s[i]*curve_length.
@@ -2143,7 +2143,7 @@ def DivideEquidistant(thisCurve, distance, multiple=False):
     Calculates 3d points on a curve where the linear distance between the points is equal.
 
     Args:
-        distance (double): The distance betwen division points.
+        distance (double): The distance between division points.
 
     Returns:
         Point3d[]: An array of equidistant points, or None on error.
@@ -2468,14 +2468,14 @@ def Simplify(thisCurve, options, distanceTolerance, angleToleranceRadians, multi
     The PolyCurve has the following properties
     1. All the PolyCurve segments are LineCurve, PolylineCurve, ArcCurve, or NurbsCurve.
     
-    2. The Nurbs Curves segments do not have fully multiple interior knots.
+    2. The NURBS Curves segments do not have fully multiple interior knots.
     
-    3. Rational Nurbs curves do not have constant weights.
+    3. Rational NURBS curves do not have constant weights.
     
     4. Any segment for which IsLinear() or IsArc() is True is a Line,
     Polyline segment, or an Arc.
     
-    5. Adjacent Colinear or Cocircular segments are combined.
+    5. Adjacent co-linear or co-circular segments are combined.
     
     6. Segments that meet with G1-continuity have there ends tuned up so
     that they meet with G1-continuity to within machine precision.
@@ -2532,7 +2532,7 @@ def Fair(thisCurve, distanceTolerance, angleTolerance, clampStart, clampEnd, ite
         clampStart (int): The number of (control vertices-1) to preserve at start.
             0 = preserve start point1 = preserve start point and 1st derivative2 = preserve start point, 1st and 2nd derivative
         clampEnd (int): Same as clampStart.
-        iterations (int): The number of iteratoins to use in adjusting the curve.
+        iterations (int): The number of iterations to use in adjusting the curve.
 
     Returns:
         Curve: Returns new faired Curve on success, None on failure.
@@ -2579,7 +2579,7 @@ def Rebuild(thisCurve, pointCount, degree, preserveTangents, multiple=False):
         preserveTangents (bool): If true, the end tangents of the input curve will be preserved.
 
     Returns:
-        NurbsCurve: A Nurbs curve on success or None on failure.
+        NurbsCurve: A NURBS curve on success or None on failure.
     """
     url = "rhino/geometry/curve/rebuild-curve_int_int_bool"
     if multiple: url += "?multiple=true"
@@ -2597,7 +2597,7 @@ def ToPolyline(thisCurve, mainSegmentCount, subSegmentCount, maxAngleRadians, ma
     Args:
         mainSegmentCount (int): If mainSegmentCount <= 0, then both subSegmentCount and mainSegmentCount are ignored.
             If mainSegmentCount > 0, then subSegmentCount must be >= 1. In this
-            case the nurb will be broken into mainSegmentCount equally spaced
+            case the NURBS will be broken into mainSegmentCount equally spaced
             chords. If needed, each of these chords can be split into as many
             subSegmentCount sub-parts if the subdivision is necessary for the
             mesh to meet the other meshing constraints. In particular, if
@@ -2640,7 +2640,7 @@ def ToPolyline1(thisCurve, mainSegmentCount, subSegmentCount, maxAngleRadians, m
     Args:
         mainSegmentCount (int): If mainSegmentCount <= 0, then both subSegmentCount and mainSegmentCount are ignored.
             If mainSegmentCount > 0, then subSegmentCount must be >= 1. In this
-            case the nurb will be broken into mainSegmentCount equally spaced
+            case the NURBS will be broken into mainSegmentCount equally spaced
             chords. If needed, each of these chords can be split into as many
             subSegmentCount sub-parts if the subdivision is necessary for the
             mesh to meet the other meshing constraints. In particular, if
@@ -2664,7 +2664,7 @@ def ToPolyline1(thisCurve, mainSegmentCount, subSegmentCount, maxAngleRadians, m
         keepStartPoint (bool): If True the starting point of the curve
             is added to the polyline. If False the starting point of the curve is
             not added to the polyline.
-        curveDomain (Interval): This subdomain of the NURBS curve is approximated.
+        curveDomain (Interval): This sub-domain of the NURBS curve is approximated.
 
     Returns:
         PolylineCurve: PolylineCurve on success, None on error.
@@ -2716,6 +2716,7 @@ def ToArcsAndLines(thisCurve, tolerance, angleTolerance, minimumLength, maximumL
     args = [thisCurve, tolerance, angleTolerance, minimumLength, maximumLength]
     if multiple: args = zip(thisCurve, tolerance, angleTolerance, minimumLength, maximumLength)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -2743,7 +2744,7 @@ def Offset(thisCurve, plane, distance, tolerance, cornerStyle, multiple=False):
     """
     Offsets this curve. If you have a nice offset, then there will be one entry in
     the array. If the original curve had kinks or the offset curve had self
-    intersections, you will get multiple segments in the offset_curves[] array.
+    intersections, you will get multiple segments in the output array.
 
     Args:
         plane (Plane): Offset solution plane.
@@ -2767,7 +2768,7 @@ def Offset1(thisCurve, directionPoint, normal, distance, tolerance, cornerStyle,
     """
     Offsets this curve. If you have a nice offset, then there will be one entry in
     the array. If the original curve had kinks or the offset curve had self
-    intersections, you will get multiple segments in the offset_curves[] array.
+    intersections, you will get multiple segments in the output array.
 
     Args:
         directionPoint (Point3d): A point that indicates the direction of the offset.
@@ -2783,6 +2784,34 @@ def Offset1(thisCurve, directionPoint, normal, distance, tolerance, cornerStyle,
     if multiple: url += "?multiple=true"
     args = [thisCurve, directionPoint, normal, distance, tolerance, cornerStyle]
     if multiple: args = zip(thisCurve, directionPoint, normal, distance, tolerance, cornerStyle)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def Offset2(thisCurve, directionPoint, normal, distance, tolerance, angleTolerance, loose, cornerStyle, endStyle, multiple=False):
+    """
+    Offsets this curve. If you have a nice offset, then there will be one entry in
+    the array. If the original curve had kinks or the offset curve had self
+    intersections, you will get multiple segments in the output array.
+
+    Args:
+        directionPoint (Point3d): A point that indicates the direction of the offset.
+        normal (Vector3d): The normal to the offset plane.
+        distance (double): The positive or negative distance to offset.
+        tolerance (double): The offset or fitting tolerance.
+        angleTolerance (double): The angle tolerance, in radians, used to decide whether to split at kinks.
+        loose (bool): If false, offset within tolerance. If true, offset by moving edit points.
+        cornerStyle (CurveOffsetCornerStyle): Corner style for offset kinks.
+        endStyle (CurveOffsetEndStyle): End style for non-loose, non-closed curve offsets.
+
+    Returns:
+        Curve[]: Offset curves on success, None on failure.
+    """
+    url = "rhino/geometry/curve/offset-curve_point3d_vector3d_double_double_double_bool_curveoffsetcornerstyle_curveoffsetendstyle"
+    if multiple: url += "?multiple=true"
+    args = [thisCurve, directionPoint, normal, distance, tolerance, angleTolerance, loose, cornerStyle, endStyle]
+    if multiple: args = zip(thisCurve, directionPoint, normal, distance, tolerance, angleTolerance, loose, cornerStyle, endStyle)
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response

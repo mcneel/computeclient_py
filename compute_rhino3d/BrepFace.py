@@ -183,7 +183,7 @@ def RebuildEdges(thisBrepFace, tolerance, rebuildSharedEdges, rebuildVertices, m
 
     Args:
         tolerance (double): tolerance for fitting 3d edge curves.
-        rebuildSharedEdges (bool): if False and and edge is used by this face and a neighbor, then the edge
+        rebuildSharedEdges (bool): if False and edge is used by this face and a neighbor, then the edge
             will be skipped.
         rebuildVertices (bool): if true, vertex locations are updated to lie on the surface.
 

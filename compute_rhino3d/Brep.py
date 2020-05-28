@@ -12,7 +12,7 @@ def ChangeSeam(face, direction, parameter, tolerance, multiple=False):
         tolerance (double): Tolerance used to cut up surface.
 
     Returns:
-        Brep: A new Brep that has the same geoemtry as the face with a relocated seam if successful, or None on failure.
+        Brep: A new Brep that has the same geometry as the face with a relocated seam if successful, or None on failure.
     """
     url = "rhino/geometry/brep/changeseam-brepface_int_double_double"
     if multiple: url += "?multiple=true"
@@ -520,7 +520,7 @@ def CreatePatch2(geometry, startingSurface, uSpans, vSpans, trim, tangency, poin
             like a stiff material; higher, less like a stiff material.  That is,
             each span is made to more closely match the spans adjacent to it if there
             is no input geometry mapping to that area of the surface when the
-            flexibility value is low.  The scale is logrithmic. Numbers around 0.001
+            flexibility value is low.  The scale is logarithmic. Numbers around 0.001
             or 0.1 make the patch pretty stiff and numbers around 10 or 100 make the
             surface flexible.
         surfacePull (double): Tends to keep the result surface where it was before the fit in areas where
@@ -755,7 +755,7 @@ def CreateFromSweep4(rail1, rail2, shapes, start, end, closed, tolerance, rebuil
         tolerance (double): Tolerance for fitting surface and rails.
         rebuild (SweepRebuild): The rebuild style.
         rebuildPointCount (int): If rebuild == SweepRebuild.Rebuild, the number of points. Otherwise specify 0.
-        refitTolerance (double): If rebuild == SweepRebuild.Refit, the refit tolerenace. Otherwise, specify 0.0
+        refitTolerance (double): If rebuild == SweepRebuild.Refit, the refit tolerance. Otherwise, specify 0.0
         preserveHeight (bool): Removes the association between the height scaling from the width scaling
 
     Returns:
@@ -802,7 +802,7 @@ def CreateFromTaperedExtrude(curveToExtrude, distance, direction, basePoint, dra
         curveToExtrude (Curve): the curve to extrude
         distance (double): the distance to extrude
         direction (Vector3d): the direction of the extrusion
-        basePoint (Point3d): the basepoint of the extrusion
+        basePoint (Point3d): the base point of the extrusion
         draftAngleRadians (double): angle of the extrusion
         tolerance (double): tolerance to use for the extrusion
         angleToleranceRadians (double): angle tolerance to use for the extrusion
@@ -827,7 +827,7 @@ def CreateFromTaperedExtrude1(curveToExtrude, distance, direction, basePoint, dr
         curveToExtrude (Curve): the curve to extrude
         distance (double): the distance to extrude
         direction (Vector3d): the direction of the extrusion
-        basePoint (Point3d): the basepoint of the extrusion
+        basePoint (Point3d): the base point of the extrusion
         draftAngleRadians (double): angle of the extrusion
 
     Returns:
@@ -936,7 +936,7 @@ def CreateFilletSurface(face0, uv0, face1, uv1, radius, extend, tolerance, multi
         uv1 (Point2d): A parameter face1 at the side you want to keep after filleting.
         radius (double): The fillet radius.
         extend (bool): If true, then when one input surface is longer than the other, the fillet surface is extended to the input surface edges.
-        tolerance (double): The tolerance. In in doubt, the the document's model absolute tolerance.
+        tolerance (double): The tolerance. When in doubt, use the document's model absolute tolerance.
 
     Returns:
         Brep[]: Array of Breps if successful.
@@ -962,7 +962,7 @@ def CreateFilletSurface1(face0, uv0, face1, uv1, radius, trim, extend, tolerance
         radius (double): The fillet radius.
         trim (bool): If true, the input faces will be trimmed, if false, the input faces will be split.
         extend (bool): If true, then when one input surface is longer than the other, the fillet surface is extended to the input surface edges.
-        tolerance (double): The tolerance. In in doubt, the the document's model absolute tolerance.
+        tolerance (double): The tolerance. When in doubt, use the document's model absolute tolerance.
 
     Returns:
         Brep[]: Array of Breps if successful.
@@ -989,7 +989,7 @@ def CreateChamferSurface(face0, uv0, radius0, face1, uv1, radius1, extend, toler
         uv1 (Point2d): A parameter face1 at the side you want to keep after chamfering.
         radius1 (double): The distance from the intersection of face1 to the edge of the chamfer.
         extend (bool): If true, then when one input surface is longer than the other, the chamfer surface is extended to the input surface edges.
-        tolerance (double): The tolerance. In in doubt, the the document's model absolute tolerance.
+        tolerance (double): The tolerance. When in doubt, use the document's model absolute tolerance.
 
     Returns:
         Brep[]: Array of Breps if successful.
@@ -1016,7 +1016,7 @@ def CreateChamferSurface1(face0, uv0, radius0, face1, uv1, radius1, trim, extend
         radius1 (double): The distance from the intersection of face1 to the edge of the chamfer.
         trim (bool): If true, the input faces will be trimmed, if false, the input faces will be split.
         extend (bool): If true, then when one input surface is longer than the other, the chamfer surface is extended to the input surface edges.
-        tolerance (double): The tolerance. In in doubt, the the document's model absolute tolerance.
+        tolerance (double): The tolerance. When in doubt, use the document's model absolute tolerance.
 
     Returns:
         Brep[]: Array of Breps if successful.
@@ -1085,6 +1085,21 @@ def CreateOffsetBrep(brep, distance, solid, extend, tolerance, multiple=False):
     if multiple: url += "?multiple=true"
     args = [brep, distance, solid, extend, tolerance]
     if multiple: args = zip(brep, distance, solid, extend, tolerance)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def RemoveFins(thisBrep, multiple=False):
+    """
+    Recursively removes any Brep face with a naked edge. This function is only useful for non-manifold Breps.
+
+    Returns:
+        bool: True if successful, False if everything is removed or if the result has any Brep edges with more than two Brep trims.
+    """
+    url = "rhino/geometry/brep/removefins-brep"
+    if multiple: url += "?multiple=true"
+    args = [thisBrep]
+    if multiple: args = [[item] for item in thisBrep]
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -1463,7 +1478,7 @@ def CreateShell(brep, facesToRemove, distance, tolerance, multiple=False):
         brep (Brep): The solid Brep to shell.
         facesToRemove (IEnumerable<int>): The indices of the Brep faces to remove. These surfaces are removed and the remainder is offset inward, using the outer parts of the removed surfaces to join the inner and outer parts.
         distance (double): The distance, or thickness, for the shell. This is a signed distance value with respect to face normals and flipped faces.
-        tolerance (double): The offset tolerane. When in doubt, use the document's absolute tolerance.
+        tolerance (double): The offset tolerance. When in doubt, use the document's absolute tolerance.
 
     Returns:
         Brep[]: An array of Brep results or None on failure.
@@ -1594,6 +1609,7 @@ def GetRegions(thisBrep, multiple=False):
     args = [thisBrep]
     if multiple: args = [[item] for item in thisBrep]
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
     return response
 
 
@@ -1638,7 +1654,7 @@ def ClosestPoint(thisBrep, testPoint, multiple=False):
 def IsPointInside(thisBrep, point, tolerance, strictlyIn, multiple=False):
     """
     Determines if point is inside a Brep.  This question only makes sense when
-    the brep is a closed and manifold.  This function does not not check for
+    the brep is a closed and manifold.  This function does not check for
     closed or manifold, so result is not valid in those cases.  Intersects
     a line through point with brep, finds the intersection point Q closest
     to point, and looks at face normal at Q.  If the point Q is on an edge
@@ -1918,7 +1934,7 @@ def Trim1(thisBrep, cutter, intersectionTolerance, multiple=False):
     component of Brep that does not intersect the cutter is kept if and only
     if it is contained in the inside of Cutter.  That is the region bounded by
     cutter opposite from the normal of cutter, or in the case of a Plane cutter
-    the halfspace opposite from the plane normal.
+    the half space opposite from the plane normal.
 
     Args:
         cutter (Plane): A cutting plane.
@@ -1938,10 +1954,10 @@ def Trim1(thisBrep, cutter, intersectionTolerance, multiple=False):
 
 def UnjoinEdges(thisBrep, edgesToUnjoin, multiple=False):
     """
-    Unjoins, or separates, edges within the Brep. Note, seams in closed surfaces will not separate.
+    Un-joins, or separates, edges within the Brep. Note, seams in closed surfaces will not separate.
 
     Args:
-        edgesToUnjoin (IEnumerable<int>): The indices of the Brep edges to unjoin.
+        edgesToUnjoin (IEnumerable<int>): The indices of the Brep edges to un-join.
 
     Returns:
         Brep[]: This Brep is not modified, the trim results are returned in an array.
@@ -2095,7 +2111,7 @@ def RebuildTrimsForV2(thisBrep, face, nurbsSurface, multiple=False):
 def MakeValidForV2(thisBrep, multiple=False):
     """
     No support is available for this function.
-    Expert user function that converts all geometry in brep to nurbs form.
+    Expert user function that converts all geometry in Brep to NURB form.
     """
     url = "rhino/geometry/brep/makevalidforv2-brep"
     if multiple: url += "?multiple=true"
@@ -2109,7 +2125,7 @@ def Repair(thisBrep, tolerance, multiple=False):
     """
     Fills in missing or fixes incorrect component information from a Brep.
     Useful when reading Brep information from other file formats that do not
-    provide as complete of a Brep definition as requried by Rhino.
+    provide as complete of a Brep definition as required by Rhino.
 
     Args:
         tolerance (double): The repair tolerance. When in doubt, use the document's model absolute tolerance.

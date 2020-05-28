@@ -28,7 +28,7 @@ def MakeCompatible(curves, startPt, endPt, simplifyMethod, numPoints, refitToler
 
 def CreateParabolaFromVertex(vertex, startPoint, endPoint, multiple=False):
     """
-    Createsa a parabola from vertex and end points.
+    Creates a parabola from vertex and end points.
 
     Args:
         vertex (Point3d): The vertex point.
@@ -70,11 +70,11 @@ def CreateParabolaFromFocus(focus, startPoint, endPoint, multiple=False):
 
 def CreateFromArc(arc, degree, cvCount, multiple=False):
     """
-    Create a uniform non-ratonal cubic NURBS approximation of an arc.
+    Create a uniform non-rational cubic NURBS approximation of an arc.
 
     Args:
         degree (int): >=1
-        cvCount (int): cv count >=5
+        cvCount (int): CV count >=5
 
     Returns:
         NurbsCurve: NURBS curve approximation of an arc on success
@@ -123,13 +123,50 @@ def CreateHSpline1(points, startTangent, endTangent, multiple=False):
     return response
 
 
+def CreatePlanarRailFrames(thisNurbsCurve, parameters, normal, multiple=False):
+    """
+    Computes planar rail sweep frames at specified parameters.
+
+    Args:
+        parameters (IEnumerable<double>): A collection of curve parameters.
+        normal (Vector3d): Unit normal to the plane.
+
+    Returns:
+        Plane[]: An array of planes if successful, or an empty array on failure.
+    """
+    url = "rhino/geometry/nurbscurve/createplanarrailframes-nurbscurve_doublearray_vector3d"
+    if multiple: url += "?multiple=true"
+    args = [thisNurbsCurve, parameters, normal]
+    if multiple: args = zip(thisNurbsCurve, parameters, normal)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CreateRailFrames(thisNurbsCurve, parameters, multiple=False):
+    """
+    Computes relatively parallel rail sweep frames at specified parameters.
+
+    Args:
+        parameters (IEnumerable<double>): A collection of curve parameters.
+
+    Returns:
+        Plane[]: An array of planes if successful, or an empty array on failure.
+    """
+    url = "rhino/geometry/nurbscurve/createrailframes-nurbscurve_doublearray"
+    if multiple: url += "?multiple=true"
+    args = [thisNurbsCurve, parameters]
+    if multiple: args = zip(thisNurbsCurve, parameters)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
 def CreateFromCircle(circle, degree, cvCount, multiple=False):
     """
-    Create a uniform non-ratonal cubic NURBS approximation of a circle.
+    Create a uniform non-rational cubic NURBS approximation of a circle.
 
     Args:
         degree (int): >=1
-        cvCount (int): cv count >=5
+        cvCount (int): CV count >=5
 
     Returns:
         NurbsCurve: NURBS curve approximation of a circle on success
@@ -145,11 +182,11 @@ def CreateFromCircle(circle, degree, cvCount, multiple=False):
 
 def SetEndCondition(thisNurbsCurve, bSetEnd, continuity, point, tangent, multiple=False):
     """
-    Set end condition of a nurbs curve to point, tangent and curvature.
+    Set end condition of a NURBS curve to point, tangent and curvature.
 
     Args:
         bSetEnd (bool): true: set end of curve, false: set start of curve
-        continuity (NurbsCurveEndConditionType): Position: set strart or end point, Tangency: set point and tangent, Curvature: set point, tangent and curvature
+        continuity (NurbsCurveEndConditionType): Position: set start or end point, Tangency: set point and tangent, Curvature: set point, tangent and curvature
         point (Point3d): point to set
         tangent (Vector3d): tangent to set
 
@@ -166,11 +203,11 @@ def SetEndCondition(thisNurbsCurve, bSetEnd, continuity, point, tangent, multipl
 
 def SetEndCondition1(thisNurbsCurve, bSetEnd, continuity, point, tangent, curvature, multiple=False):
     """
-    Set end condition of a nurbs curve to point, tangent and curvature.
+    Set end condition of a NURBS curve to point, tangent and curvature.
 
     Args:
         bSetEnd (bool): true: set end of curve, false: set start of curve
-        continuity (NurbsCurveEndConditionType): Position: set strart or end point, Tangency: set point and tangent, Curvature: set point, tangent and curvature
+        continuity (NurbsCurveEndConditionType): Position: set start or end point, Tangency: set point and tangent, Curvature: set point, tangent and curvature
         point (Point3d): point to set
         tangent (Vector3d): tangent to set
         curvature (Vector3d): curvature to set
@@ -191,7 +228,7 @@ def GrevillePoints(thisNurbsCurve, all, multiple=False):
     Gets Greville points for this curve.
 
     Args:
-        all (bool): If true, then all Greville points are returnd. If false, only edit points are returned.
+        all (bool): If true, then all Greville points are returns. If false, only edit points are returned.
 
     Returns:
         Point3dList: A list of points if successful, None otherwise.
@@ -232,12 +269,12 @@ def CreateSpiral(axisStart, axisDir, radiusPoint, pitch, turnCount, radius0, rad
     Args:
         axisStart (Point3d): Helix's axis starting point or center of spiral.
         axisDir (Vector3d): Helix's axis vector or normal to spiral's plane.
-        radiusPoint (Point3d): Point used only to get a vector that is perpedicular to the axis. In
+        radiusPoint (Point3d): Point used only to get a vector that is perpendicular to the axis. In
             particular, this vector must not be (anti)parallel to the axis vector.
         pitch (double): The pitch, where a spiral has a pitch = 0, and pitch > 0 is the distance
             between the helix's "threads".
         turnCount (double): The number of turns in spiral or helix. Positive
-            values produce counter-clockwise orientation, negitive values produce
+            values produce counter-clockwise orientation, negative values produce
             clockwise orientation. Note, for a helix, turnCount * pitch = length of
             the helix's axis.
         radius0 (double): The starting radius.
@@ -263,19 +300,19 @@ def CreateSpiral1(railCurve, t0, t1, radiusPoint, pitch, turnCount, radius0, rad
         railCurve (Curve): The rail curve.
         t0 (double): Starting portion of rail curve's domain to sweep along.
         t1 (double): Ending portion of rail curve's domain to sweep along.
-        radiusPoint (Point3d): Point used only to get a vector that is perpedicular to the axis. In
+        radiusPoint (Point3d): Point used only to get a vector that is perpendicular to the axis. In
             particular, this vector must not be (anti)parallel to the axis vector.
         pitch (double): The pitch. Positive values produce counter-clockwise orientation,
             negative values produce clockwise orientation.
         turnCount (double): The turn count. If != 0, then the resulting helix will have this many
             turns. If = 0, then pitch must be != 0 and the approximate distance
             between turns will be set to pitch. Positive values produce counter-clockwise
-            orientation, negitive values produce clockwise orientation.
-        radius0 (double): The starting radius. At least one radii must benonzero. Negative values
+            orientation, negative values produce clockwise orientation.
+        radius0 (double): The starting radius. At least one radii must be nonzero. Negative values
             are allowed.
-        radius1 (double): The ending radius. At least ont radii must be nonzero. Negative values
+        radius1 (double): The ending radius. At least one radii must be nonzero. Negative values
             are allowed.
-        pointsPerTurn (int): Number of points to intepolate per turn. Must be greater than 4.
+        pointsPerTurn (int): Number of points to interpolate per turn. Must be greater than 4.
             When in doubt, use 12.
 
     Returns:

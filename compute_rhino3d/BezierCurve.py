@@ -3,7 +3,7 @@ from . import Util
 
 def CreateCubicBeziers(sourceCurve, distanceTolerance, kinkTolerance, multiple=False):
     """
-    Constructs an array of cubic, non-rational beziers that fit a curve to a tolerance.
+    Constructs an array of cubic, non-rational Beziers that fit a curve to a tolerance.
 
     Args:
         sourceCurve (Curve): A curve to approximate.
