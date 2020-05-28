@@ -21,6 +21,25 @@ def CreateFromPlane(plane, xInterval, yInterval, xCount, yCount, multiple=False)
     return response
 
 
+def CreateFromFilteredFaceList(original, inclusion, multiple=False):
+    """
+    Constructs a sub-mesh, that contains a filtered list of faces.
+
+    Args:
+        original (Mesh): The mesh to copy. This item can be null, and in this case an empty mesh is returned.
+        inclusion (IEnumerable<bool>): A series of True and False values, that determine if each face is used in the new mesh.
+            If the amount does not match the length of the face list, the pattern is repeated. If it exceeds the amount
+            of faces in the mesh face list, the pattern is truncated. This items can be None or empty, and the mesh will simply be duplicated.
+    """
+    url = "rhino/geometry/mesh/createfromfilteredfacelist-mesh_boolarray"
+    if multiple: url += "?multiple=true"
+    args = [original, inclusion]
+    if multiple: args = zip(original, inclusion)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
 def CreateFromBox(box, xCount, yCount, zCount, multiple=False):
     """
     Constructs new mesh that matches a bounding box.
@@ -207,7 +226,7 @@ def CreateFromCylinder2(cylinder, vertical, around, capBottom, capTop, quadCaps,
         around (int): Number of faces around the cylinder.
         capBottom (bool): If True end at Cylinder.Height1 should be capped.
         capTop (bool): If True end at Cylinder.Height2 should be capped.
-        quadCaps (bool): If True and it's possible to make quad caps, ie. around is even, then caps will have quad faces.
+        quadCaps (bool): If True and it's possible to make quad caps, i.e.. around is even, then caps will have quad faces.
 
     Returns:
         Mesh: Returns a mesh cylinder if successful, None otherwise.
@@ -270,7 +289,7 @@ def CreateFromCone2(cone, vertical, around, solid, quadCaps, multiple=False):
         vertical (int): Number of faces in the top-to-bottom direction.
         around (int): Number of faces around the cone.
         solid (bool): If False the mesh will be open with no faces on the circular planar portion.
-        quadCaps (bool): If True and it's possible to make quad caps, ie. around is even, then caps will have quad faces.
+        quadCaps (bool): If True and it's possible to make quad caps, i.e.. around is even, then caps will have quad faces.
 
     Returns:
         Mesh: A valid mesh if successful.
@@ -348,7 +367,7 @@ def CreateFromPlanarBoundary1(boundary, parameters, tolerance, multiple=False):
 
 def CreateFromClosedPolyline(polyline, multiple=False):
     """
-    Attempts to create a Mesh that is a triangulation of a closed polyline.
+    Attempts to create a Mesh that is a triangulation of a simple closed polyline that projects onto a plane.
 
     Args:
         polyline (Polyline): must be closed
@@ -505,7 +524,7 @@ def CreatePatch(outerBoundary, angleToleranceRadians, pullbackSurface, innerBoun
             boundary will be ignored and have no impact on the result. If any of
             the input intersects the outer boundary the result will be
             unpredictable and is likely to not include the entire outer boundary.
-        angleToleranceRadians (double): Maximum angle between unit tangents and adjacent verticies. Used to
+        angleToleranceRadians (double): Maximum angle between unit tangents and adjacent vertices. Used to
             divide curve inputs that cannot otherwise be represented as a polyline.
         innerBoundaryCurves (IEnumerable<Curve>): (optional: can be null) Polylines to create holes in the output mesh.
             If innerBoundaryCurves are the only input then the result may be null
@@ -659,7 +678,7 @@ def CreateFromCurveExtrusion(curve, direction, parameters, boundingBox, multiple
         curve (Curve): A curve to extrude.
         direction (Vector3d): The direction of extrusion.
         parameters (MeshingParameters): The parameters of meshing.
-        boundingBox (BoundingBox): The bounding box controls the length of the estrusion.
+        boundingBox (BoundingBox): The bounding box controls the length of the extrusion.
 
     Returns:
         Mesh: A new mesh, or None on failure.
@@ -673,24 +692,43 @@ def CreateFromCurveExtrusion(curve, direction, parameters, boundingBox, multiple
     return response
 
 
-def CreateFromMeshArrayCleanUp(meshes, tolerance, mendSinglePrecisionVertexJump, multiple=False):
+def CreateFromIterativeCleanup(meshes, tolerance, multiple=False):
     """
     Repairs meshes with vertices that are too near, using a tolerance value.
 
     Args:
-        meshes (IEnumerable<Mesh>): The meshes to be repared.
+        meshes (IEnumerable<Mesh>): The meshes to be repaired.
         tolerance (double): A minimum distance for clean vertices.
-        mendSinglePrecisionVertexJump (bool): If true, operations are performed on double precision vertices so that, when single precision vertices are computed, they will keep consistent.
 
     Returns:
         Mesh[]: A valid meshes array if successful. If no change was required, some meshes can be null. Otherwise, null, when no changes were done.
     """
-    url = "rhino/geometry/mesh/createfrommesharraycleanup-mesharray_double_bool"
+    url = "rhino/geometry/mesh/createfromiterativecleanup-mesharray_double"
     if multiple: url += "?multiple=true"
-    args = [meshes, tolerance, mendSinglePrecisionVertexJump]
-    if multiple: args = zip(meshes, tolerance, mendSinglePrecisionVertexJump)
+    args = [meshes, tolerance]
+    if multiple: args = zip(meshes, tolerance)
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def RequireIterativeCleanup(meshes, tolerance, multiple=False):
+    """
+    Analyzes some meshes, and determines if a pass of CreateFromIterativeCleanup would change the array.
+    All available cleanup steps are used. Currently available cleanup steps are:- mending of single precision coincidence even though double precision vertices differ.- union of nearly identical vertices, irrespectively of their origin.- removal of t-joints along edges.
+
+    Args:
+        meshes (IEnumerable<Mesh>): A list, and array or any enumerable of meshes.
+        tolerance (double): A 3d distance. This is usually a value of about 10e-7 magnitude.
+
+    Returns:
+        bool: True if meshes would be changed, otherwise false.
+    """
+    url = "rhino/geometry/mesh/requireiterativecleanup-mesharray_double"
+    if multiple: url += "?multiple=true"
+    args = [meshes, tolerance]
+    if multiple: args = zip(meshes, tolerance)
+    response = Util.ComputeFetch(url, args)
     return response
 
 
@@ -790,7 +828,7 @@ def Unweld(thisMesh, angleToleranceRadians, modifyNormals, multiple=False):
     Args:
         angleToleranceRadians (double): Angle at which to make unique vertices.
         modifyNormals (bool): Determines whether new vertex normals will have the same vertex normal as the original (false)
-            or vertex normals made from the corrsponding face normals (true)
+            or vertex normals made from the corresponding face normals (true)
     """
     url = "rhino/geometry/mesh/unweld-mesh_double_bool"
     if multiple: url += "?multiple=true"
@@ -1023,6 +1061,7 @@ def Split1(thisMesh, mesh, multiple=False):
 def Split2(thisMesh, meshes, multiple=False):
     """
     Split a mesh with a collection of meshes.
+    Does not split at coplanar intersections.
 
     Args:
         meshes (IEnumerable<Mesh>): Meshes to split with.
@@ -1039,7 +1078,7 @@ def Split2(thisMesh, meshes, multiple=False):
     return response
 
 
-def Split3(thisMesh, meshes, tolerance, preprocessing, textLog, cancel, progress, multiple=False):
+def Split3(thisMesh, meshes, tolerance, splitAtCoplanar, textLog, cancel, progress, multiple=False):
     """
     Split a mesh with a collection of meshes.
 
@@ -1047,9 +1086,7 @@ def Split3(thisMesh, meshes, tolerance, preprocessing, textLog, cancel, progress
         meshes (IEnumerable<Mesh>): Meshes to split with.
         tolerance (double): A value for intersection tolerance.
             WARNING! Correct values are typically in the (10e-8 - 10e-4) range.An option is to use the document tolerance diminished by a few orders or magnitude.
-        preprocessing (bool): Indicates if a preprocessing step can be executed.
-            Some groups of meshes have distances between vertices and edges that are below the tolerance indicated. In this case, this parameter allows the function
-            to improve the mesh in order to increase likelihood of intersection success. The mesh topology might change slightly, but not the overall shape.If meshes have no distances between vertices and edges laying below the tolerance that is indicated, this parameter will do nothing.
+        splitAtCoplanar (bool): If false, coplanar areas will not be separated.
         textLog (TextLog): A text log to write onto.
         cancel (CancellationToken): A cancellation token.
         progress (IProgress<double>): A progress reporter item. This can be null.
@@ -1059,8 +1096,8 @@ def Split3(thisMesh, meshes, tolerance, preprocessing, textLog, cancel, progress
     """
     url = "rhino/geometry/mesh/split-mesh_mesharray_double_bool_textlog_cancellationtoken_doublearray"
     if multiple: url += "?multiple=true"
-    args = [thisMesh, meshes, tolerance, preprocessing, textLog, cancel, progress]
-    if multiple: args = zip(thisMesh, meshes, tolerance, preprocessing, textLog, cancel, progress)
+    args = [thisMesh, meshes, tolerance, splitAtCoplanar, textLog, cancel, progress]
+    if multiple: args = zip(thisMesh, meshes, tolerance, splitAtCoplanar, textLog, cancel, progress)
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1140,13 +1177,13 @@ def GetNakedEdges(thisMesh, multiple=False):
 
 def ExplodeAtUnweldedEdges(thisMesh, multiple=False):
     """
-    Explode the mesh into submeshes where a submesh is a collection of faces that are contained
+    Explode the mesh into sub-meshes where a sub-mesh is a collection of faces that are contained
     within a closed loop of "unwelded" edges. Unwelded edges are edges where the faces that share
     the edge have unique mesh vertexes (not mesh topology vertexes) at both ends of the edge.
 
     Returns:
-        Mesh[]: Array of submeshes on success; None on error. If the count in the returned array is 1, then
-        nothing happened and the ouput is essentially a copy of the input.
+        Mesh[]: Array of sub-meshes on success; None on error. If the count in the returned array is 1, then
+        nothing happened and the output is essentially a copy of the input.
     """
     url = "rhino/geometry/mesh/explodeatunweldededges-mesh"
     if multiple: url += "?multiple=true"
@@ -1162,7 +1199,7 @@ def ClosestPoint(thisMesh, testPoint, multiple=False):
     Gets the point on the mesh that is closest to a given test point.
 
     Args:
-        testPoint (Point3d): Point to seach for.
+        testPoint (Point3d): Point to search for.
 
     Returns:
         Point3d: The point on the mesh closest to testPoint, or Point3d.Unset on failure.
@@ -1206,7 +1243,7 @@ def ClosestPoint1(thisMesh, testPoint, maximumDistance, multiple=False):
     Gets the point on the mesh that is closest to a given test point.
 
     Args:
-        testPoint (Point3d): Point to seach for.
+        testPoint (Point3d): Point to search for.
         maximumDistance (double): Optional upper bound on the distance from test point to the mesh.
             If you are only interested in finding a point Q on the mesh when
             testPoint.DistanceTo(Q) < maximumDistance,
@@ -1231,7 +1268,7 @@ def ClosestPoint2(thisMesh, testPoint, maximumDistance, multiple=False):
     Gets the point on the mesh that is closest to a given test point.
 
     Args:
-        testPoint (Point3d): Point to seach for.
+        testPoint (Point3d): Point to search for.
         maximumDistance (double): Optional upper bound on the distance from test point to the mesh.
             If you are only interested in finding a point Q on the mesh when
             testPoint.DistanceTo(Q) < maximumDistance,
@@ -1257,7 +1294,7 @@ def PointAt(thisMesh, meshPoint, multiple=False):
     Evaluate a mesh at a set of barycentric coordinates.
 
     Args:
-        meshPoint (MeshPoint): MeshPoint instance contiaining a valid Face Index and Barycentric coordinates.
+        meshPoint (MeshPoint): MeshPoint instance containing a valid Face Index and Barycentric coordinates.
 
     Returns:
         Point3d: A Point on the mesh or Point3d.Unset if the faceIndex is not valid or if the barycentric coordinates could not be evaluated.
@@ -1300,7 +1337,7 @@ def NormalAt(thisMesh, meshPoint, multiple=False):
     Evaluate a mesh normal at a set of barycentric coordinates.
 
     Args:
-        meshPoint (MeshPoint): MeshPoint instance contiaining a valid Face Index and Barycentric coordinates.
+        meshPoint (MeshPoint): MeshPoint instance containing a valid Face Index and Barycentric coordinates.
 
     Returns:
         Vector3d: A Normal vector to the mesh or Vector3d.Unset if the faceIndex is not valid or if the barycentric coordinates could not be evaluated.
@@ -1341,7 +1378,7 @@ def ColorAt(thisMesh, meshPoint, multiple=False):
     Evaluate a mesh color at a set of barycentric coordinates.
 
     Args:
-        meshPoint (MeshPoint): MeshPoint instance contiaining a valid Face Index and Barycentric coordinates.
+        meshPoint (MeshPoint): MeshPoint instance containing a valid Face Index and Barycentric coordinates.
 
     Returns:
         Color: The interpolated vertex color on the mesh or Color.Transparent if the faceIndex is not valid,
@@ -1420,7 +1457,7 @@ def PullCurve(thisMesh, curve, tolerance, multiple=False):
 
 def SplitWithProjectedPolylines(thisMesh, curves, tolerance, multiple=False):
     """
-    Splits a mesh by adding edges in correspondance with input polylines, and divides the mesh at partitioned areas.
+    Splits a mesh by adding edges in correspondence with input polylines, and divides the mesh at partitioned areas.
     Polyline segments that are measured not to be on the mesh will be ignored.
 
     Args:
@@ -1441,7 +1478,7 @@ def SplitWithProjectedPolylines(thisMesh, curves, tolerance, multiple=False):
 
 def SplitWithProjectedPolylines1(thisMesh, curves, tolerance, textLog, cancel, progress, multiple=False):
     """
-    Splits a mesh by adding edges in correspondance with input polylines, and divides the mesh at partitioned areas.
+    Splits a mesh by adding edges in correspondence with input polylines, and divides the mesh at partitioned areas.
     Polyline segments that are measured not to be on the mesh will be ignored.
 
     Args:
@@ -1745,7 +1782,7 @@ def QuadRemeshBrep1(brep, parameters, guideCurves, multiple=False):
 
 def QuadRemeshBrepAsync(brep, parameters, progress, cancelToken, multiple=False):
     """
-    Quad remesh this brep async
+    Quad remesh this Brep asynchronously.
 
     Args:
         brep (Brep): Set Brep Face Mode by setting QuadRemeshParameters.PreserveMeshArrayEdgesMode
@@ -1760,7 +1797,7 @@ def QuadRemeshBrepAsync(brep, parameters, progress, cancelToken, multiple=False)
 
 def QuadRemeshBrepAsync1(brep, parameters, guideCurves, progress, cancelToken, multiple=False):
     """
-    Quad remesh this brep async
+    Quad remesh this Brep asynchronously.
 
     Args:
         brep (Brep): Set Brep Face Mode by setting QuadRemeshParameters.PreserveMeshArrayEdgesMode
@@ -1778,7 +1815,7 @@ def QuadRemeshBrepAsync1(brep, parameters, guideCurves, progress, cancelToken, m
 
 def QuadRemesh(thisMesh, parameters, multiple=False):
     """
-    Quad remesh this mesh
+    Quad remesh this mesh.
     """
     url = "rhino/geometry/mesh/quadremesh-mesh_quadremeshparameters"
     if multiple: url += "?multiple=true"
@@ -1791,7 +1828,7 @@ def QuadRemesh(thisMesh, parameters, multiple=False):
 
 def QuadRemesh1(thisMesh, parameters, guideCurves, multiple=False):
     """
-    Quad remesh this mesh
+    Quad remesh this mesh.
 
     Args:
         guideCurves (IEnumerable<Curve>): A curve array used to influence mesh face layout
@@ -1809,7 +1846,7 @@ def QuadRemesh1(thisMesh, parameters, guideCurves, multiple=False):
 
 def QuadRemeshAsync(thisMesh, parameters, progress, cancelToken, multiple=False):
     """
-    Quad remesh this mesh async
+    Quad remesh this mesh asynchronously.
     """
     url = "rhino/geometry/mesh/quadremeshasync-mesh_quadremeshparameters_intarray_cancellationtoken"
     if multiple: url += "?multiple=true"
@@ -1821,7 +1858,7 @@ def QuadRemeshAsync(thisMesh, parameters, progress, cancelToken, multiple=False)
 
 def QuadRemeshAsync1(thisMesh, parameters, guideCurves, progress, cancelToken, multiple=False):
     """
-    Quad remesh this mesh async
+    Quad remesh this mesh asynchronously.
 
     Args:
         guideCurves (IEnumerable<Curve>): A curve array used to influence mesh face layout
@@ -1838,7 +1875,7 @@ def QuadRemeshAsync1(thisMesh, parameters, guideCurves, progress, cancelToken, m
 
 def QuadRemeshAsync2(thisMesh, faceBlocks, parameters, guideCurves, progress, cancelToken, multiple=False):
     """
-    Quad remesh this mesh async
+    Quad remesh this mesh asynchronously.
 
     Args:
         guideCurves (IEnumerable<Curve>): A curve array used to influence mesh face layout

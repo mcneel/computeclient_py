@@ -13,12 +13,12 @@ def CreateCurveOnSurfacePoints(surface, fixedPoints, tolerance, periodic, initCo
         fixedPoints (IEnumerable<Point2d>): Surface points to interpolate given by parameters. These must be distinct.
         tolerance (double): Relative tolerance used by the solver. When in doubt, use a tolerance of 0.0.
         periodic (bool): When True constructs a smoothly closed curve.
-        initCount (int): Maximum number of points to insert beteween fixed points on the first level.
+        initCount (int): Maximum number of points to insert between fixed points on the first level.
         levels (int): The number of levels (between 1 and 3) to be used in multi-level solver. Use 1 for single level solve.
 
     Returns:
         Point2d[]: A sequence of surface points, given by surface parameters, if successful.
-        The number of output points is approximatelely: 2 ^ (level-1) * initCount * fixedPoints.Count.
+        The number of output points is approximately: 2 ^ (level-1) * initCount * fixedPoints.Count.
     """
     url = "rhino/geometry/nurbssurface/createcurveonsurfacepoints-surface_point2darray_double_bool_int_int"
     if multiple: url += "?multiple=true"
@@ -34,7 +34,7 @@ def CreateCurveOnSurface(surface, points, tolerance, periodic, multiple=False):
 
     Args:
         surface (Surface): Surface on which to construct curve.
-        points (IEnumerable<Point2d>): Parameter space coodinates of the points to interpolate.
+        points (IEnumerable<Point2d>): Parameter space coordinates of the points to interpolate.
         tolerance (double): Curve should be within tolerance of surface and points.
         periodic (bool): When True make a periodic curve.
 
@@ -59,7 +59,7 @@ def MakeCompatible(surface0, surface1, multiple=False):
         surface1 (Surface): The second surface.
 
     Returns:
-        bool: True if successsful, False on failure.
+        bool: True if successful, False on failure.
         nurb0 (NurbsSurface): The first output NURBS surface.
         nurb1 (NurbsSurface): The second output NURBS surface.
     """
@@ -214,11 +214,11 @@ def CreateNetworkSurface(uCurves, uContinuityStart, uContinuityEnd, vCurves, vCo
 
     Args:
         uCurves (IEnumerable<Curve>): An array, a list or any enumerable set of U curves.
-        uContinuityStart (int): continuity at first U segment, 0 = loose, 1 = pos, 2 = tan, 3 = curvature.
-        uContinuityEnd (int): continuity at last U segment, 0 = loose, 1 = pos, 2 = tan, 3 = curvature.
+        uContinuityStart (int): continuity at first U segment, 0 = loose, 1 = position, 2 = tan, 3 = curvature.
+        uContinuityEnd (int): continuity at last U segment, 0 = loose, 1 = position, 2 = tan, 3 = curvature.
         vCurves (IEnumerable<Curve>): An array, a list or any enumerable set of V curves.
-        vContinuityStart (int): continuity at first V segment, 0 = loose, 1 = pos, 2 = tan, 3 = curvature.
-        vContinuityEnd (int): continuity at last V segment, 0 = loose, 1 = pos, 2 = tan, 3 = curvature.
+        vContinuityStart (int): continuity at first V segment, 0 = loose, 1 = position, 2 = tan, 3 = curvature.
+        vContinuityEnd (int): continuity at last V segment, 0 = loose, 1 = position, 2 = tan, 3 = curvature.
         edgeTolerance (double): tolerance to use along network surface edge.
         interiorTolerance (double): tolerance to use for the interior curves.
         angleTolerance (double): angle tolerance to use.
@@ -226,7 +226,7 @@ def CreateNetworkSurface(uCurves, uContinuityStart, uContinuityEnd, vCurves, vCo
     Returns:
         NurbsSurface: A NurbsSurface or None on failure.
         error (int): If the NurbsSurface could not be created, the error value describes where
-            the failure occured.  0 = success,  1 = curve sorter failed, 2 = network initializing failed,
+            the failure occurred.  0 = success,  1 = curve sorter failed, 2 = network initializing failed,
             3 = failed to build surface, 4 = network surface is not valid.
     """
     url = "rhino/geometry/nurbssurface/createnetworksurface-curvearray_int_int_curvearray_int_int_double_double_double_int"
@@ -239,11 +239,11 @@ def CreateNetworkSurface(uCurves, uContinuityStart, uContinuityEnd, vCurves, vCo
 
 def CreateNetworkSurface1(curves, continuity, edgeTolerance, interiorTolerance, angleTolerance, multiple=False):
     """
-    Builds a surface from an autosorted network of curves/edges.
+    Builds a surface from an auto-sorted network of curves/edges.
 
     Args:
         curves (IEnumerable<Curve>): An array, a list or any enumerable set of curves/edges, sorted automatically into U and V curves.
-        continuity (int): continuity along edges, 0 = loose, 1 = pos, 2 = tan, 3 = curvature.
+        continuity (int): continuity along edges, 0 = loose, 1 = position, 2 = tan, 3 = curvature.
         edgeTolerance (double): tolerance to use along network surface edge.
         interiorTolerance (double): tolerance to use for the interior curves.
         angleTolerance (double): angle tolerance to use.
@@ -251,7 +251,7 @@ def CreateNetworkSurface1(curves, continuity, edgeTolerance, interiorTolerance, 
     Returns:
         NurbsSurface: A NurbsSurface or None on failure.
         error (int): If the NurbsSurface could not be created, the error value describes where
-            the failure occured.  0 = success,  1 = curve sorter failed, 2 = network initializing failed,
+            the failure occurred.  0 = success,  1 = curve sorter failed, 2 = network initializing failed,
             3 = failed to build surface, 4 = network surface is not valid.
     """
     url = "rhino/geometry/nurbssurface/createnetworksurface-curvearray_int_double_double_double_int"

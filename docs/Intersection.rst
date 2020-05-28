@@ -62,8 +62,19 @@ Intersection
 
    :param rhino3dm.Curve curveA: First curve for intersection.
    :param rhino3dm.Curve curveB: Second curve for intersection.
-   :param float tolerance: Intersection tolerance. If the curves approach each other to within tolerance, \
-      an intersection is assumed.
+   :param float tolerance: Intersection tolerance. If the curves approach each other to within tolerance, an intersection is assumed.
+   :param float overlapTolerance: The tolerance with which the curves are tested.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: A collection of intersection events.
+   :rtype: CurveIntersections
+.. py:function:: CurveCurveValidate(curveA, curveB, tolerance, overlapTolerance, multiple=False)
+
+   Finds the intersections between two curves.
+
+   :param rhino3dm.Curve curveA: First curve for intersection.
+   :param rhino3dm.Curve curveB: Second curve for intersection.
+   :param float tolerance: Intersection tolerance. If the curves approach each other to within tolerance, an intersection is assumed.
    :param float overlapTolerance: The tolerance with which the curves are tested.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
@@ -74,9 +85,8 @@ Intersection
    Intersects a curve and an infinite line.
 
    :param rhino3dm.Curve curve: Curve for intersection.
-   :param Line line: Infinite line to intesect.
-   :param float tolerance: Intersection tolerance. If the curves approach each other to within tolerance, \
-      an intersection is assumed.
+   :param Line line: Infinite line to intersect.
+   :param float tolerance: Intersection tolerance. If the curves approach each other to within tolerance, an intersection is assumed.
    :param float overlapTolerance: The tolerance with which the curves are tested.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
@@ -88,8 +98,19 @@ Intersection
 
    :param rhino3dm.Curve curve: Curve for intersection.
    :param rhino3dm.Surface surface: Surface for intersection.
-   :param float tolerance: Intersection tolerance. If the curve approaches the surface to within tolerance, \
-      an intersection is assumed.
+   :param float tolerance: Intersection tolerance. If the curve approaches the surface to within tolerance, an intersection is assumed.
+   :param float overlapTolerance: The tolerance with which the curves are tested.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: A collection of intersection events.
+   :rtype: CurveIntersections
+.. py:function:: CurveSurfaceValidate(curve, surface, tolerance, overlapTolerance, multiple=False)
+
+   Intersects a curve and a surface.
+
+   :param rhino3dm.Curve curve: Curve for intersection.
+   :param rhino3dm.Surface surface: Surface for intersection.
+   :param float tolerance: Intersection tolerance. If the curve approaches the surface to within tolerance, an intersection is assumed.
    :param float overlapTolerance: The tolerance with which the curves are tested.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
@@ -97,13 +118,25 @@ Intersection
    :rtype: CurveIntersections
 .. py:function:: CurveSurface1(curve, curveDomain, surface, tolerance, overlapTolerance, multiple=False)
 
-   Intersects a (sub)curve and a surface.
+   Intersects a sub-curve and a surface.
 
    :param rhino3dm.Curve curve: Curve for intersection.
-   :param rhino3dm.Interval curveDomain: Domain of surbcurve to take into consideration for Intersections.
+   :param rhino3dm.Interval curveDomain: Domain of sub-curve to take into consideration for Intersections.
    :param rhino3dm.Surface surface: Surface for intersection.
-   :param float tolerance: Intersection tolerance. If the curve approaches the surface to within tolerance, \
-      an intersection is assumed.
+   :param float tolerance: Intersection tolerance. If the curve approaches the surface to within tolerance, an intersection is assumed.
+   :param float overlapTolerance: The tolerance with which the curves are tested.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: A collection of intersection events.
+   :rtype: CurveIntersections
+.. py:function:: CurveSurfaceValidate1(curve, curveDomain, surface, tolerance, overlapTolerance, multiple=False)
+
+   Intersects a sub-curve and a surface.
+
+   :param rhino3dm.Curve curve: Curve for intersection.
+   :param rhino3dm.Interval curveDomain: Domain of sub-curve to take into consideration for Intersections.
+   :param rhino3dm.Surface surface: Surface for intersection.
+   :param float tolerance: Intersection tolerance. If the curve approaches the surface to within tolerance, an intersection is assumed.
    :param float overlapTolerance: The tolerance with which the curves are tested.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
@@ -186,45 +219,8 @@ Intersection
    :param rhino3dm.Mesh meshB: Second mesh for intersection.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
-   :return: An array of intersection line segments, or null.
+   :return: An array of intersection line segments, or None if no intersections were found.
    :rtype: Line[]
-.. py:function:: MeshMesh(meshes, tolerance, preprocessing, sets, overlaps, textLog, cancel, progress, multiple=False)
-
-   Intersects meshes. Overlaps and perforations are provided in the output list.
-
-   :param list[rhino3dm.Mesh] meshes: The mesh input list. This cannot be null. Null entries are tolerated.
-   :param float tolerance: A tolerance value. If negative, the positive value will be used. \
-      WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10.
-   :param bool preprocessing: Indicates if a preprocessing step can be executed. \
-      Some groups of meshes have distances between vertices and edges that are below the tolerance indicated. In this case, this parameter allows the function \
-      to improve the mesh in order to increase likelihood of intersection success. The mesh topology might change slightly, but not the overall shape.If meshes have no distances between vertices and edges laying below the tolerance that is indicated, this parameter will do nothing.
-   :param SetsCombinations sets: Determines which sets of intersections are considered. See SetsCombinations for definitions.
-   :param bool overlaps: If true, overlaps are computed and returned.
-   :param FileIO.TextLog textLog: A text log, or null.
-   :param System.Threading.CancellationToken cancel: A cancellation token to stop the computation at a given point.
-   :param IProgress<double> progress: A progress reporter to inform the user about progress. The reported value is indicative.
-   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
-
-   :return: True, if the operation succeeded, otherwise false.
-   :rtype: bool
-.. py:function:: MeshMesh1(meshes, tolerance, preprocessing, sets, textLog, cancel, progress, multiple=False)
-
-   Intersects meshes. Overlaps and perforations are provided in the output list.
-
-   :param list[rhino3dm.Mesh] meshes: The mesh input list. This cannot be null. Null entries are tolerated.
-   :param float tolerance: A tolerance value. If negative, the positive value will be used. \
-      WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10.
-   :param bool preprocessing: Indicates if a preprocessing step can be executed. \
-      Some groups of meshes have distances between vertices and edges that are below the tolerance indicated. In this case, this parameter allows the function \
-      to improve the mesh in order to increase likelihood of intersection success. The mesh topology might change slightly, but not the overall shape.If meshes have no distances between vertices and edges laying below the tolerance that is indicated, this parameter will do nothing.
-   :param SetsCombinations sets: Determines which sets of intersections are considered. See SetsCombinations for definitions.
-   :param FileIO.TextLog textLog: A text log, or null.
-   :param System.Threading.CancellationToken cancel: A cancellation token to stop the computation at a given point.
-   :param IProgress<double> progress: A progress reporter to inform the user about progress. The reported value is indicative.
-   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
-
-   :return: True, if the operation succeeded, otherwise false.
-   :rtype: bool
 .. py:function:: MeshMeshAccurate(meshA, meshB, tolerance, multiple=False)
 
    Intersects two meshes. Overlaps and near misses are handled. This is an old method kept for compatibility.
@@ -281,15 +277,26 @@ Intersection
    :rtype: rhino3dm.Point3d[]
 .. py:function:: RayShoot(ray, geometry, maxReflections, multiple=False)
 
-   Computes point intersections that occur when shooting a ray to a collection of surfaces.
+   Computes point intersections that occur when shooting a ray to a collection of surfaces and Breps.
 
    :param Ray3d ray: A ray used in intersection.
    :param list[rhino3dm.GeometryBase] geometry: Only Surface and Brep objects are currently supported. Trims are ignored on Breps.
    :param int maxReflections: The maximum number of reflections. This value should be any value between 1 and 1000, inclusive.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
-   :return: An array of points: one for each face that was passed by the faceIds out reference.
+   :return: An array of points: one for each surface or Brep face that was hit, or an empty array on failure.
    :rtype: rhino3dm.Point3d[]
+.. py:function:: RayShoot1(geometry, ray, maxReflections, multiple=False)
+
+   Computes point intersections that occur when shooting a ray to a collection of surfaces and Breps.
+
+   :param list[rhino3dm.GeometryBase] geometry: The collection of surfaces and Breps to intersect. Trims are ignored on Breps.
+   :param Ray3d ray: >A ray used in intersection.
+   :param int maxReflections: The maximum number of reflections. This value should be any value between 1 and 1000, inclusive.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: An array of RayShootEvent structs if successful, or an empty array on failure.
+   :rtype: RayShootEvent[]
 .. py:function:: ProjectPointsToMeshes(meshes, points, direction, tolerance, multiple=False)
 
    Projects points onto meshes.

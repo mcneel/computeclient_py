@@ -108,8 +108,7 @@ def CurveCurve(curveA, curveB, tolerance, overlapTolerance, multiple=False):
     Args:
         curveA (Curve): First curve for intersection.
         curveB (Curve): Second curve for intersection.
-        tolerance (double): Intersection tolerance. If the curves approach each other to within tolerance,
-            an intersection is assumed.
+        tolerance (double): Intersection tolerance. If the curves approach each other to within tolerance, an intersection is assumed.
         overlapTolerance (double): The tolerance with which the curves are tested.
 
     Returns:
@@ -123,15 +122,37 @@ def CurveCurve(curveA, curveB, tolerance, overlapTolerance, multiple=False):
     return response
 
 
+def CurveCurveValidate(curveA, curveB, tolerance, overlapTolerance, multiple=False):
+    """
+    Finds the intersections between two curves.
+
+    Args:
+        curveA (Curve): First curve for intersection.
+        curveB (Curve): Second curve for intersection.
+        tolerance (double): Intersection tolerance. If the curves approach each other to within tolerance, an intersection is assumed.
+        overlapTolerance (double): The tolerance with which the curves are tested.
+
+    Returns:
+        CurveIntersections: A collection of intersection events.
+        invalidIndices (int[]): The indices in the resulting CurveIntersections collection that are invalid.
+        textLog (TextLog): A text log that contains tails about the invalid intersection events.
+    """
+    url = "rhino/geometry/intersect/intersection/curvecurvevalidate-curve_curve_double_double_intarray_textlog"
+    if multiple: url += "?multiple=true"
+    args = [curveA, curveB, tolerance, overlapTolerance]
+    if multiple: args = zip(curveA, curveB, tolerance, overlapTolerance)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
 def CurveLine(curve, line, tolerance, overlapTolerance, multiple=False):
     """
     Intersects a curve and an infinite line.
 
     Args:
         curve (Curve): Curve for intersection.
-        line (Line): Infinite line to intesect.
-        tolerance (double): Intersection tolerance. If the curves approach each other to within tolerance,
-            an intersection is assumed.
+        line (Line): Infinite line to intersect.
+        tolerance (double): Intersection tolerance. If the curves approach each other to within tolerance, an intersection is assumed.
         overlapTolerance (double): The tolerance with which the curves are tested.
 
     Returns:
@@ -152,8 +173,7 @@ def CurveSurface(curve, surface, tolerance, overlapTolerance, multiple=False):
     Args:
         curve (Curve): Curve for intersection.
         surface (Surface): Surface for intersection.
-        tolerance (double): Intersection tolerance. If the curve approaches the surface to within tolerance,
-            an intersection is assumed.
+        tolerance (double): Intersection tolerance. If the curve approaches the surface to within tolerance, an intersection is assumed.
         overlapTolerance (double): The tolerance with which the curves are tested.
 
     Returns:
@@ -167,22 +187,68 @@ def CurveSurface(curve, surface, tolerance, overlapTolerance, multiple=False):
     return response
 
 
-def CurveSurface1(curve, curveDomain, surface, tolerance, overlapTolerance, multiple=False):
+def CurveSurfaceValidate(curve, surface, tolerance, overlapTolerance, multiple=False):
     """
-    Intersects a (sub)curve and a surface.
+    Intersects a curve and a surface.
 
     Args:
         curve (Curve): Curve for intersection.
-        curveDomain (Interval): Domain of surbcurve to take into consideration for Intersections.
         surface (Surface): Surface for intersection.
-        tolerance (double): Intersection tolerance. If the curve approaches the surface to within tolerance,
-            an intersection is assumed.
+        tolerance (double): Intersection tolerance. If the curve approaches the surface to within tolerance, an intersection is assumed.
+        overlapTolerance (double): The tolerance with which the curves are tested.
+
+    Returns:
+        CurveIntersections: A collection of intersection events.
+        invalidIndices (int[]): The indices in the resulting CurveIntersections collection that are invalid.
+        textLog (TextLog): A text log that contains tails about the invalid intersection events.
+    """
+    url = "rhino/geometry/intersect/intersection/curvesurfacevalidate-curve_surface_double_double_intarray_textlog"
+    if multiple: url += "?multiple=true"
+    args = [curve, surface, tolerance, overlapTolerance]
+    if multiple: args = zip(curve, surface, tolerance, overlapTolerance)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CurveSurface1(curve, curveDomain, surface, tolerance, overlapTolerance, multiple=False):
+    """
+    Intersects a sub-curve and a surface.
+
+    Args:
+        curve (Curve): Curve for intersection.
+        curveDomain (Interval): Domain of sub-curve to take into consideration for Intersections.
+        surface (Surface): Surface for intersection.
+        tolerance (double): Intersection tolerance. If the curve approaches the surface to within tolerance, an intersection is assumed.
         overlapTolerance (double): The tolerance with which the curves are tested.
 
     Returns:
         CurveIntersections: A collection of intersection events.
     """
     url = "rhino/geometry/intersect/intersection/curvesurface-curve_interval_surface_double_double"
+    if multiple: url += "?multiple=true"
+    args = [curve, curveDomain, surface, tolerance, overlapTolerance]
+    if multiple: args = zip(curve, curveDomain, surface, tolerance, overlapTolerance)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CurveSurfaceValidate1(curve, curveDomain, surface, tolerance, overlapTolerance, multiple=False):
+    """
+    Intersects a sub-curve and a surface.
+
+    Args:
+        curve (Curve): Curve for intersection.
+        curveDomain (Interval): Domain of sub-curve to take into consideration for Intersections.
+        surface (Surface): Surface for intersection.
+        tolerance (double): Intersection tolerance. If the curve approaches the surface to within tolerance, an intersection is assumed.
+        overlapTolerance (double): The tolerance with which the curves are tested.
+
+    Returns:
+        CurveIntersections: A collection of intersection events.
+        invalidIndices (int[]): The indices in the resulting CurveIntersections collection that are invalid.
+        textLog (TextLog): A text log that contains tails about the invalid intersection events.
+    """
+    url = "rhino/geometry/intersect/intersection/curvesurfacevalidate-curve_interval_surface_double_double_intarray_textlog"
     if multiple: url += "?multiple=true"
     args = [curve, curveDomain, surface, tolerance, overlapTolerance]
     if multiple: args = zip(curve, curveDomain, surface, tolerance, overlapTolerance)
@@ -333,7 +399,7 @@ def MeshMeshFast(meshA, meshB, multiple=False):
         meshB (Mesh): Second mesh for intersection.
 
     Returns:
-        Line[]: An array of intersection line segments, or null.
+        Line[]: An array of intersection line segments, or None if no intersections were found.
     """
     url = "rhino/geometry/intersect/intersection/meshmeshfast-mesh_mesh"
     if multiple: url += "?multiple=true"
@@ -341,65 +407,6 @@ def MeshMeshFast(meshA, meshB, multiple=False):
     if multiple: args = zip(meshA, meshB)
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToLine(response)
-    return response
-
-
-def MeshMesh(meshes, tolerance, preprocessing, sets, overlaps, textLog, cancel, progress, multiple=False):
-    """
-    Intersects meshes. Overlaps and perforations are provided in the output list.
-
-    Args:
-        meshes (IEnumerable<Mesh>): The mesh input list. This cannot be null. Null entries are tolerated.
-        tolerance (double): A tolerance value. If negative, the positive value will be used.
-            WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10.
-        preprocessing (bool): Indicates if a preprocessing step can be executed.
-            Some groups of meshes have distances between vertices and edges that are below the tolerance indicated. In this case, this parameter allows the function
-            to improve the mesh in order to increase likelihood of intersection success. The mesh topology might change slightly, but not the overall shape.If meshes have no distances between vertices and edges laying below the tolerance that is indicated, this parameter will do nothing.
-        sets (SetsCombinations): Determines which sets of intersections are considered. See SetsCombinations for definitions.
-        overlaps (bool): If true, overlaps are computed and returned.
-        textLog (FileIO.TextLog): A text log, or null.
-        cancel (System.Threading.CancellationToken): A cancellation token to stop the computation at a given point.
-        progress (IProgress<double>): A progress reporter to inform the user about progress. The reported value is indicative.
-
-    Returns:
-        bool: True, if the operation succeeded, otherwise false.
-        intersections (Polyline[]): If true, overlaps are computed and returned.
-        overlapsResult (Polyline[]): If requested, overlaps are returned here.
-    """
-    url = "rhino/geometry/intersect/intersection/meshmesh-mesharray_double_bool_setscombinations_polylinearray_bool_polylinearray_fileio.textlog_system.threading.cancellationtoken_doublearray"
-    if multiple: url += "?multiple=true"
-    args = [meshes, tolerance, preprocessing, sets, overlaps, textLog, cancel, progress]
-    if multiple: args = zip(meshes, tolerance, preprocessing, sets, overlaps, textLog, cancel, progress)
-    response = Util.ComputeFetch(url, args)
-    return response
-
-
-def MeshMesh1(meshes, tolerance, preprocessing, sets, textLog, cancel, progress, multiple=False):
-    """
-    Intersects meshes. Overlaps and perforations are provided in the output list.
-
-    Args:
-        meshes (IEnumerable<Mesh>): The mesh input list. This cannot be null. Null entries are tolerated.
-        tolerance (double): A tolerance value. If negative, the positive value will be used.
-            WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10.
-        preprocessing (bool): Indicates if a preprocessing step can be executed.
-            Some groups of meshes have distances between vertices and edges that are below the tolerance indicated. In this case, this parameter allows the function
-            to improve the mesh in order to increase likelihood of intersection success. The mesh topology might change slightly, but not the overall shape.If meshes have no distances between vertices and edges laying below the tolerance that is indicated, this parameter will do nothing.
-        sets (SetsCombinations): Determines which sets of intersections are considered. See SetsCombinations for definitions.
-        textLog (FileIO.TextLog): A text log, or null.
-        cancel (System.Threading.CancellationToken): A cancellation token to stop the computation at a given point.
-        progress (IProgress<double>): A progress reporter to inform the user about progress. The reported value is indicative.
-
-    Returns:
-        bool: True, if the operation succeeded, otherwise false.
-        intersections (Polyline[]): If true, overlaps are computed and returned.
-        overlapsResult (Mesh): If requested, overlaps are returned here.
-    """
-    url = "rhino/geometry/intersect/intersection/meshmesh-mesharray_double_bool_setscombinations_polylinearray_mesh_fileio.textlog_system.threading.cancellationtoken_doublearray"
-    if multiple: url += "?multiple=true"
-    args = [meshes, tolerance, preprocessing, sets, textLog, cancel, progress]
-    if multiple: args = zip(meshes, tolerance, preprocessing, sets, textLog, cancel, progress)
-    response = Util.ComputeFetch(url, args)
     return response
 
 
@@ -507,7 +514,7 @@ def MeshLine(mesh, line, multiple=False):
 
 def RayShoot(ray, geometry, maxReflections, multiple=False):
     """
-    Computes point intersections that occur when shooting a ray to a collection of surfaces.
+    Computes point intersections that occur when shooting a ray to a collection of surfaces and Breps.
 
     Args:
         ray (Ray3d): A ray used in intersection.
@@ -515,7 +522,7 @@ def RayShoot(ray, geometry, maxReflections, multiple=False):
         maxReflections (int): The maximum number of reflections. This value should be any value between 1 and 1000, inclusive.
 
     Returns:
-        Point3d[]: An array of points: one for each face that was passed by the faceIds out reference.
+        Point3d[]: An array of points: one for each surface or Brep face that was hit, or an empty array on failure.
     """
     url = "rhino/geometry/intersect/intersection/rayshoot-ray3d_geometrybasearray_int"
     if multiple: url += "?multiple=true"
@@ -523,6 +530,26 @@ def RayShoot(ray, geometry, maxReflections, multiple=False):
     if multiple: args = zip(ray, geometry, maxReflections)
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToPoint3d(response)
+    return response
+
+
+def RayShoot1(geometry, ray, maxReflections, multiple=False):
+    """
+    Computes point intersections that occur when shooting a ray to a collection of surfaces and Breps.
+
+    Args:
+        geometry (IEnumerable<GeometryBase>): The collection of surfaces and Breps to intersect. Trims are ignored on Breps.
+        ray (Ray3d): >A ray used in intersection.
+        maxReflections (int): The maximum number of reflections. This value should be any value between 1 and 1000, inclusive.
+
+    Returns:
+        RayShootEvent[]: An array of RayShootEvent structs if successful, or an empty array on failure.
+    """
+    url = "rhino/geometry/intersect/intersection/rayshoot-geometrybasearray_ray3d_int"
+    if multiple: url += "?multiple=true"
+    args = [geometry, ray, maxReflections]
+    if multiple: args = zip(geometry, ray, maxReflections)
+    response = Util.ComputeFetch(url, args)
     return response
 
 
