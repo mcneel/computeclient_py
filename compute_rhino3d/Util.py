@@ -61,7 +61,7 @@ def DecodeToCommonObject(item):
     if item is None:
         return None
     if isinstance(item, list):
-        return [rhino3dm.CommonObject.Decode(x) for x in item]
+        return [DecodeToCommonObject(x) for x in item]
     return rhino3dm.CommonObject.Decode(item)
 
 
