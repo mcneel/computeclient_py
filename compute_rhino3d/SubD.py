@@ -5,7 +5,7 @@ def ToBrep(thisSubD, multiple=False):
     """
     Create a Brep based on this SubD geometry
     """
-    url = "rhino/geometry/subd/tobrep-subd"
+    url = "rhino/geometry/subd/tobrep"
     if multiple: url += "?multiple=true"
     args = [thisSubD]
     if multiple: args = [[item] for item in thisSubD]
