@@ -2,10 +2,11 @@ import rhino3dm
 import json
 import requests
 
-__version__ = '0.11.0'
+__version__ = '0.11.1'
 
 url = 'https://compute.rhino3d.com/'
 authToken = ''
+apiKey = ''
 stopat = 0
 
 
@@ -16,6 +17,7 @@ def ComputeFetch(endpoint, arglist):
                 return o.Encode()
             return json.JSONEncoder.default(self, o)
     global authToken
+    global apiKey
     global url
     global stopat
     posturl = url + endpoint
@@ -24,10 +26,11 @@ def ComputeFetch(endpoint, arglist):
         else: posturl += '?stopat='
         posturl += str(stopat)
     postdata = json.dumps(arglist, cls=__Rhino3dmEncoder)
-    headers = {
-        'Authorization': 'Bearer ' + authToken,
-        'User-Agent': 'compute.rhino3d.py/' + __version__
-    }
+    headers = { 'User-Agent': 'compute.rhino3d.py/' + __version__ }
+    if authToken:
+        headers['Authorization'] = 'Bearer ' + authToken
+    if apiKey:
+        headers['RhinoComputeKey'] = apiKey
     r = requests.post(posturl, data=postdata, headers=headers)
     return r.json()
 
