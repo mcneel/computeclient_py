@@ -232,13 +232,13 @@ def CreateTrimmedSurface1(trimSource, surfaceSource, tolerance, multiple=False):
 
 def CreateFromCornerPoints(corner1, corner2, corner3, tolerance, multiple=False):
     """
-    Makes a brep with one face.
+    Makes a Brep with one face from three corner points.
 
     Args:
         corner1 (Point3d): A first corner.
         corner2 (Point3d): A second corner.
         corner3 (Point3d): A third corner.
-        tolerance (double): Minimum edge length without collapsing to a singularity.
+        tolerance (double): Minimum edge length allowed before collapsing the side into a singularity.
 
     Returns:
         Brep: A boundary representation, or None on error.
@@ -254,7 +254,7 @@ def CreateFromCornerPoints(corner1, corner2, corner3, tolerance, multiple=False)
 
 def CreateFromCornerPoints1(corner1, corner2, corner3, corner4, tolerance, multiple=False):
     """
-    make a Brep with one face.
+    Makes a Brep with one face from four corner points.
 
     Args:
         corner1 (Point3d): A first corner.
@@ -544,21 +544,22 @@ def CreatePatch2(geometry, startingSurface, uSpans, vSpans, trim, tangency, poin
 
 def CreatePipe(rail, radius, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians, multiple=False):
     """
-    Creates a single walled pipe
+    Creates a single walled pipe.
 
     Args:
-        rail (Curve): the path curve for the pipe
-        radius (double): radius of the pipe
-        localBlending (bool): If True, Local (pipe radius stays constant at the ends and changes more rapidly in the middle) is applied.
-            If False, Global (radius is linearly blended from one end to the other, creating pipes that taper from one radius to the other) is applied
-        cap (PipeCapMode): end cap mode
+        rail (Curve): The rail, or path, curve.
+        radius (double): The radius of the pipe.
+        localBlending (bool): The shape blending.
+            If True, Local (pipe radius stays constant at the ends and changes more rapidly in the middle) is applied.
+            If False, Global (radius is linearly blended from one end to the other, creating pipes that taper from one radius to the other) is applied.
+        cap (PipeCapMode): The end cap mode.
         fitRail (bool): If the curve is a polycurve of lines and arcs, the curve is fit and a single surface is created;
-            otherwise the result is a polysurface with joined surfaces created from the polycurve segments.
-        absoluteTolerance (double): The sweeping and fitting tolerance. If you are unsure what to use, then use the document's absolute tolerance
-        angleToleranceRadians (double): The angle tolerance. If you are unsure what to use, then either use the document's angle tolerance in radians
+            otherwise the result is a Brep with joined surfaces created from the polycurve segments.
+        absoluteTolerance (double): The sweeping and fitting tolerance. When in doubt, use the document's absolute tolerance.
+        angleToleranceRadians (double): The angle tolerance. When in doubt, use the document's angle tolerance in radians.
 
     Returns:
-        Brep[]: Array of created pipes on success
+        Brep[]: Array of Breps success.
     """
     url = "rhino/geometry/brep/createpipe-curve_double_bool_pipecapmode_bool_double_double"
     if multiple: url += "?multiple=true"
@@ -571,28 +572,91 @@ def CreatePipe(rail, radius, localBlending, cap, fitRail, absoluteTolerance, ang
 
 def CreatePipe1(rail, railRadiiParameters, radii, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians, multiple=False):
     """
-    Creates a single walled pipe
+    Creates a single walled pipe.
 
     Args:
-        rail (Curve): the path curve for the pipe
-        railRadiiParameters (IEnumerable<double>): one or more normalized curve parameters where changes in radius occur.
+        rail (Curve): The rail, or path, curve.
+        railRadiiParameters (IEnumerable<double>): One or more normalized curve parameters where changes in radius occur.
             Important: curve parameters must be normalized - ranging between 0.0 and 1.0.
-        radii (IEnumerable<double>): An array of radii - one at each normalized curve parameter in railRadiiParameters.
-        localBlending (bool): If True, Local (pipe radius stays constant at the ends and changes more rapidly in the middle) is applied.
-            If False, Global (radius is linearly blended from one end to the other, creating pipes that taper from one radius to the other) is applied
-        cap (PipeCapMode): end cap mode
+            Use Interval.NormalizedParameterAt to calculate these.
+        radii (IEnumerable<double>): One or more radii - one at each normalized curve parameter in railRadiiParameters.
+        localBlending (bool): The shape blending.
+            If True, Local (pipe radius stays constant at the ends and changes more rapidly in the middle) is applied.
+            If False, Global (radius is linearly blended from one end to the other, creating pipes that taper from one radius to the other) is applied.
+        cap (PipeCapMode): The end cap mode.
         fitRail (bool): If the curve is a polycurve of lines and arcs, the curve is fit and a single surface is created;
-            otherwise the result is a polysurface with joined surfaces created from the polycurve segments.
-        absoluteTolerance (double): The sweeping and fitting tolerance. If you are unsure what to use, then use the document's absolute tolerance
-        angleToleranceRadians (double): The angle tolerance. If you are unsure what to use, then either use the document's angle tolerance in radians
+            otherwise the result is a Brep with joined surfaces created from the polycurve segments.
+        absoluteTolerance (double): The sweeping and fitting tolerance. When in doubt, use the document's absolute tolerance.
+        angleToleranceRadians (double): The angle tolerance. When in doubt, use the document's angle tolerance in radians.
 
     Returns:
-        Brep[]: Array of created pipes on success
+        Brep[]: Array of Breps success.
     """
     url = "rhino/geometry/brep/createpipe-curve_doublearray_doublearray_bool_pipecapmode_bool_double_double"
     if multiple: url += "?multiple=true"
     args = [rail, railRadiiParameters, radii, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians]
     if multiple: args = zip(rail, railRadiiParameters, radii, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreateThickPipe(rail, radius0, radius1, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians, multiple=False):
+    """
+    Creates a double-walled pipe.
+
+    Args:
+        rail (Curve): The rail, or path, curve.
+        radius0 (double): The first radius of the pipe.
+        radius1 (double): The second radius of the pipe.
+        localBlending (bool): The shape blending.
+            If True, Local (pipe radius stays constant at the ends and changes more rapidly in the middle) is applied.
+            If False, Global (radius is linearly blended from one end to the other, creating pipes that taper from one radius to the other) is applied.
+        cap (PipeCapMode): The end cap mode.
+        fitRail (bool): If the curve is a polycurve of lines and arcs, the curve is fit and a single surface is created;
+            otherwise the result is a Brep with joined surfaces created from the polycurve segments.
+        absoluteTolerance (double): The sweeping and fitting tolerance. When in doubt, use the document's absolute tolerance.
+        angleToleranceRadians (double): The angle tolerance. When in doubt, use the document's angle tolerance in radians.
+
+    Returns:
+        Brep[]: Array of Breps success.
+    """
+    url = "rhino/geometry/brep/createthickpipe-curve_double_double_bool_pipecapmode_bool_double_double"
+    if multiple: url += "?multiple=true"
+    args = [rail, radius0, radius1, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians]
+    if multiple: args = zip(rail, radius0, radius1, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreateThickPipe1(rail, railRadiiParameters, radii0, radii1, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians, multiple=False):
+    """
+    Creates a double-walled pipe.
+
+    Args:
+        rail (Curve): The rail, or path, curve.
+        railRadiiParameters (IEnumerable<double>): One or more normalized curve parameters where changes in radius occur.
+            Important: curve parameters must be normalized - ranging between 0.0 and 1.0.
+            Use Interval.NormalizedParameterAt to calculate these.
+        radii0 (IEnumerable<double>): One or more radii for the first wall - one at each normalized curve parameter in railRadiiParameters.
+        radii1 (IEnumerable<double>): One or more radii for the second wall - one at each normalized curve parameter in railRadiiParameters.
+        localBlending (bool): The shape blending.
+            If True, Local (pipe radius stays constant at the ends and changes more rapidly in the middle) is applied.
+            If False, Global (radius is linearly blended from one end to the other, creating pipes that taper from one radius to the other) is applied.
+        cap (PipeCapMode): The end cap mode.
+        fitRail (bool): If the curve is a polycurve of lines and arcs, the curve is fit and a single surface is created;
+            otherwise the result is a Brep with joined surfaces created from the polycurve segments.
+        absoluteTolerance (double): The sweeping and fitting tolerance. When in doubt, use the document's absolute tolerance.
+        angleToleranceRadians (double): The angle tolerance. When in doubt, use the document's angle tolerance in radians.
+
+    Returns:
+        Brep[]: Array of Breps success.
+    """
+    url = "rhino/geometry/brep/createthickpipe-curve_doublearray_doublearray_doublearray_bool_pipecapmode_bool_double_double"
+    if multiple: url += "?multiple=true"
+    args = [rail, railRadiiParameters, radii0, radii1, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians]
+    if multiple: args = zip(rail, railRadiiParameters, radii0, radii1, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians)
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -644,6 +708,37 @@ def CreateFromSweep1(rail, shapes, closed, tolerance, multiple=False):
     return response
 
 
+def CreateFromSweep2(rail, shapes, startPoint, endPoint, frameType, roadlikeNormal, closed, blendType, miterType, tolerance, rebuildType, rebuildPointCount, refitTolerance, multiple=False):
+    """
+    Sweep1 function that fits a surface through a series of profile curves that define the surface cross-sections
+    and one curve that defines a surface edge.
+
+    Args:
+        rail (Curve): Rail to sweep shapes along.
+        shapes (IEnumerable<Curve>): Shape curves.
+        startPoint (Point3d): Optional starting point of sweep. Use Point3d.Unset if you do not want to include a start point.
+        endPoint (Point3d): Optional ending point of sweep. Use Point3d.Unset if you do not want to include an end point.
+        frameType (SweepFrame): The frame type.
+        roadlikeNormal (Vector3d): The roadlike normal directoion. Use Vector3d.Unset if the frame type is not set to roadlike.
+        closed (bool): Only matters if shapes are closed.
+        blendType (SweepBlend): The shape blending type.
+        miterType (SweepMiter): The mitering type.
+        rebuildType (SweepRebuild): The rebuild style.
+        rebuildPointCount (int): If rebuild == SweepRebuild.Rebuild, the number of points. Otherwise specify 0.
+        refitTolerance (double): If rebuild == SweepRebuild.Refit, the refit tolerance. Otherwise, specify 0.0
+
+    Returns:
+        Brep[]: Array of Brep sweep results.
+    """
+    url = "rhino/geometry/brep/createfromsweep-curve_curvearray_point3d_point3d_sweepframe_vector3d_bool_sweepblend_sweepmiter_double_sweeprebuild_int_double"
+    if multiple: url += "?multiple=true"
+    args = [rail, shapes, startPoint, endPoint, frameType, roadlikeNormal, closed, blendType, miterType, tolerance, rebuildType, rebuildPointCount, refitTolerance]
+    if multiple: args = zip(rail, shapes, startPoint, endPoint, frameType, roadlikeNormal, closed, blendType, miterType, tolerance, rebuildType, rebuildPointCount, refitTolerance)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
 def CreateFromSweepSegmented(rail, shape, closed, tolerance, multiple=False):
     """
     Sweep1 function that fits a surface through a profile curve that define the surface cross-sections
@@ -675,13 +770,13 @@ def CreateFromSweepSegmented1(rail, shapes, closed, tolerance, multiple=False):
     and sweeps each piece separately, then put the results together into a Brep.
 
     Args:
-        rail (Curve): Rail to sweep shapes along
-        shapes (IEnumerable<Curve>): Shape curves
-        closed (bool): Only matters if shapes are closed
-        tolerance (double): Tolerance for fitting surface and rails
+        rail (Curve): Rail to sweep shapes along.
+        shapes (IEnumerable<Curve>): Shape curves.
+        closed (bool): Only matters if shapes are closed.
+        tolerance (double): Tolerance for fitting surface and rails.
 
     Returns:
-        Brep[]: Array of Brep sweep results
+        Brep[]: Array of Brep sweep results.
     """
     url = "rhino/geometry/brep/createfromsweepsegmented-curve_curvearray_bool_double"
     if multiple: url += "?multiple=true"
@@ -692,7 +787,39 @@ def CreateFromSweepSegmented1(rail, shapes, closed, tolerance, multiple=False):
     return response
 
 
-def CreateFromSweep2(rail1, rail2, shape, closed, tolerance, multiple=False):
+def CreateFromSweepSegmented2(rail, shapes, startPoint, endPoint, frameType, roadlikeNormal, closed, blendType, miterType, tolerance, rebuildType, rebuildPointCount, refitTolerance, multiple=False):
+    """
+    Sweep1 function that fits a surface through a series of profile curves that define the surface cross-sections
+    and one curve that defines a surface edge. The Segmented version breaks the rail at curvature kinks
+    and sweeps each piece separately, then put the results together into a Brep.
+
+    Args:
+        rail (Curve): Rail to sweep shapes along.
+        shapes (IEnumerable<Curve>): Shape curves.
+        startPoint (Point3d): Optional starting point of sweep. Use Point3d.Unset if you do not want to include a start point.
+        endPoint (Point3d): Optional ending point of sweep. Use Point3d.Unset if you do not want to include an end point.
+        frameType (SweepFrame): The frame type.
+        roadlikeNormal (Vector3d): The roadlike normal directoion. Use Vector3d.Unset if the frame type is not set to roadlike.
+        closed (bool): Only matters if shapes are closed.
+        blendType (SweepBlend): The shape blending type.
+        miterType (SweepMiter): The mitering type.
+        rebuildType (SweepRebuild): The rebuild style.
+        rebuildPointCount (int): If rebuild == SweepRebuild.Rebuild, the number of points. Otherwise specify 0.
+        refitTolerance (double): If rebuild == SweepRebuild.Refit, the refit tolerance. Otherwise, specify 0.0
+
+    Returns:
+        Brep[]: Array of Brep sweep results.
+    """
+    url = "rhino/geometry/brep/createfromsweepsegmented-curve_curvearray_point3d_point3d_sweepframe_vector3d_bool_sweepblend_sweepmiter_double_sweeprebuild_int_double"
+    if multiple: url += "?multiple=true"
+    args = [rail, shapes, startPoint, endPoint, frameType, roadlikeNormal, closed, blendType, miterType, tolerance, rebuildType, rebuildPointCount, refitTolerance]
+    if multiple: args = zip(rail, shapes, startPoint, endPoint, frameType, roadlikeNormal, closed, blendType, miterType, tolerance, rebuildType, rebuildPointCount, refitTolerance)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreateFromSweep3(rail1, rail2, shape, closed, tolerance, multiple=False):
     """
     General 2 rail sweep. If you are not producing the sweep results that you are after, then
     use the SweepTwoRail class with options to generate the swept geometry.
@@ -716,7 +843,7 @@ def CreateFromSweep2(rail1, rail2, shape, closed, tolerance, multiple=False):
     return response
 
 
-def CreateFromSweep3(rail1, rail2, shapes, closed, tolerance, multiple=False):
+def CreateFromSweep4(rail1, rail2, shapes, closed, tolerance, multiple=False):
     """
     General 2 rail sweep. If you are not producing the sweep results that you are after, then
     use the SweepTwoRail class with options to generate the swept geometry.
@@ -740,10 +867,10 @@ def CreateFromSweep3(rail1, rail2, shapes, closed, tolerance, multiple=False):
     return response
 
 
-def CreateFromSweep4(rail1, rail2, shapes, start, end, closed, tolerance, rebuild, rebuildPointCount, refitTolerance, preserveHeight, multiple=False):
+def CreateFromSweep5(rail1, rail2, shapes, start, end, closed, tolerance, rebuild, rebuildPointCount, refitTolerance, preserveHeight, multiple=False):
     """
     Sweep2 function that fits a surface through profile curves that define the surface cross-sections
-    and two curves that defines a surface edge.
+    and two curves that defines the surface edges.
 
     Args:
         rail1 (Curve): Rail to sweep shapes along
@@ -1210,6 +1337,130 @@ def CreateFromLoftRefit(curves, start, end, loftType, closed, refitTolerance, mu
     if multiple: url += "?multiple=true"
     args = [curves, start, end, loftType, closed, refitTolerance]
     if multiple: args = zip(curves, start, end, loftType, closed, refitTolerance)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreateFromLoft1(curves, start, end, StartTangent, EndTangent, StartTrim, EndTrim, loftType, closed, multiple=False):
+    """
+    Constructs one or more Breps by lofting through a set of curves, optionally matching start and
+    end tangents of surfaces when first and/or last loft curves are surface edges
+
+    Args:
+        curves (IEnumerable<Curve>): The curves to loft through. This function will not perform any curve sorting. You must pass in
+            curves in the order you want them lofted. This function will not adjust the directions of open
+            curves. Use Curve.DoDirectionsMatch and Curve.Reverse to adjust the directions of open curves.
+            This function will not adjust the seams of closed curves. Use Curve.ChangeClosedCurveSeam to
+            adjust the seam of closed curves.
+        start (Point3d): Optional starting point of loft. Use Point3d.Unset if you do not want to include a start point.
+            "start" and "StartTangent" cannot both be true.
+        end (Point3d): Optional ending point of loft. Use Point3d.Unset if you do not want to include an end point.
+            "end and "EndTangent" cannot both be true.
+        StartTangent (bool): If StartTangent is True and the first loft curve is a surface edge, the loft will match the tangent
+            of the surface behind that edge.
+        EndTangent (bool): If EndTangent is True and the first loft curve is a surface edge, the loft will match the tangent
+            of the surface behind that edge.
+        StartTrim (BrepTrim): BrepTrim from the surface edge where start tangent is to be matched
+        EndTrim (BrepTrim): BrepTrim from the surface edge where end tangent is to be matched
+        loftType (LoftType): type of loft to perform.
+        closed (bool): True if the last curve in this loft should be connected back to the first one.
+
+    Returns:
+        Brep[]: Constructs a closed surface, continuing the surface past the last curve around to the
+        first curve. Available when you have selected three shape curves.
+    """
+    url = "rhino/geometry/brep/createfromloft-curvearray_point3d_point3d_bool_bool_breptrim_breptrim_lofttype_bool"
+    if multiple: url += "?multiple=true"
+    args = [curves, start, end, StartTangent, EndTangent, StartTrim, EndTrim, loftType, closed]
+    if multiple: args = zip(curves, start, end, StartTangent, EndTangent, StartTrim, EndTrim, loftType, closed)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreatePlanarUnion(breps, plane, tolerance, multiple=False):
+    """
+    CreatePlanarUnion
+
+    Args:
+        breps (IEnumerable<Brep>): The planar regions on which to preform the union operation.
+        plane (Plane): The plane in which all the input breps lie
+        tolerance (double): Tolerance to use for union operation.
+
+    Returns:
+        Brep[]: An array of Brep results or None on failure.
+    """
+    url = "rhino/geometry/brep/createplanarunion-breparray_plane_double"
+    if multiple: url += "?multiple=true"
+    args = [breps, plane, tolerance]
+    if multiple: args = zip(breps, plane, tolerance)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreatePlanarUnion1(b0, b1, plane, tolerance, multiple=False):
+    """
+    CreatePlanarUnion
+
+    Args:
+        b0 (Brep): The first brep to union.
+        b1 (Brep): The first brep to union.
+        plane (Plane): The plane in which all the input breps lie
+        tolerance (double): Tolerance to use for union operation.
+
+    Returns:
+        Brep[]: An array of Brep results or None on failure.
+    """
+    url = "rhino/geometry/brep/createplanarunion-brep_brep_plane_double"
+    if multiple: url += "?multiple=true"
+    args = [b0, b1, plane, tolerance]
+    if multiple: args = zip(b0, b1, plane, tolerance)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreatePlanarDifference(b0, b1, plane, tolerance, multiple=False):
+    """
+    CreatePlanarDifference
+
+    Args:
+        b0 (Brep): The first brep to intersect.
+        b1 (Brep): The first brep to intersect.
+        plane (Plane): The plane in which all the input breps lie
+        tolerance (double): Tolerance to use for Difference operation.
+
+    Returns:
+        Brep[]: An array of Brep results or None on failure.
+    """
+    url = "rhino/geometry/brep/createplanardifference-brep_brep_plane_double"
+    if multiple: url += "?multiple=true"
+    args = [b0, b1, plane, tolerance]
+    if multiple: args = zip(b0, b1, plane, tolerance)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreatePlanarIntersection(b0, b1, plane, tolerance, multiple=False):
+    """
+    CreatePlanarIntersection
+
+    Args:
+        b0 (Brep): The first brep to intersect.
+        b1 (Brep): The first brep to intersect.
+        plane (Plane): The plane in which all the input breps lie
+        tolerance (double): Tolerance to use for intersection operation.
+
+    Returns:
+        Brep[]: An array of Brep results or None on failure.
+    """
+    url = "rhino/geometry/brep/createplanarintersection-brep_brep_plane_double"
+    if multiple: url += "?multiple=true"
+    args = [b0, b1, plane, tolerance]
+    if multiple: args = zip(b0, b1, plane, tolerance)
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response

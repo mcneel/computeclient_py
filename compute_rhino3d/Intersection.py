@@ -474,7 +474,7 @@ def MeshRay1(mesh, ray, multiple=False):
 
 def MeshPolyline(mesh, curve, multiple=False):
     """
-    Finds the intersection of a mesh and a polyline.
+    Finds the intersection of a mesh and a polyline. Points are not guaranteed to be sorted along the polyline.
 
     Args:
         mesh (Mesh): A mesh to intersect.
@@ -492,9 +492,29 @@ def MeshPolyline(mesh, curve, multiple=False):
     return response
 
 
+def MeshPolylineSorted(mesh, curve, multiple=False):
+    """
+    Finds the intersection of a mesh and a polyline. Points are guaranteed to be sorted along the polyline.
+
+    Args:
+        mesh (Mesh): A mesh to intersect.
+        curve (PolylineCurve): A polyline curves to intersect.
+
+    Returns:
+        Point3d[]: An array of points: one for each face that was passed by the faceIds out reference.
+        faceIds (int[]): The indices of the intersecting faces. This out reference is assigned during the call.
+    """
+    url = "rhino/geometry/intersect/intersection/meshpolylinesorted-mesh_polylinecurve_intarray"
+    if multiple: url += "?multiple=true"
+    args = [mesh, curve]
+    if multiple: args = zip(mesh, curve)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
 def MeshLine(mesh, line, multiple=False):
     """
-    Finds the intersection of a mesh and a line
+    Finds the intersections of a mesh and a line. The points are not necessarily sorted.
 
     Args:
         mesh (Mesh): A mesh to intersect
@@ -505,6 +525,26 @@ def MeshLine(mesh, line, multiple=False):
         faceIds (int[]): The indices of the intersecting faces. This out reference is assigned during the call.
     """
     url = "rhino/geometry/intersect/intersection/meshline-mesh_line_intarray"
+    if multiple: url += "?multiple=true"
+    args = [mesh, line]
+    if multiple: args = zip(mesh, line)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def MeshLineSorted(mesh, line, multiple=False):
+    """
+    Finds the intersections of a mesh and a line. Points are sorted along the line.
+
+    Args:
+        mesh (Mesh): A mesh to intersect
+        line (Line): The line to intersect with the mesh
+
+    Returns:
+        Point3d[]: An array of points: one for each face that was passed by the faceIds out reference.
+        faceIds (int[]): The indices of the intersecting faces. This out reference is assigned during the call.
+    """
+    url = "rhino/geometry/intersect/intersection/meshlinesorted-mesh_line_intarray"
     if multiple: url += "?multiple=true"
     args = [mesh, line]
     if multiple: args = zip(mesh, line)

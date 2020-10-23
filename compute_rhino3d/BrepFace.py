@@ -97,19 +97,39 @@ def Split(thisBrepFace, curves, tolerance, multiple=False):
 
 def IsPointOnFace(thisBrepFace, u, v, multiple=False):
     """
-    Tests if a parameter space point is on the interior of a trimmed face.
+    Tests if a parameter space point is in the active region of a face.
 
     Args:
-        u (double): Parameter space point u value.
-        v (double): Parameter space point v value.
+        u (double): Parameter space point U value.
+        v (double): Parameter space point V value.
 
     Returns:
-        PointFaceRelation: A value describing the spatial relationship between the point and the face.
+        PointFaceRelation: A value describing the relationship between the point and the face.
     """
     url = "rhino/geometry/brepface/ispointonface-brepface_double_double"
     if multiple: url += "?multiple=true"
     args = [thisBrepFace, u, v]
     if multiple: args = zip(thisBrepFace, u, v)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def IsPointOnFace1(thisBrepFace, u, v, tolerance, multiple=False):
+    """
+    Tests if a parameter space point is in the active region of a face.
+
+    Args:
+        u (double): Parameter space point U value.
+        v (double): Parameter space point V value.
+        tolerance (double): 3D tolerance used when checking to see if the point is on a face or inside of a loop.
+
+    Returns:
+        PointFaceRelation: A value describing the relationship between the point and the face.
+    """
+    url = "rhino/geometry/brepface/ispointonface-brepface_double_double_double"
+    if multiple: url += "?multiple=true"
+    args = [thisBrepFace, u, v, tolerance]
+    if multiple: args = zip(thisBrepFace, u, v, tolerance)
     response = Util.ComputeFetch(url, args)
     return response
 

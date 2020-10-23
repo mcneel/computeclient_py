@@ -1,6 +1,50 @@
 from . import Util
 
 
+def CreateSubDFriendly(surface, multiple=False):
+    """
+    Create a bi-cubic SubD friendly surface from a surface.
+
+    Args:
+        surface (Surface): >Surface to rebuild as a SubD friendly surface.
+
+    Returns:
+        NurbsSurface: A SubD friendly NURBS surface is successful, None otherwise.
+    """
+    url = "rhino/geometry/nurbssurface/createsubdfriendly-surface"
+    if multiple: url += "?multiple=true"
+    args = [surface]
+    if multiple: args = [[item] for item in surface]
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreateFromPlane(plane, uInterval, vInterval, uDegree, vDegree, uPointCount, vPointCount, multiple=False):
+    """
+    Creates a NURBS surface from a plane and additonal parameters.
+
+    Args:
+        plane (Plane): The plane.
+        uInterval (Interval): The interval describing the extends of the output surface in the U direction.
+        vInterval (Interval): The interval describing the extends of the output surface in the V direction.
+        uDegree (int): The degree of the output surface in the U direction.
+        vDegree (int): The degree of the output surface in the V direction.
+        uPointCount (int): The number of control points of the output surface in the U direction.
+        vPointCount (int): The number of control points of the output surface in the V direction.
+
+    Returns:
+        NurbsSurface: A NURBS surface if successful, or None on failure.
+    """
+    url = "rhino/geometry/nurbssurface/createfromplane-plane_interval_interval_int_int_int_int"
+    if multiple: url += "?multiple=true"
+    args = [plane, uInterval, vInterval, uDegree, vDegree, uPointCount, vPointCount]
+    if multiple: args = zip(plane, uInterval, vInterval, uDegree, vDegree, uPointCount, vPointCount)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
 def CreateCurveOnSurfacePoints(surface, fixedPoints, tolerance, periodic, initCount, levels, multiple=False):
     """
     Computes a discrete spline curve on the surface. In other words, computes a sequence

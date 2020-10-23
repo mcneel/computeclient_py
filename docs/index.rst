@@ -15,6 +15,7 @@ Welcome to compute.rhino3d.py's documentation!
    BrepFace
    Curve
    Extrusion
+   GeometryBase
    Intersection
    Mesh
    NurbsCurve
