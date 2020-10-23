@@ -55,13 +55,24 @@ BrepFace
    :rtype: rhino3dm.Brep
 .. py:function:: IsPointOnFace(thisBrepFace, u, v, multiple=False)
 
-   Tests if a parameter space point is on the interior of a trimmed face.
+   Tests if a parameter space point is in the active region of a face.
 
-   :param float u: Parameter space point u value.
-   :param float v: Parameter space point v value.
+   :param float u: Parameter space point U value.
+   :param float v: Parameter space point V value.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
-   :return: A value describing the spatial relationship between the point and the face.
+   :return: A value describing the relationship between the point and the face.
+   :rtype: PointFaceRelation
+.. py:function:: IsPointOnFace1(thisBrepFace, u, v, tolerance, multiple=False)
+
+   Tests if a parameter space point is in the active region of a face.
+
+   :param float u: Parameter space point U value.
+   :param float v: Parameter space point V value.
+   :param float tolerance: 3D tolerance used when checking to see if the point is on a face or inside of a loop.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: A value describing the relationship between the point and the face.
    :rtype: PointFaceRelation
 .. py:function:: TrimAwareIsoIntervals(thisBrepFace, direction, constantParameter, multiple=False)
 

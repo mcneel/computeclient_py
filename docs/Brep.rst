@@ -124,19 +124,19 @@ Brep
    :rtype: rhino3dm.Brep
 .. py:function:: CreateFromCornerPoints(corner1, corner2, corner3, tolerance, multiple=False)
 
-   Makes a brep with one face.
+   Makes a Brep with one face from three corner points.
 
    :param rhino3dm.Point3d corner1: A first corner.
    :param rhino3dm.Point3d corner2: A second corner.
    :param rhino3dm.Point3d corner3: A third corner.
-   :param float tolerance: Minimum edge length without collapsing to a singularity.
+   :param float tolerance: Minimum edge length allowed before collapsing the side into a singularity.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
    :return: A boundary representation, or None on error.
    :rtype: rhino3dm.Brep
 .. py:function:: CreateFromCornerPoints1(corner1, corner2, corner3, corner4, tolerance, multiple=False)
 
-   make a Brep with one face.
+   Makes a Brep with one face from four corner points.
 
    :param rhino3dm.Point3d corner1: A first corner.
    :param rhino3dm.Point3d corner2: A second corner.
@@ -306,39 +306,83 @@ Brep
    :rtype: rhino3dm.Brep
 .. py:function:: CreatePipe(rail, radius, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians, multiple=False)
 
-   Creates a single walled pipe
+   Creates a single walled pipe.
 
-   :param rhino3dm.Curve rail: the path curve for the pipe
-   :param float radius: radius of the pipe
-   :param bool localBlending: If True, Local (pipe radius stays constant at the ends and changes more rapidly in the middle) is applied. \
-      If False, Global (radius is linearly blended from one end to the other, creating pipes that taper from one radius to the other) is applied
-   :param PipeCapMode cap: end cap mode
+   :param rhino3dm.Curve rail: The rail, or path, curve.
+   :param float radius: The radius of the pipe.
+   :param bool localBlending: The shape blending. \
+      If True, Local (pipe radius stays constant at the ends and changes more rapidly in the middle) is applied. \
+      If False, Global (radius is linearly blended from one end to the other, creating pipes that taper from one radius to the other) is applied.
+   :param PipeCapMode cap: The end cap mode.
    :param bool fitRail: If the curve is a polycurve of lines and arcs, the curve is fit and a single surface is created; \
-      otherwise the result is a polysurface with joined surfaces created from the polycurve segments.
-   :param float absoluteTolerance: The sweeping and fitting tolerance. If you are unsure what to use, then use the document's absolute tolerance
-   :param float angleToleranceRadians: The angle tolerance. If you are unsure what to use, then either use the document's angle tolerance in radians
+      otherwise the result is a Brep with joined surfaces created from the polycurve segments.
+   :param float absoluteTolerance: The sweeping and fitting tolerance. When in doubt, use the document's absolute tolerance.
+   :param float angleToleranceRadians: The angle tolerance. When in doubt, use the document's angle tolerance in radians.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
-   :return: Array of created pipes on success
+   :return: Array of Breps success.
    :rtype: rhino3dm.Brep[]
 .. py:function:: CreatePipe1(rail, railRadiiParameters, radii, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians, multiple=False)
 
-   Creates a single walled pipe
+   Creates a single walled pipe.
 
-   :param rhino3dm.Curve rail: the path curve for the pipe
-   :param list[float] railRadiiParameters: one or more normalized curve parameters where changes in radius occur. \
-      Important: curve parameters must be normalized - ranging between 0.0 and 1.0.
-   :param list[float] radii: An array of radii - one at each normalized curve parameter in railRadiiParameters.
-   :param bool localBlending: If True, Local (pipe radius stays constant at the ends and changes more rapidly in the middle) is applied. \
-      If False, Global (radius is linearly blended from one end to the other, creating pipes that taper from one radius to the other) is applied
-   :param PipeCapMode cap: end cap mode
+   :param rhino3dm.Curve rail: The rail, or path, curve.
+   :param list[float] railRadiiParameters: One or more normalized curve parameters where changes in radius occur. \
+      Important: curve parameters must be normalized - ranging between 0.0 and 1.0. \
+      Use Interval.NormalizedParameterAt to calculate these.
+   :param list[float] radii: One or more radii - one at each normalized curve parameter in railRadiiParameters.
+   :param bool localBlending: The shape blending. \
+      If True, Local (pipe radius stays constant at the ends and changes more rapidly in the middle) is applied. \
+      If False, Global (radius is linearly blended from one end to the other, creating pipes that taper from one radius to the other) is applied.
+   :param PipeCapMode cap: The end cap mode.
    :param bool fitRail: If the curve is a polycurve of lines and arcs, the curve is fit and a single surface is created; \
-      otherwise the result is a polysurface with joined surfaces created from the polycurve segments.
-   :param float absoluteTolerance: The sweeping and fitting tolerance. If you are unsure what to use, then use the document's absolute tolerance
-   :param float angleToleranceRadians: The angle tolerance. If you are unsure what to use, then either use the document's angle tolerance in radians
+      otherwise the result is a Brep with joined surfaces created from the polycurve segments.
+   :param float absoluteTolerance: The sweeping and fitting tolerance. When in doubt, use the document's absolute tolerance.
+   :param float angleToleranceRadians: The angle tolerance. When in doubt, use the document's angle tolerance in radians.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
-   :return: Array of created pipes on success
+   :return: Array of Breps success.
+   :rtype: rhino3dm.Brep[]
+.. py:function:: CreateThickPipe(rail, radius0, radius1, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians, multiple=False)
+
+   Creates a double-walled pipe.
+
+   :param rhino3dm.Curve rail: The rail, or path, curve.
+   :param float radius0: The first radius of the pipe.
+   :param float radius1: The second radius of the pipe.
+   :param bool localBlending: The shape blending. \
+      If True, Local (pipe radius stays constant at the ends and changes more rapidly in the middle) is applied. \
+      If False, Global (radius is linearly blended from one end to the other, creating pipes that taper from one radius to the other) is applied.
+   :param PipeCapMode cap: The end cap mode.
+   :param bool fitRail: If the curve is a polycurve of lines and arcs, the curve is fit and a single surface is created; \
+      otherwise the result is a Brep with joined surfaces created from the polycurve segments.
+   :param float absoluteTolerance: The sweeping and fitting tolerance. When in doubt, use the document's absolute tolerance.
+   :param float angleToleranceRadians: The angle tolerance. When in doubt, use the document's angle tolerance in radians.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Array of Breps success.
+   :rtype: rhino3dm.Brep[]
+.. py:function:: CreateThickPipe1(rail, railRadiiParameters, radii0, radii1, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians, multiple=False)
+
+   Creates a double-walled pipe.
+
+   :param rhino3dm.Curve rail: The rail, or path, curve.
+   :param list[float] railRadiiParameters: One or more normalized curve parameters where changes in radius occur. \
+      Important: curve parameters must be normalized - ranging between 0.0 and 1.0. \
+      Use Interval.NormalizedParameterAt to calculate these.
+   :param list[float] radii0: One or more radii for the first wall - one at each normalized curve parameter in railRadiiParameters.
+   :param list[float] radii1: One or more radii for the second wall - one at each normalized curve parameter in railRadiiParameters.
+   :param bool localBlending: The shape blending. \
+      If True, Local (pipe radius stays constant at the ends and changes more rapidly in the middle) is applied. \
+      If False, Global (radius is linearly blended from one end to the other, creating pipes that taper from one radius to the other) is applied.
+   :param PipeCapMode cap: The end cap mode.
+   :param bool fitRail: If the curve is a polycurve of lines and arcs, the curve is fit and a single surface is created; \
+      otherwise the result is a Brep with joined surfaces created from the polycurve segments.
+   :param float absoluteTolerance: The sweeping and fitting tolerance. When in doubt, use the document's absolute tolerance.
+   :param float angleToleranceRadians: The angle tolerance. When in doubt, use the document's angle tolerance in radians.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Array of Breps success.
    :rtype: rhino3dm.Brep[]
 .. py:function:: CreateFromSweep(rail, shape, closed, tolerance, multiple=False)
 
@@ -366,6 +410,27 @@ Brep
 
    :return: Array of Brep sweep results
    :rtype: rhino3dm.Brep[]
+.. py:function:: CreateFromSweep2(rail, shapes, startPoint, endPoint, frameType, roadlikeNormal, closed, blendType, miterType, tolerance, rebuildType, rebuildPointCount, refitTolerance, multiple=False)
+
+   Sweep1 function that fits a surface through a series of profile curves that define the surface cross-sections
+   and one curve that defines a surface edge.
+
+   :param rhino3dm.Curve rail: Rail to sweep shapes along.
+   :param list[rhino3dm.Curve] shapes: Shape curves.
+   :param rhino3dm.Point3d startPoint: Optional starting point of sweep. Use Point3d.Unset if you do not want to include a start point.
+   :param rhino3dm.Point3d endPoint: Optional ending point of sweep. Use Point3d.Unset if you do not want to include an end point.
+   :param SweepFrame frameType: The frame type.
+   :param rhino3dm.Vector3d roadlikeNormal: The roadlike normal directoion. Use Vector3d.Unset if the frame type is not set to roadlike.
+   :param bool closed: Only matters if shapes are closed.
+   :param SweepBlend blendType: The shape blending type.
+   :param SweepMiter miterType: The mitering type.
+   :param SweepRebuild rebuildType: The rebuild style.
+   :param int rebuildPointCount: If rebuild == SweepRebuild.Rebuild, the number of points. Otherwise specify 0.
+   :param float refitTolerance: If rebuild == SweepRebuild.Refit, the refit tolerance. Otherwise, specify 0.0
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Array of Brep sweep results.
+   :rtype: rhino3dm.Brep[]
 .. py:function:: CreateFromSweepSegmented(rail, shape, closed, tolerance, multiple=False)
 
    Sweep1 function that fits a surface through a profile curve that define the surface cross-sections
@@ -386,15 +451,37 @@ Brep
    and one curve that defines a surface edge. The Segmented version breaks the rail at curvature kinks
    and sweeps each piece separately, then put the results together into a Brep.
 
-   :param rhino3dm.Curve rail: Rail to sweep shapes along
-   :param list[rhino3dm.Curve] shapes: Shape curves
-   :param bool closed: Only matters if shapes are closed
-   :param float tolerance: Tolerance for fitting surface and rails
+   :param rhino3dm.Curve rail: Rail to sweep shapes along.
+   :param list[rhino3dm.Curve] shapes: Shape curves.
+   :param bool closed: Only matters if shapes are closed.
+   :param float tolerance: Tolerance for fitting surface and rails.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
-   :return: Array of Brep sweep results
+   :return: Array of Brep sweep results.
    :rtype: rhino3dm.Brep[]
-.. py:function:: CreateFromSweep2(rail1, rail2, shape, closed, tolerance, multiple=False)
+.. py:function:: CreateFromSweepSegmented2(rail, shapes, startPoint, endPoint, frameType, roadlikeNormal, closed, blendType, miterType, tolerance, rebuildType, rebuildPointCount, refitTolerance, multiple=False)
+
+   Sweep1 function that fits a surface through a series of profile curves that define the surface cross-sections
+   and one curve that defines a surface edge. The Segmented version breaks the rail at curvature kinks
+   and sweeps each piece separately, then put the results together into a Brep.
+
+   :param rhino3dm.Curve rail: Rail to sweep shapes along.
+   :param list[rhino3dm.Curve] shapes: Shape curves.
+   :param rhino3dm.Point3d startPoint: Optional starting point of sweep. Use Point3d.Unset if you do not want to include a start point.
+   :param rhino3dm.Point3d endPoint: Optional ending point of sweep. Use Point3d.Unset if you do not want to include an end point.
+   :param SweepFrame frameType: The frame type.
+   :param rhino3dm.Vector3d roadlikeNormal: The roadlike normal directoion. Use Vector3d.Unset if the frame type is not set to roadlike.
+   :param bool closed: Only matters if shapes are closed.
+   :param SweepBlend blendType: The shape blending type.
+   :param SweepMiter miterType: The mitering type.
+   :param SweepRebuild rebuildType: The rebuild style.
+   :param int rebuildPointCount: If rebuild == SweepRebuild.Rebuild, the number of points. Otherwise specify 0.
+   :param float refitTolerance: If rebuild == SweepRebuild.Refit, the refit tolerance. Otherwise, specify 0.0
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Array of Brep sweep results.
+   :rtype: rhino3dm.Brep[]
+.. py:function:: CreateFromSweep3(rail1, rail2, shape, closed, tolerance, multiple=False)
 
    General 2 rail sweep. If you are not producing the sweep results that you are after, then
    use the SweepTwoRail class with options to generate the swept geometry.
@@ -408,7 +495,7 @@ Brep
 
    :return: Array of Brep sweep results
    :rtype: rhino3dm.Brep[]
-.. py:function:: CreateFromSweep3(rail1, rail2, shapes, closed, tolerance, multiple=False)
+.. py:function:: CreateFromSweep4(rail1, rail2, shapes, closed, tolerance, multiple=False)
 
    General 2 rail sweep. If you are not producing the sweep results that you are after, then
    use the SweepTwoRail class with options to generate the swept geometry.
@@ -422,10 +509,10 @@ Brep
 
    :return: Array of Brep sweep results
    :rtype: rhino3dm.Brep[]
-.. py:function:: CreateFromSweep4(rail1, rail2, shapes, start, end, closed, tolerance, rebuild, rebuildPointCount, refitTolerance, preserveHeight, multiple=False)
+.. py:function:: CreateFromSweep5(rail1, rail2, shapes, start, end, closed, tolerance, rebuild, rebuildPointCount, refitTolerance, preserveHeight, multiple=False)
 
    Sweep2 function that fits a surface through profile curves that define the surface cross-sections
-   and two curves that defines a surface edge.
+   and two curves that defines the surface edges.
 
    :param rhino3dm.Curve rail1: Rail to sweep shapes along
    :param rhino3dm.Curve rail2: Rail to sweep shapes along
@@ -716,6 +803,80 @@ Brep
 
    :return: Constructs a closed surface, continuing the surface past the last curve around to the \
       first curve. Available when you have selected three shape curves.
+   :rtype: rhino3dm.Brep[]
+.. py:function:: CreateFromLoft1(curves, start, end, StartTangent, EndTangent, StartTrim, EndTrim, loftType, closed, multiple=False)
+
+   Constructs one or more Breps by lofting through a set of curves, optionally matching start and
+   end tangents of surfaces when first and/or last loft curves are surface edges
+
+   :param list[rhino3dm.Curve] curves: The curves to loft through. This function will not perform any curve sorting. You must pass in \
+      curves in the order you want them lofted. This function will not adjust the directions of open \
+      curves. Use Curve.DoDirectionsMatch and Curve.Reverse to adjust the directions of open curves. \
+      This function will not adjust the seams of closed curves. Use Curve.ChangeClosedCurveSeam to \
+      adjust the seam of closed curves.
+   :param rhino3dm.Point3d start: Optional starting point of loft. Use Point3d.Unset if you do not want to include a start point. \
+      "start" and "StartTangent" cannot both be true.
+   :param rhino3dm.Point3d end: Optional ending point of loft. Use Point3d.Unset if you do not want to include an end point. \
+      "end and "EndTangent" cannot both be true.
+   :param bool StartTangent: If StartTangent is True and the first loft curve is a surface edge, the loft will match the tangent \
+      of the surface behind that edge.
+   :param bool EndTangent: If EndTangent is True and the first loft curve is a surface edge, the loft will match the tangent \
+      of the surface behind that edge.
+   :param BrepTrim StartTrim: BrepTrim from the surface edge where start tangent is to be matched
+   :param BrepTrim EndTrim: BrepTrim from the surface edge where end tangent is to be matched
+   :param LoftType loftType: type of loft to perform.
+   :param bool closed: True if the last curve in this loft should be connected back to the first one.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Constructs a closed surface, continuing the surface past the last curve around to the \
+      first curve. Available when you have selected three shape curves.
+   :rtype: rhino3dm.Brep[]
+.. py:function:: CreatePlanarUnion(breps, plane, tolerance, multiple=False)
+
+   CreatePlanarUnion
+
+   :param list[rhino3dm.Brep] breps: The planar regions on which to preform the union operation.
+   :param rhino3dm.Plane plane: The plane in which all the input breps lie
+   :param float tolerance: Tolerance to use for union operation.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: An array of Brep results or None on failure.
+   :rtype: rhino3dm.Brep[]
+.. py:function:: CreatePlanarUnion1(b0, b1, plane, tolerance, multiple=False)
+
+   CreatePlanarUnion
+
+   :param rhino3dm.Brep b0: The first brep to union.
+   :param rhino3dm.Brep b1: The first brep to union.
+   :param rhino3dm.Plane plane: The plane in which all the input breps lie
+   :param float tolerance: Tolerance to use for union operation.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: An array of Brep results or None on failure.
+   :rtype: rhino3dm.Brep[]
+.. py:function:: CreatePlanarDifference(b0, b1, plane, tolerance, multiple=False)
+
+   CreatePlanarDifference
+
+   :param rhino3dm.Brep b0: The first brep to intersect.
+   :param rhino3dm.Brep b1: The first brep to intersect.
+   :param rhino3dm.Plane plane: The plane in which all the input breps lie
+   :param float tolerance: Tolerance to use for Difference operation.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: An array of Brep results or None on failure.
+   :rtype: rhino3dm.Brep[]
+.. py:function:: CreatePlanarIntersection(b0, b1, plane, tolerance, multiple=False)
+
+   CreatePlanarIntersection
+
+   :param rhino3dm.Brep b0: The first brep to intersect.
+   :param rhino3dm.Brep b1: The first brep to intersect.
+   :param rhino3dm.Plane plane: The plane in which all the input breps lie
+   :param float tolerance: Tolerance to use for intersection operation.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: An array of Brep results or None on failure.
    :rtype: rhino3dm.Brep[]
 .. py:function:: CreateBooleanUnion(breps, tolerance, multiple=False)
 

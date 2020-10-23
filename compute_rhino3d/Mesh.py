@@ -500,19 +500,6 @@ def CreateFromSubD(subd, displayDensity, multiple=False):
     return response
 
 
-def CreateFromSubDControlNet(subd, multiple=False):
-    """
-    Create a mesh from a SubD control net
-    """
-    url = "rhino/geometry/mesh/createfromsubdcontrolnet-subd"
-    if multiple: url += "?multiple=true"
-    args = [subd]
-    if multiple: args = [[item] for item in subd]
-    response = Util.ComputeFetch(url, args)
-    response = Util.DecodeToCommonObject(response)
-    return response
-
-
 def CreatePatch(outerBoundary, angleToleranceRadians, pullbackSurface, innerBoundaryCurves, innerBothSideCurves, innerPoints, trimback, divisions, multiple=False):
     """
     Construct a mesh patch from a variety of input geometry.
@@ -747,6 +734,30 @@ def Volume(thisMesh, multiple=False):
     return response
 
 
+def IsPointInside(thisMesh, point, tolerance, strictlyIn, multiple=False):
+    """
+    Determines if a point is inside a solid mesh.
+
+    Args:
+        point (Point3d): 3d point to test.
+        tolerance (double): (>=0) 3d distance tolerance used for ray-mesh intersection
+            and determining strict inclusion.
+        strictlyIn (bool): If strictlyIn is true, then point must be inside mesh by at least
+            tolerance in order for this function to return true.
+            If strictlyIn is false, then this function will return True if
+            point is inside or the distance from point to a mesh face is <= tolerance.
+
+    Returns:
+        bool: True if point is inside the solid mesh, False if not.
+    """
+    url = "rhino/geometry/mesh/ispointinside-mesh_point3d_double_bool"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, point, tolerance, strictlyIn]
+    if multiple: args = zip(thisMesh, point, tolerance, strictlyIn)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
 def Smooth(thisMesh, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries, coordinateSystem, multiple=False):
     """
     Smooths a mesh by averaging the positions of mesh vertices in a specified region.
@@ -854,6 +865,26 @@ def UnweldEdge(thisMesh, edgeIndices, modifyNormals, multiple=False):
     if multiple: url += "?multiple=true"
     args = [thisMesh, edgeIndices, modifyNormals]
     if multiple: args = zip(thisMesh, edgeIndices, modifyNormals)
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def UnweldVertices(thisMesh, topologyVertexIndices, modifyNormals, multiple=False):
+    """
+    Ensures that faces sharing a common topological vertex have unique indices into the  collection.
+
+    Args:
+        topologyVertexIndices (IEnumerable<int>): Topological vertex indices, from the  collection, to be unwelded.
+            Use  to convert from vertex indices to topological vertex indices.
+        modifyNormals (bool): If true, the new vertex normals will be calculated from the face normal.
+
+    Returns:
+        bool: True if successful, False otherwise.
+    """
+    url = "rhino/geometry/mesh/unweldvertices-mesh_intarray_bool"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, topologyVertexIndices, modifyNormals]
+    if multiple: args = zip(thisMesh, topologyVertexIndices, modifyNormals)
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -1041,7 +1072,7 @@ def Split(thisMesh, plane, multiple=False):
 
 def Split1(thisMesh, mesh, multiple=False):
     """
-    Split a mesh with another mesh.
+    Split a mesh with another mesh. Suggestion: upgrade to overload with tolerance.
 
     Args:
         mesh (Mesh): Mesh to split with.
@@ -1060,7 +1091,7 @@ def Split1(thisMesh, mesh, multiple=False):
 
 def Split2(thisMesh, meshes, multiple=False):
     """
-    Split a mesh with a collection of meshes.
+    Split a mesh with a collection of meshes. Suggestion: upgrade to overload with tolerance.
     Does not split at coplanar intersections.
 
     Args:
@@ -1098,6 +1129,32 @@ def Split3(thisMesh, meshes, tolerance, splitAtCoplanar, textLog, cancel, progre
     if multiple: url += "?multiple=true"
     args = [thisMesh, meshes, tolerance, splitAtCoplanar, textLog, cancel, progress]
     if multiple: args = zip(thisMesh, meshes, tolerance, splitAtCoplanar, textLog, cancel, progress)
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def Split4(thisMesh, meshes, tolerance, splitAtCoplanar, createNgons, textLog, cancel, progress, multiple=False):
+    """
+    Split a mesh with a collection of meshes.
+
+    Args:
+        meshes (IEnumerable<Mesh>): Meshes to split with.
+        tolerance (double): A value for intersection tolerance.
+            WARNING! Correct values are typically in the (10e-8 - 10e-4) range.An option is to use the document tolerance diminished by a few orders or magnitude.
+        splitAtCoplanar (bool): If false, coplanar areas will not be separated.
+        createNgons (bool): If true, creates ngons along the split ridge.
+        textLog (TextLog): A text log to write onto.
+        cancel (CancellationToken): A cancellation token.
+        progress (IProgress<double>): A progress reporter item. This can be null.
+
+    Returns:
+        Mesh[]: An array of mesh parts representing the split result, or null: when no mesh intersected, or if a cancel stopped the computation.
+    """
+    url = "rhino/geometry/mesh/split-mesh_mesharray_double_bool_bool_textlog_cancellationtoken_doublearray"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, meshes, tolerance, splitAtCoplanar, createNgons, textLog, cancel, progress]
+    if multiple: args = zip(thisMesh, meshes, tolerance, splitAtCoplanar, createNgons, textLog, cancel, progress)
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response

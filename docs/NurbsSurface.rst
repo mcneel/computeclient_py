@@ -3,6 +3,30 @@ NurbsSurface
 
 .. py:module:: compute_rhino3d.NurbsSurface
 
+.. py:function:: CreateSubDFriendly(surface, multiple=False)
+
+   Create a bi-cubic SubD friendly surface from a surface.
+
+   :param rhino3dm.Surface surface: >Surface to rebuild as a SubD friendly surface.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: A SubD friendly NURBS surface is successful, None otherwise.
+   :rtype: NurbsSurface
+.. py:function:: CreateFromPlane(plane, uInterval, vInterval, uDegree, vDegree, uPointCount, vPointCount, multiple=False)
+
+   Creates a NURBS surface from a plane and additonal parameters.
+
+   :param rhino3dm.Plane plane: The plane.
+   :param rhino3dm.Interval uInterval: The interval describing the extends of the output surface in the U direction.
+   :param rhino3dm.Interval vInterval: The interval describing the extends of the output surface in the V direction.
+   :param int uDegree: The degree of the output surface in the U direction.
+   :param int vDegree: The degree of the output surface in the V direction.
+   :param int uPointCount: The number of control points of the output surface in the U direction.
+   :param int vPointCount: The number of control points of the output surface in the V direction.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: A NURBS surface if successful, or None on failure.
+   :rtype: NurbsSurface
 .. py:function:: CreateCurveOnSurfacePoints(surface, fixedPoints, tolerance, periodic, initCount, levels, multiple=False)
 
    Computes a discrete spline curve on the surface. In other words, computes a sequence
