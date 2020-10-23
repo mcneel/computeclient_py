@@ -2,7 +2,7 @@ import rhino3dm
 import json
 import requests
 
-__version__ = '0.12.0'
+__version__ = '0.12.1'
 
 url = 'https://compute.rhino3d.com/'
 authToken = ''
