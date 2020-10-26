@@ -93,3 +93,10 @@ def DecodeToLine(item):
     end = DecodeToPoint3d(item['To'])
     return rhino3dm.Line(start,end)
 
+
+def DecodeToBoundingBox(item):
+    if item is None:
+        return None
+    if isinstance(item, list):
+        return [DecodeToBoundingBox(x) for x in item]
+    return rhino3dm.BoundingBox(item['Min']['X'], item['Min']['Y'], item['Min']['Z'], item['Max']['X'], item['Max']['Y'], item['Max']['Z'])

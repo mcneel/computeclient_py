@@ -21,6 +21,7 @@ def GetBoundingBox(thisGeometryBase, accurate, multiple=False):
     args = [thisGeometryBase, accurate]
     if multiple: args = zip(thisGeometryBase, accurate)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToBoundingBox(response)
     return response
 
 
@@ -41,6 +42,7 @@ def GetBoundingBox1(thisGeometryBase, xform, multiple=False):
     args = [thisGeometryBase, xform]
     if multiple: args = zip(thisGeometryBase, xform)
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToBoundingBox(response)
     return response
 
 
