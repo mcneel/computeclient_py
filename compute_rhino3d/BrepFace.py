@@ -1,4 +1,8 @@
 from . import Util
+try:
+    from itertools import izip as zip # python 2
+except ImportError:
+    pass # python 3
 
 
 def PullPointsToFace(thisBrepFace, points, tolerance, multiple=False):
@@ -15,7 +19,7 @@ def PullPointsToFace(thisBrepFace, points, tolerance, multiple=False):
     url = "rhino/geometry/brepface/pullpointstoface-brepface_point3darray_double"
     if multiple: url += "?multiple=true"
     args = [thisBrepFace, points, tolerance]
-    if multiple: args = zip(thisBrepFace, points, tolerance)
+    if multiple: args = list(zip(thisBrepFace, points, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToPoint3d(response)
     return response
@@ -39,7 +43,7 @@ def DraftAnglePoint(thisBrepFace, testPoint, testAngle, pullDirection, edge, mul
     url = "rhino/geometry/brepface/draftanglepoint-brepface_point2d_double_vector3d_bool_point3d_double"
     if multiple: url += "?multiple=true"
     args = [thisBrepFace, testPoint, testAngle, pullDirection, edge]
-    if multiple: args = zip(thisBrepFace, testPoint, testAngle, pullDirection, edge)
+    if multiple: args = list(zip(thisBrepFace, testPoint, testAngle, pullDirection, edge))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -51,7 +55,7 @@ def RemoveHoles(thisBrepFace, tolerance, multiple=False):
     url = "rhino/geometry/brepface/removeholes-brepface_double"
     if multiple: url += "?multiple=true"
     args = [thisBrepFace, tolerance]
-    if multiple: args = zip(thisBrepFace, tolerance)
+    if multiple: args = list(zip(thisBrepFace, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -89,7 +93,7 @@ def Split(thisBrepFace, curves, tolerance, multiple=False):
     url = "rhino/geometry/brepface/split-brepface_curvearray_double"
     if multiple: url += "?multiple=true"
     args = [thisBrepFace, curves, tolerance]
-    if multiple: args = zip(thisBrepFace, curves, tolerance)
+    if multiple: args = list(zip(thisBrepFace, curves, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -109,7 +113,7 @@ def IsPointOnFace(thisBrepFace, u, v, multiple=False):
     url = "rhino/geometry/brepface/ispointonface-brepface_double_double"
     if multiple: url += "?multiple=true"
     args = [thisBrepFace, u, v]
-    if multiple: args = zip(thisBrepFace, u, v)
+    if multiple: args = list(zip(thisBrepFace, u, v))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -129,7 +133,7 @@ def IsPointOnFace1(thisBrepFace, u, v, tolerance, multiple=False):
     url = "rhino/geometry/brepface/ispointonface-brepface_double_double_double"
     if multiple: url += "?multiple=true"
     args = [thisBrepFace, u, v, tolerance]
-    if multiple: args = zip(thisBrepFace, u, v, tolerance)
+    if multiple: args = list(zip(thisBrepFace, u, v, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -152,7 +156,7 @@ def TrimAwareIsoIntervals(thisBrepFace, direction, constantParameter, multiple=F
     url = "rhino/geometry/brepface/trimawareisointervals-brepface_int_double"
     if multiple: url += "?multiple=true"
     args = [thisBrepFace, direction, constantParameter]
-    if multiple: args = zip(thisBrepFace, direction, constantParameter)
+    if multiple: args = list(zip(thisBrepFace, direction, constantParameter))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -173,7 +177,7 @@ def TrimAwareIsoCurve(thisBrepFace, direction, constantParameter, multiple=False
     url = "rhino/geometry/brepface/trimawareisocurve-brepface_int_double"
     if multiple: url += "?multiple=true"
     args = [thisBrepFace, direction, constantParameter]
-    if multiple: args = zip(thisBrepFace, direction, constantParameter)
+    if multiple: args = list(zip(thisBrepFace, direction, constantParameter))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -192,7 +196,7 @@ def ChangeSurface(thisBrepFace, surfaceIndex, multiple=False):
     url = "rhino/geometry/brepface/changesurface-brepface_int"
     if multiple: url += "?multiple=true"
     args = [thisBrepFace, surfaceIndex]
-    if multiple: args = zip(thisBrepFace, surfaceIndex)
+    if multiple: args = list(zip(thisBrepFace, surfaceIndex))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -213,7 +217,7 @@ def RebuildEdges(thisBrepFace, tolerance, rebuildSharedEdges, rebuildVertices, m
     url = "rhino/geometry/brepface/rebuildedges-brepface_double_bool_bool"
     if multiple: url += "?multiple=true"
     args = [thisBrepFace, tolerance, rebuildSharedEdges, rebuildVertices]
-    if multiple: args = zip(thisBrepFace, tolerance, rebuildSharedEdges, rebuildVertices)
+    if multiple: args = list(zip(thisBrepFace, tolerance, rebuildSharedEdges, rebuildVertices))
     response = Util.ComputeFetch(url, args)
     return response
 

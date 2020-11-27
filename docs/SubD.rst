@@ -8,8 +8,8 @@ SubD
    Create a Brep based on this SubD geometry.
 
    :param SubDToBrepOptions options: The SubD to Brep conversion options. Use SubDToBrepOptions.Default \
-      for sensible defaults, currently packed faces and locally-G1 \
-      vertices in the output.
+      for sensible defaults. Currently, these return unpacked faces \
+      and locally-G1 vertices in the output Brep.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
    :return: A new Brep if successful, or None on failure.

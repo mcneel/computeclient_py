@@ -1,4 +1,8 @@
 from . import Util
+try:
+    from itertools import izip as zip # python 2
+except ImportError:
+    pass # python 3
 
 
 def Compute(closedPlanarCurve, multiple=False):
@@ -33,7 +37,7 @@ def Compute1(closedPlanarCurve, planarTolerance, multiple=False):
     url = "rhino/geometry/areamassproperties/compute-curve_double"
     if multiple: url += "?multiple=true"
     args = [closedPlanarCurve, planarTolerance]
-    if multiple: args = zip(closedPlanarCurve, planarTolerance)
+    if multiple: args = list(zip(closedPlanarCurve, planarTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -91,7 +95,7 @@ def Compute4(mesh, area, firstMoments, secondMoments, productMoments, multiple=F
     url = "rhino/geometry/areamassproperties/compute-mesh_bool_bool_bool_bool"
     if multiple: url += "?multiple=true"
     args = [mesh, area, firstMoments, secondMoments, productMoments]
-    if multiple: args = zip(mesh, area, firstMoments, secondMoments, productMoments)
+    if multiple: args = list(zip(mesh, area, firstMoments, secondMoments, productMoments))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -131,7 +135,7 @@ def Compute6(brep, area, firstMoments, secondMoments, productMoments, multiple=F
     url = "rhino/geometry/areamassproperties/compute-brep_bool_bool_bool_bool"
     if multiple: url += "?multiple=true"
     args = [brep, area, firstMoments, secondMoments, productMoments]
-    if multiple: args = zip(brep, area, firstMoments, secondMoments, productMoments)
+    if multiple: args = list(zip(brep, area, firstMoments, secondMoments, productMoments))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -171,7 +175,7 @@ def Compute8(surface, area, firstMoments, secondMoments, productMoments, multipl
     url = "rhino/geometry/areamassproperties/compute-surface_bool_bool_bool_bool"
     if multiple: url += "?multiple=true"
     args = [surface, area, firstMoments, secondMoments, productMoments]
-    if multiple: args = zip(surface, area, firstMoments, secondMoments, productMoments)
+    if multiple: args = list(zip(surface, area, firstMoments, secondMoments, productMoments))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -213,7 +217,7 @@ def Compute10(geometry, area, firstMoments, secondMoments, productMoments, multi
     url = "rhino/geometry/areamassproperties/compute-geometrybasearray_bool_bool_bool_bool"
     if multiple: url += "?multiple=true"
     args = [geometry, area, firstMoments, secondMoments, productMoments]
-    if multiple: args = zip(geometry, area, firstMoments, secondMoments, productMoments)
+    if multiple: args = list(zip(geometry, area, firstMoments, secondMoments, productMoments))
     response = Util.ComputeFetch(url, args)
     return response
 

@@ -1,4 +1,8 @@
 from . import Util
+try:
+    from itertools import izip as zip # python 2
+except ImportError:
+    pass # python 3
 
 
 def CurvePlane(curve, plane, tolerance, multiple=False):
@@ -16,7 +20,7 @@ def CurvePlane(curve, plane, tolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/curveplane-curve_plane_double"
     if multiple: url += "?multiple=true"
     args = [curve, plane, tolerance]
-    if multiple: args = zip(curve, plane, tolerance)
+    if multiple: args = list(zip(curve, plane, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -35,7 +39,7 @@ def MeshPlane(mesh, plane, multiple=False):
     url = "rhino/geometry/intersect/intersection/meshplane-mesh_plane"
     if multiple: url += "?multiple=true"
     args = [mesh, plane]
-    if multiple: args = zip(mesh, plane)
+    if multiple: args = list(zip(mesh, plane))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -54,7 +58,7 @@ def MeshPlane1(mesh, planes, multiple=False):
     url = "rhino/geometry/intersect/intersection/meshplane-mesh_planearray"
     if multiple: url += "?multiple=true"
     args = [mesh, planes]
-    if multiple: args = zip(mesh, planes)
+    if multiple: args = list(zip(mesh, planes))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -76,7 +80,7 @@ def BrepPlane(brep, plane, tolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/brepplane-brep_plane_double_curvearray_point3darray"
     if multiple: url += "?multiple=true"
     args = [brep, plane, tolerance]
-    if multiple: args = zip(brep, plane, tolerance)
+    if multiple: args = list(zip(brep, plane, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -96,7 +100,7 @@ def CurveSelf(curve, tolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/curveself-curve_double"
     if multiple: url += "?multiple=true"
     args = [curve, tolerance]
-    if multiple: args = zip(curve, tolerance)
+    if multiple: args = list(zip(curve, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -117,7 +121,7 @@ def CurveCurve(curveA, curveB, tolerance, overlapTolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/curvecurve-curve_curve_double_double"
     if multiple: url += "?multiple=true"
     args = [curveA, curveB, tolerance, overlapTolerance]
-    if multiple: args = zip(curveA, curveB, tolerance, overlapTolerance)
+    if multiple: args = list(zip(curveA, curveB, tolerance, overlapTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -140,7 +144,7 @@ def CurveCurveValidate(curveA, curveB, tolerance, overlapTolerance, multiple=Fal
     url = "rhino/geometry/intersect/intersection/curvecurvevalidate-curve_curve_double_double_intarray_textlog"
     if multiple: url += "?multiple=true"
     args = [curveA, curveB, tolerance, overlapTolerance]
-    if multiple: args = zip(curveA, curveB, tolerance, overlapTolerance)
+    if multiple: args = list(zip(curveA, curveB, tolerance, overlapTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -161,7 +165,7 @@ def CurveLine(curve, line, tolerance, overlapTolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/curveline-curve_line_double_double"
     if multiple: url += "?multiple=true"
     args = [curve, line, tolerance, overlapTolerance]
-    if multiple: args = zip(curve, line, tolerance, overlapTolerance)
+    if multiple: args = list(zip(curve, line, tolerance, overlapTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -182,7 +186,7 @@ def CurveSurface(curve, surface, tolerance, overlapTolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/curvesurface-curve_surface_double_double"
     if multiple: url += "?multiple=true"
     args = [curve, surface, tolerance, overlapTolerance]
-    if multiple: args = zip(curve, surface, tolerance, overlapTolerance)
+    if multiple: args = list(zip(curve, surface, tolerance, overlapTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -205,7 +209,7 @@ def CurveSurfaceValidate(curve, surface, tolerance, overlapTolerance, multiple=F
     url = "rhino/geometry/intersect/intersection/curvesurfacevalidate-curve_surface_double_double_intarray_textlog"
     if multiple: url += "?multiple=true"
     args = [curve, surface, tolerance, overlapTolerance]
-    if multiple: args = zip(curve, surface, tolerance, overlapTolerance)
+    if multiple: args = list(zip(curve, surface, tolerance, overlapTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -227,7 +231,7 @@ def CurveSurface1(curve, curveDomain, surface, tolerance, overlapTolerance, mult
     url = "rhino/geometry/intersect/intersection/curvesurface-curve_interval_surface_double_double"
     if multiple: url += "?multiple=true"
     args = [curve, curveDomain, surface, tolerance, overlapTolerance]
-    if multiple: args = zip(curve, curveDomain, surface, tolerance, overlapTolerance)
+    if multiple: args = list(zip(curve, curveDomain, surface, tolerance, overlapTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -251,7 +255,7 @@ def CurveSurfaceValidate1(curve, curveDomain, surface, tolerance, overlapToleran
     url = "rhino/geometry/intersect/intersection/curvesurfacevalidate-curve_interval_surface_double_double_intarray_textlog"
     if multiple: url += "?multiple=true"
     args = [curve, curveDomain, surface, tolerance, overlapTolerance]
-    if multiple: args = zip(curve, curveDomain, surface, tolerance, overlapTolerance)
+    if multiple: args = list(zip(curve, curveDomain, surface, tolerance, overlapTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -275,7 +279,7 @@ def CurveBrep(curve, brep, tolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/curvebrep-curve_brep_double_curvearray_point3darray"
     if multiple: url += "?multiple=true"
     args = [curve, brep, tolerance]
-    if multiple: args = zip(curve, brep, tolerance)
+    if multiple: args = list(zip(curve, brep, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -297,7 +301,7 @@ def CurveBrep1(curve, brep, tolerance, angleTolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/curvebrep-curve_brep_double_double_doublearray"
     if multiple: url += "?multiple=true"
     args = [curve, brep, tolerance, angleTolerance]
-    if multiple: args = zip(curve, brep, tolerance, angleTolerance)
+    if multiple: args = list(zip(curve, brep, tolerance, angleTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -319,7 +323,7 @@ def CurveBrepFace(curve, face, tolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/curvebrepface-curve_brepface_double_curvearray_point3darray"
     if multiple: url += "?multiple=true"
     args = [curve, face, tolerance]
-    if multiple: args = zip(curve, face, tolerance)
+    if multiple: args = list(zip(curve, face, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -341,7 +345,7 @@ def SurfaceSurface(surfaceA, surfaceB, tolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/surfacesurface-surface_surface_double_curvearray_point3darray"
     if multiple: url += "?multiple=true"
     args = [surfaceA, surfaceB, tolerance]
-    if multiple: args = zip(surfaceA, surfaceB, tolerance)
+    if multiple: args = list(zip(surfaceA, surfaceB, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -363,7 +367,7 @@ def BrepBrep(brepA, brepB, tolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/brepbrep-brep_brep_double_curvearray_point3darray"
     if multiple: url += "?multiple=true"
     args = [brepA, brepB, tolerance]
-    if multiple: args = zip(brepA, brepB, tolerance)
+    if multiple: args = list(zip(brepA, brepB, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -385,7 +389,7 @@ def BrepSurface(brep, surface, tolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/brepsurface-brep_surface_double_curvearray_point3darray"
     if multiple: url += "?multiple=true"
     args = [brep, surface, tolerance]
-    if multiple: args = zip(brep, surface, tolerance)
+    if multiple: args = list(zip(brep, surface, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -404,7 +408,7 @@ def MeshMeshFast(meshA, meshB, multiple=False):
     url = "rhino/geometry/intersect/intersection/meshmeshfast-mesh_mesh"
     if multiple: url += "?multiple=true"
     args = [meshA, meshB]
-    if multiple: args = zip(meshA, meshB)
+    if multiple: args = list(zip(meshA, meshB))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToLine(response)
     return response
@@ -426,7 +430,7 @@ def MeshMeshAccurate(meshA, meshB, tolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/meshmeshaccurate-mesh_mesh_double"
     if multiple: url += "?multiple=true"
     args = [meshA, meshB, tolerance]
-    if multiple: args = zip(meshA, meshB, tolerance)
+    if multiple: args = list(zip(meshA, meshB, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -446,7 +450,7 @@ def MeshRay(mesh, ray, multiple=False):
     url = "rhino/geometry/intersect/intersection/meshray-mesh_ray3d"
     if multiple: url += "?multiple=true"
     args = [mesh, ray]
-    if multiple: args = zip(mesh, ray)
+    if multiple: args = list(zip(mesh, ray))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -467,7 +471,7 @@ def MeshRay1(mesh, ray, multiple=False):
     url = "rhino/geometry/intersect/intersection/meshray-mesh_ray3d_intarray"
     if multiple: url += "?multiple=true"
     args = [mesh, ray]
-    if multiple: args = zip(mesh, ray)
+    if multiple: args = list(zip(mesh, ray))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -487,7 +491,7 @@ def MeshPolyline(mesh, curve, multiple=False):
     url = "rhino/geometry/intersect/intersection/meshpolyline-mesh_polylinecurve_intarray"
     if multiple: url += "?multiple=true"
     args = [mesh, curve]
-    if multiple: args = zip(mesh, curve)
+    if multiple: args = list(zip(mesh, curve))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -507,7 +511,7 @@ def MeshPolylineSorted(mesh, curve, multiple=False):
     url = "rhino/geometry/intersect/intersection/meshpolylinesorted-mesh_polylinecurve_intarray"
     if multiple: url += "?multiple=true"
     args = [mesh, curve]
-    if multiple: args = zip(mesh, curve)
+    if multiple: args = list(zip(mesh, curve))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -527,7 +531,7 @@ def MeshLine(mesh, line, multiple=False):
     url = "rhino/geometry/intersect/intersection/meshline-mesh_line_intarray"
     if multiple: url += "?multiple=true"
     args = [mesh, line]
-    if multiple: args = zip(mesh, line)
+    if multiple: args = list(zip(mesh, line))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -547,7 +551,7 @@ def MeshLineSorted(mesh, line, multiple=False):
     url = "rhino/geometry/intersect/intersection/meshlinesorted-mesh_line_intarray"
     if multiple: url += "?multiple=true"
     args = [mesh, line]
-    if multiple: args = zip(mesh, line)
+    if multiple: args = list(zip(mesh, line))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -567,7 +571,7 @@ def RayShoot(ray, geometry, maxReflections, multiple=False):
     url = "rhino/geometry/intersect/intersection/rayshoot-ray3d_geometrybasearray_int"
     if multiple: url += "?multiple=true"
     args = [ray, geometry, maxReflections]
-    if multiple: args = zip(ray, geometry, maxReflections)
+    if multiple: args = list(zip(ray, geometry, maxReflections))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToPoint3d(response)
     return response
@@ -588,7 +592,7 @@ def RayShoot1(geometry, ray, maxReflections, multiple=False):
     url = "rhino/geometry/intersect/intersection/rayshoot-geometrybasearray_ray3d_int"
     if multiple: url += "?multiple=true"
     args = [geometry, ray, maxReflections]
-    if multiple: args = zip(geometry, ray, maxReflections)
+    if multiple: args = list(zip(geometry, ray, maxReflections))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -609,7 +613,7 @@ def ProjectPointsToMeshes(meshes, points, direction, tolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/projectpointstomeshes-mesharray_point3darray_vector3d_double"
     if multiple: url += "?multiple=true"
     args = [meshes, points, direction, tolerance]
-    if multiple: args = zip(meshes, points, direction, tolerance)
+    if multiple: args = list(zip(meshes, points, direction, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToPoint3d(response)
     return response
@@ -632,7 +636,7 @@ def ProjectPointsToMeshesEx(meshes, points, direction, tolerance, multiple=False
     url = "rhino/geometry/intersect/intersection/projectpointstomeshesex-mesharray_point3darray_vector3d_double_intarray"
     if multiple: url += "?multiple=true"
     args = [meshes, points, direction, tolerance]
-    if multiple: args = zip(meshes, points, direction, tolerance)
+    if multiple: args = list(zip(meshes, points, direction, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -653,7 +657,7 @@ def ProjectPointsToBreps(breps, points, direction, tolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/projectpointstobreps-breparray_point3darray_vector3d_double"
     if multiple: url += "?multiple=true"
     args = [breps, points, direction, tolerance]
-    if multiple: args = zip(breps, points, direction, tolerance)
+    if multiple: args = list(zip(breps, points, direction, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToPoint3d(response)
     return response
@@ -676,7 +680,7 @@ def ProjectPointsToBrepsEx(breps, points, direction, tolerance, multiple=False):
     url = "rhino/geometry/intersect/intersection/projectpointstobrepsex-breparray_point3darray_vector3d_double_intarray"
     if multiple: url += "?multiple=true"
     args = [breps, points, direction, tolerance]
-    if multiple: args = zip(breps, points, direction, tolerance)
+    if multiple: args = list(zip(breps, points, direction, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 

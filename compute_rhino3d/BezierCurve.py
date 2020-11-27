@@ -1,4 +1,8 @@
 from . import Util
+try:
+    from itertools import izip as zip # python 2
+except ImportError:
+    pass # python 3
 
 
 def CreateCubicBeziers(sourceCurve, distanceTolerance, kinkTolerance, multiple=False):
@@ -18,7 +22,7 @@ def CreateCubicBeziers(sourceCurve, distanceTolerance, kinkTolerance, multiple=F
     url = "rhino/geometry/beziercurve/createcubicbeziers-curve_double_double"
     if multiple: url += "?multiple=true"
     args = [sourceCurve, distanceTolerance, kinkTolerance]
-    if multiple: args = zip(sourceCurve, distanceTolerance, kinkTolerance)
+    if multiple: args = list(zip(sourceCurve, distanceTolerance, kinkTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 

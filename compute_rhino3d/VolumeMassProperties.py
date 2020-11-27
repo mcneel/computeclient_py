@@ -1,4 +1,8 @@
 from . import Util
+try:
+    from itertools import izip as zip # python 2
+except ImportError:
+    pass # python 3
 
 
 def Compute(mesh, multiple=False):
@@ -36,7 +40,7 @@ def Compute1(mesh, volume, firstMoments, secondMoments, productMoments, multiple
     url = "rhino/geometry/volumemassproperties/compute-mesh_bool_bool_bool_bool"
     if multiple: url += "?multiple=true"
     args = [mesh, volume, firstMoments, secondMoments, productMoments]
-    if multiple: args = zip(mesh, volume, firstMoments, secondMoments, productMoments)
+    if multiple: args = list(zip(mesh, volume, firstMoments, secondMoments, productMoments))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -76,7 +80,7 @@ def Compute3(brep, volume, firstMoments, secondMoments, productMoments, multiple
     url = "rhino/geometry/volumemassproperties/compute-brep_bool_bool_bool_bool"
     if multiple: url += "?multiple=true"
     args = [brep, volume, firstMoments, secondMoments, productMoments]
-    if multiple: args = zip(brep, volume, firstMoments, secondMoments, productMoments)
+    if multiple: args = list(zip(brep, volume, firstMoments, secondMoments, productMoments))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -116,7 +120,7 @@ def Compute5(surface, volume, firstMoments, secondMoments, productMoments, multi
     url = "rhino/geometry/volumemassproperties/compute-surface_bool_bool_bool_bool"
     if multiple: url += "?multiple=true"
     args = [surface, volume, firstMoments, secondMoments, productMoments]
-    if multiple: args = zip(surface, volume, firstMoments, secondMoments, productMoments)
+    if multiple: args = list(zip(surface, volume, firstMoments, secondMoments, productMoments))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -158,7 +162,7 @@ def Compute7(geometry, volume, firstMoments, secondMoments, productMoments, mult
     url = "rhino/geometry/volumemassproperties/compute-geometrybasearray_bool_bool_bool_bool"
     if multiple: url += "?multiple=true"
     args = [geometry, volume, firstMoments, secondMoments, productMoments]
-    if multiple: args = zip(geometry, volume, firstMoments, secondMoments, productMoments)
+    if multiple: args = list(zip(geometry, volume, firstMoments, secondMoments, productMoments))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -176,7 +180,7 @@ def Sum(thisVolumeMassProperties, summand, multiple=False):
     url = "rhino/geometry/volumemassproperties/sum-volumemassproperties_volumemassproperties"
     if multiple: url += "?multiple=true"
     args = [thisVolumeMassProperties, summand]
-    if multiple: args = zip(thisVolumeMassProperties, summand)
+    if multiple: args = list(zip(thisVolumeMassProperties, summand))
     response = Util.ComputeFetch(url, args)
     return response
 

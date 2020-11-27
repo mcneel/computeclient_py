@@ -1,4 +1,8 @@
 from . import Util
+try:
+    from itertools import izip as zip # python 2
+except ImportError:
+    pass # python 3
 
 
 def CreateSubDFriendly(surface, multiple=False):
@@ -39,7 +43,7 @@ def CreateFromPlane(plane, uInterval, vInterval, uDegree, vDegree, uPointCount, 
     url = "rhino/geometry/nurbssurface/createfromplane-plane_interval_interval_int_int_int_int"
     if multiple: url += "?multiple=true"
     args = [plane, uInterval, vInterval, uDegree, vDegree, uPointCount, vPointCount]
-    if multiple: args = zip(plane, uInterval, vInterval, uDegree, vDegree, uPointCount, vPointCount)
+    if multiple: args = list(zip(plane, uInterval, vInterval, uDegree, vDegree, uPointCount, vPointCount))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -67,7 +71,7 @@ def CreateCurveOnSurfacePoints(surface, fixedPoints, tolerance, periodic, initCo
     url = "rhino/geometry/nurbssurface/createcurveonsurfacepoints-surface_point2darray_double_bool_int_int"
     if multiple: url += "?multiple=true"
     args = [surface, fixedPoints, tolerance, periodic, initCount, levels]
-    if multiple: args = zip(surface, fixedPoints, tolerance, periodic, initCount, levels)
+    if multiple: args = list(zip(surface, fixedPoints, tolerance, periodic, initCount, levels))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -88,7 +92,7 @@ def CreateCurveOnSurface(surface, points, tolerance, periodic, multiple=False):
     url = "rhino/geometry/nurbssurface/createcurveonsurface-surface_point2darray_double_bool"
     if multiple: url += "?multiple=true"
     args = [surface, points, tolerance, periodic]
-    if multiple: args = zip(surface, points, tolerance, periodic)
+    if multiple: args = list(zip(surface, points, tolerance, periodic))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -110,7 +114,7 @@ def MakeCompatible(surface0, surface1, multiple=False):
     url = "rhino/geometry/nurbssurface/makecompatible-surface_surface_nurbssurface_nurbssurface"
     if multiple: url += "?multiple=true"
     args = [surface0, surface1]
-    if multiple: args = zip(surface0, surface1)
+    if multiple: args = list(zip(surface0, surface1))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -132,7 +136,7 @@ def CreateFromPoints(points, uCount, vCount, uDegree, vDegree, multiple=False):
     url = "rhino/geometry/nurbssurface/createfrompoints-point3darray_int_int_int_int"
     if multiple: url += "?multiple=true"
     args = [points, uCount, vCount, uDegree, vDegree]
-    if multiple: args = zip(points, uCount, vCount, uDegree, vDegree)
+    if multiple: args = list(zip(points, uCount, vCount, uDegree, vDegree))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -157,7 +161,7 @@ def CreateThroughPoints(points, uCount, vCount, uDegree, vDegree, uClosed, vClos
     url = "rhino/geometry/nurbssurface/createthroughpoints-point3darray_int_int_int_int_bool_bool"
     if multiple: url += "?multiple=true"
     args = [points, uCount, vCount, uDegree, vDegree, uClosed, vClosed]
-    if multiple: args = zip(points, uCount, vCount, uDegree, vDegree, uClosed, vClosed)
+    if multiple: args = list(zip(points, uCount, vCount, uDegree, vDegree, uClosed, vClosed))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -180,7 +184,7 @@ def CreateFromCorners(corner1, corner2, corner3, corner4, multiple=False):
     url = "rhino/geometry/nurbssurface/createfromcorners-point3d_point3d_point3d_point3d"
     if multiple: url += "?multiple=true"
     args = [corner1, corner2, corner3, corner4]
-    if multiple: args = zip(corner1, corner2, corner3, corner4)
+    if multiple: args = list(zip(corner1, corner2, corner3, corner4))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -203,7 +207,7 @@ def CreateFromCorners1(corner1, corner2, corner3, corner4, tolerance, multiple=F
     url = "rhino/geometry/nurbssurface/createfromcorners-point3d_point3d_point3d_point3d_double"
     if multiple: url += "?multiple=true"
     args = [corner1, corner2, corner3, corner4, tolerance]
-    if multiple: args = zip(corner1, corner2, corner3, corner4, tolerance)
+    if multiple: args = list(zip(corner1, corner2, corner3, corner4, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -224,7 +228,7 @@ def CreateFromCorners2(corner1, corner2, corner3, multiple=False):
     url = "rhino/geometry/nurbssurface/createfromcorners-point3d_point3d_point3d"
     if multiple: url += "?multiple=true"
     args = [corner1, corner2, corner3]
-    if multiple: args = zip(corner1, corner2, corner3)
+    if multiple: args = list(zip(corner1, corner2, corner3))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -246,7 +250,7 @@ def CreateRailRevolvedSurface(profile, rail, axis, scaleHeight, multiple=False):
     url = "rhino/geometry/nurbssurface/createrailrevolvedsurface-curve_curve_line_bool"
     if multiple: url += "?multiple=true"
     args = [profile, rail, axis, scaleHeight]
-    if multiple: args = zip(profile, rail, axis, scaleHeight)
+    if multiple: args = list(zip(profile, rail, axis, scaleHeight))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -276,7 +280,7 @@ def CreateNetworkSurface(uCurves, uContinuityStart, uContinuityEnd, vCurves, vCo
     url = "rhino/geometry/nurbssurface/createnetworksurface-curvearray_int_int_curvearray_int_int_double_double_double_int"
     if multiple: url += "?multiple=true"
     args = [uCurves, uContinuityStart, uContinuityEnd, vCurves, vContinuityStart, vContinuityEnd, edgeTolerance, interiorTolerance, angleTolerance]
-    if multiple: args = zip(uCurves, uContinuityStart, uContinuityEnd, vCurves, vContinuityStart, vContinuityEnd, edgeTolerance, interiorTolerance, angleTolerance)
+    if multiple: args = list(zip(uCurves, uContinuityStart, uContinuityEnd, vCurves, vContinuityStart, vContinuityEnd, edgeTolerance, interiorTolerance, angleTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -301,7 +305,7 @@ def CreateNetworkSurface1(curves, continuity, edgeTolerance, interiorTolerance, 
     url = "rhino/geometry/nurbssurface/createnetworksurface-curvearray_int_double_double_double_int"
     if multiple: url += "?multiple=true"
     args = [curves, continuity, edgeTolerance, interiorTolerance, angleTolerance]
-    if multiple: args = zip(curves, continuity, edgeTolerance, interiorTolerance, angleTolerance)
+    if multiple: args = list(zip(curves, continuity, edgeTolerance, interiorTolerance, angleTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 

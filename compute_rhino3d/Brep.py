@@ -1,4 +1,8 @@
 from . import Util
+try:
+    from itertools import izip as zip # python 2
+except ImportError:
+    pass # python 3
 
 
 def ChangeSeam(face, direction, parameter, tolerance, multiple=False):
@@ -17,7 +21,7 @@ def ChangeSeam(face, direction, parameter, tolerance, multiple=False):
     url = "rhino/geometry/brep/changeseam-brepface_int_double_double"
     if multiple: url += "?multiple=true"
     args = [face, direction, parameter, tolerance]
-    if multiple: args = zip(face, direction, parameter, tolerance)
+    if multiple: args = list(zip(face, direction, parameter, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -38,7 +42,7 @@ def CopyTrimCurves(trimSource, surfaceSource, tolerance, multiple=False):
     url = "rhino/geometry/brep/copytrimcurves-brepface_surface_double"
     if multiple: url += "?multiple=true"
     args = [trimSource, surfaceSource, tolerance]
-    if multiple: args = zip(trimSource, surfaceSource, tolerance)
+    if multiple: args = list(zip(trimSource, surfaceSource, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -60,7 +64,7 @@ def CreateBaseballSphere(center, radius, tolerance, multiple=False):
     url = "rhino/geometry/brep/createbaseballsphere-point3d_double_double"
     if multiple: url += "?multiple=true"
     args = [center, radius, tolerance]
-    if multiple: args = zip(center, radius, tolerance)
+    if multiple: args = list(zip(center, radius, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -83,7 +87,7 @@ def CreateDevelopableLoft(crv0, crv1, reverse0, reverse1, density, multiple=Fals
     url = "rhino/geometry/brep/createdevelopableloft-curve_curve_bool_bool_int"
     if multiple: url += "?multiple=true"
     args = [crv0, crv1, reverse0, reverse1, density]
-    if multiple: args = zip(crv0, crv1, reverse0, reverse1, density)
+    if multiple: args = list(zip(crv0, crv1, reverse0, reverse1, density))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -106,7 +110,7 @@ def CreateDevelopableLoft1(rail0, rail1, fixedRulings, multiple=False):
     url = "rhino/geometry/brep/createdevelopableloft-nurbscurve_nurbscurve_point2darray"
     if multiple: url += "?multiple=true"
     args = [rail0, rail1, fixedRulings]
-    if multiple: args = zip(rail0, rail1, fixedRulings)
+    if multiple: args = list(zip(rail0, rail1, fixedRulings))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -144,7 +148,7 @@ def CreatePlanarBreps1(inputLoops, tolerance, multiple=False):
     url = "rhino/geometry/brep/createplanarbreps-curvearray_double"
     if multiple: url += "?multiple=true"
     args = [inputLoops, tolerance]
-    if multiple: args = zip(inputLoops, tolerance)
+    if multiple: args = list(zip(inputLoops, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -182,7 +186,7 @@ def CreatePlanarBreps3(inputLoop, tolerance, multiple=False):
     url = "rhino/geometry/brep/createplanarbreps-curve_double"
     if multiple: url += "?multiple=true"
     args = [inputLoop, tolerance]
-    if multiple: args = zip(inputLoop, tolerance)
+    if multiple: args = list(zip(inputLoop, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -203,7 +207,7 @@ def CreateTrimmedSurface(trimSource, surfaceSource, multiple=False):
     url = "rhino/geometry/brep/createtrimmedsurface-brepface_surface"
     if multiple: url += "?multiple=true"
     args = [trimSource, surfaceSource]
-    if multiple: args = zip(trimSource, surfaceSource)
+    if multiple: args = list(zip(trimSource, surfaceSource))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -224,7 +228,7 @@ def CreateTrimmedSurface1(trimSource, surfaceSource, tolerance, multiple=False):
     url = "rhino/geometry/brep/createtrimmedsurface-brepface_surface_double"
     if multiple: url += "?multiple=true"
     args = [trimSource, surfaceSource, tolerance]
-    if multiple: args = zip(trimSource, surfaceSource, tolerance)
+    if multiple: args = list(zip(trimSource, surfaceSource, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -246,7 +250,7 @@ def CreateFromCornerPoints(corner1, corner2, corner3, tolerance, multiple=False)
     url = "rhino/geometry/brep/createfromcornerpoints-point3d_point3d_point3d_double"
     if multiple: url += "?multiple=true"
     args = [corner1, corner2, corner3, tolerance]
-    if multiple: args = zip(corner1, corner2, corner3, tolerance)
+    if multiple: args = list(zip(corner1, corner2, corner3, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -269,7 +273,7 @@ def CreateFromCornerPoints1(corner1, corner2, corner3, corner4, tolerance, multi
     url = "rhino/geometry/brep/createfromcornerpoints-point3d_point3d_point3d_point3d_double"
     if multiple: url += "?multiple=true"
     args = [corner1, corner2, corner3, corner4, tolerance]
-    if multiple: args = zip(corner1, corner2, corner3, corner4, tolerance)
+    if multiple: args = list(zip(corner1, corner2, corner3, corner4, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -326,7 +330,7 @@ def CreatePlanarBreps5(inputLoops, tolerance, multiple=False):
     url = "rhino/geometry/brep/createplanarbreps-rhino.collections.curvelist_double"
     if multiple: url += "?multiple=true"
     args = [inputLoops, tolerance]
-    if multiple: args = zip(inputLoops, tolerance)
+    if multiple: args = list(zip(inputLoops, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -351,7 +355,7 @@ def CreateFromOffsetFace(face, offsetDistance, offsetTolerance, bothSides, creat
     url = "rhino/geometry/brep/createfromoffsetface-brepface_double_double_bool_bool"
     if multiple: url += "?multiple=true"
     args = [face, offsetDistance, offsetTolerance, bothSides, createSolid]
-    if multiple: args = zip(face, offsetDistance, offsetTolerance, bothSides, createSolid)
+    if multiple: args = list(zip(face, offsetDistance, offsetTolerance, bothSides, createSolid))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -371,7 +375,7 @@ def CreateSolid(breps, tolerance, multiple=False):
     url = "rhino/geometry/brep/createsolid-breparray_double"
     if multiple: url += "?multiple=true"
     args = [breps, tolerance]
-    if multiple: args = zip(breps, tolerance)
+    if multiple: args = list(zip(breps, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -393,7 +397,7 @@ def MergeSurfaces(surface0, surface1, tolerance, angleToleranceRadians, multiple
     url = "rhino/geometry/brep/mergesurfaces-surface_surface_double_double"
     if multiple: url += "?multiple=true"
     args = [surface0, surface1, tolerance, angleToleranceRadians]
-    if multiple: args = zip(surface0, surface1, tolerance, angleToleranceRadians)
+    if multiple: args = list(zip(surface0, surface1, tolerance, angleToleranceRadians))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -415,7 +419,7 @@ def MergeSurfaces1(brep0, brep1, tolerance, angleToleranceRadians, multiple=Fals
     url = "rhino/geometry/brep/mergesurfaces-brep_brep_double_double"
     if multiple: url += "?multiple=true"
     args = [brep0, brep1, tolerance, angleToleranceRadians]
-    if multiple: args = zip(brep0, brep1, tolerance, angleToleranceRadians)
+    if multiple: args = list(zip(brep0, brep1, tolerance, angleToleranceRadians))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -441,7 +445,7 @@ def MergeSurfaces2(brep0, brep1, tolerance, angleToleranceRadians, point0, point
     url = "rhino/geometry/brep/mergesurfaces-brep_brep_double_double_point2d_point2d_double_bool"
     if multiple: url += "?multiple=true"
     args = [brep0, brep1, tolerance, angleToleranceRadians, point0, point1, roundness, smooth]
-    if multiple: args = zip(brep0, brep1, tolerance, angleToleranceRadians, point0, point1, roundness, smooth)
+    if multiple: args = list(zip(brep0, brep1, tolerance, angleToleranceRadians, point0, point1, roundness, smooth))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -465,7 +469,7 @@ def CreatePatch(geometry, startingSurface, tolerance, multiple=False):
     url = "rhino/geometry/brep/createpatch-geometrybasearray_surface_double"
     if multiple: url += "?multiple=true"
     args = [geometry, startingSurface, tolerance]
-    if multiple: args = zip(geometry, startingSurface, tolerance)
+    if multiple: args = list(zip(geometry, startingSurface, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -493,7 +497,7 @@ def CreatePatch1(geometry, uSpans, vSpans, tolerance, multiple=False):
     url = "rhino/geometry/brep/createpatch-geometrybasearray_int_int_double"
     if multiple: url += "?multiple=true"
     args = [geometry, uSpans, vSpans, tolerance]
-    if multiple: args = zip(geometry, uSpans, vSpans, tolerance)
+    if multiple: args = list(zip(geometry, uSpans, vSpans, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -536,7 +540,7 @@ def CreatePatch2(geometry, startingSurface, uSpans, vSpans, trim, tangency, poin
     url = "rhino/geometry/brep/createpatch-geometrybasearray_surface_int_int_bool_bool_double_double_double_boolarray_double"
     if multiple: url += "?multiple=true"
     args = [geometry, startingSurface, uSpans, vSpans, trim, tangency, pointSpacing, flexibility, surfacePull, fixEdges, tolerance]
-    if multiple: args = zip(geometry, startingSurface, uSpans, vSpans, trim, tangency, pointSpacing, flexibility, surfacePull, fixEdges, tolerance)
+    if multiple: args = list(zip(geometry, startingSurface, uSpans, vSpans, trim, tangency, pointSpacing, flexibility, surfacePull, fixEdges, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -564,7 +568,7 @@ def CreatePipe(rail, radius, localBlending, cap, fitRail, absoluteTolerance, ang
     url = "rhino/geometry/brep/createpipe-curve_double_bool_pipecapmode_bool_double_double"
     if multiple: url += "?multiple=true"
     args = [rail, radius, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians]
-    if multiple: args = zip(rail, radius, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians)
+    if multiple: args = list(zip(rail, radius, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -595,7 +599,7 @@ def CreatePipe1(rail, railRadiiParameters, radii, localBlending, cap, fitRail, a
     url = "rhino/geometry/brep/createpipe-curve_doublearray_doublearray_bool_pipecapmode_bool_double_double"
     if multiple: url += "?multiple=true"
     args = [rail, railRadiiParameters, radii, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians]
-    if multiple: args = zip(rail, railRadiiParameters, radii, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians)
+    if multiple: args = list(zip(rail, railRadiiParameters, radii, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -624,7 +628,7 @@ def CreateThickPipe(rail, radius0, radius1, localBlending, cap, fitRail, absolut
     url = "rhino/geometry/brep/createthickpipe-curve_double_double_bool_pipecapmode_bool_double_double"
     if multiple: url += "?multiple=true"
     args = [rail, radius0, radius1, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians]
-    if multiple: args = zip(rail, radius0, radius1, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians)
+    if multiple: args = list(zip(rail, radius0, radius1, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -656,7 +660,7 @@ def CreateThickPipe1(rail, railRadiiParameters, radii0, radii1, localBlending, c
     url = "rhino/geometry/brep/createthickpipe-curve_doublearray_doublearray_doublearray_bool_pipecapmode_bool_double_double"
     if multiple: url += "?multiple=true"
     args = [rail, railRadiiParameters, radii0, radii1, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians]
-    if multiple: args = zip(rail, railRadiiParameters, radii0, radii1, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians)
+    if multiple: args = list(zip(rail, railRadiiParameters, radii0, radii1, localBlending, cap, fitRail, absoluteTolerance, angleToleranceRadians))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -679,7 +683,7 @@ def CreateFromSweep(rail, shape, closed, tolerance, multiple=False):
     url = "rhino/geometry/brep/createfromsweep-curve_curve_bool_double"
     if multiple: url += "?multiple=true"
     args = [rail, shape, closed, tolerance]
-    if multiple: args = zip(rail, shape, closed, tolerance)
+    if multiple: args = list(zip(rail, shape, closed, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -702,7 +706,7 @@ def CreateFromSweep1(rail, shapes, closed, tolerance, multiple=False):
     url = "rhino/geometry/brep/createfromsweep-curve_curvearray_bool_double"
     if multiple: url += "?multiple=true"
     args = [rail, shapes, closed, tolerance]
-    if multiple: args = zip(rail, shapes, closed, tolerance)
+    if multiple: args = list(zip(rail, shapes, closed, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -733,7 +737,7 @@ def CreateFromSweep2(rail, shapes, startPoint, endPoint, frameType, roadlikeNorm
     url = "rhino/geometry/brep/createfromsweep-curve_curvearray_point3d_point3d_sweepframe_vector3d_bool_sweepblend_sweepmiter_double_sweeprebuild_int_double"
     if multiple: url += "?multiple=true"
     args = [rail, shapes, startPoint, endPoint, frameType, roadlikeNormal, closed, blendType, miterType, tolerance, rebuildType, rebuildPointCount, refitTolerance]
-    if multiple: args = zip(rail, shapes, startPoint, endPoint, frameType, roadlikeNormal, closed, blendType, miterType, tolerance, rebuildType, rebuildPointCount, refitTolerance)
+    if multiple: args = list(zip(rail, shapes, startPoint, endPoint, frameType, roadlikeNormal, closed, blendType, miterType, tolerance, rebuildType, rebuildPointCount, refitTolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -757,7 +761,7 @@ def CreateFromSweepSegmented(rail, shape, closed, tolerance, multiple=False):
     url = "rhino/geometry/brep/createfromsweepsegmented-curve_curve_bool_double"
     if multiple: url += "?multiple=true"
     args = [rail, shape, closed, tolerance]
-    if multiple: args = zip(rail, shape, closed, tolerance)
+    if multiple: args = list(zip(rail, shape, closed, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -781,7 +785,7 @@ def CreateFromSweepSegmented1(rail, shapes, closed, tolerance, multiple=False):
     url = "rhino/geometry/brep/createfromsweepsegmented-curve_curvearray_bool_double"
     if multiple: url += "?multiple=true"
     args = [rail, shapes, closed, tolerance]
-    if multiple: args = zip(rail, shapes, closed, tolerance)
+    if multiple: args = list(zip(rail, shapes, closed, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -813,7 +817,7 @@ def CreateFromSweepSegmented2(rail, shapes, startPoint, endPoint, frameType, roa
     url = "rhino/geometry/brep/createfromsweepsegmented-curve_curvearray_point3d_point3d_sweepframe_vector3d_bool_sweepblend_sweepmiter_double_sweeprebuild_int_double"
     if multiple: url += "?multiple=true"
     args = [rail, shapes, startPoint, endPoint, frameType, roadlikeNormal, closed, blendType, miterType, tolerance, rebuildType, rebuildPointCount, refitTolerance]
-    if multiple: args = zip(rail, shapes, startPoint, endPoint, frameType, roadlikeNormal, closed, blendType, miterType, tolerance, rebuildType, rebuildPointCount, refitTolerance)
+    if multiple: args = list(zip(rail, shapes, startPoint, endPoint, frameType, roadlikeNormal, closed, blendType, miterType, tolerance, rebuildType, rebuildPointCount, refitTolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -837,7 +841,7 @@ def CreateFromSweep3(rail1, rail2, shape, closed, tolerance, multiple=False):
     url = "rhino/geometry/brep/createfromsweep-curve_curve_curve_bool_double"
     if multiple: url += "?multiple=true"
     args = [rail1, rail2, shape, closed, tolerance]
-    if multiple: args = zip(rail1, rail2, shape, closed, tolerance)
+    if multiple: args = list(zip(rail1, rail2, shape, closed, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -861,7 +865,7 @@ def CreateFromSweep4(rail1, rail2, shapes, closed, tolerance, multiple=False):
     url = "rhino/geometry/brep/createfromsweep-curve_curve_curvearray_bool_double"
     if multiple: url += "?multiple=true"
     args = [rail1, rail2, shapes, closed, tolerance]
-    if multiple: args = zip(rail1, rail2, shapes, closed, tolerance)
+    if multiple: args = list(zip(rail1, rail2, shapes, closed, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -891,7 +895,7 @@ def CreateFromSweep5(rail1, rail2, shapes, start, end, closed, tolerance, rebuil
     url = "rhino/geometry/brep/createfromsweep-curve_curve_curvearray_point3d_point3d_bool_double_sweeprebuild_int_double_bool"
     if multiple: url += "?multiple=true"
     args = [rail1, rail2, shapes, start, end, closed, tolerance, rebuild, rebuildPointCount, refitTolerance, preserveHeight]
-    if multiple: args = zip(rail1, rail2, shapes, start, end, closed, tolerance, rebuild, rebuildPointCount, refitTolerance, preserveHeight)
+    if multiple: args = list(zip(rail1, rail2, shapes, start, end, closed, tolerance, rebuild, rebuildPointCount, refitTolerance, preserveHeight))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -915,7 +919,7 @@ def CreateFromSweepInParts(rail1, rail2, shapes, rail_params, closed, tolerance,
     url = "rhino/geometry/brep/createfromsweepinparts-curve_curve_curvearray_point2darray_bool_double"
     if multiple: url += "?multiple=true"
     args = [rail1, rail2, shapes, rail_params, closed, tolerance]
-    if multiple: args = zip(rail1, rail2, shapes, rail_params, closed, tolerance)
+    if multiple: args = list(zip(rail1, rail2, shapes, rail_params, closed, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -940,7 +944,7 @@ def CreateFromTaperedExtrude(curveToExtrude, distance, direction, basePoint, dra
     url = "rhino/geometry/brep/createfromtaperedextrude-curve_double_vector3d_point3d_double_extrudecornertype_double_double"
     if multiple: url += "?multiple=true"
     args = [curveToExtrude, distance, direction, basePoint, draftAngleRadians, cornerType, tolerance, angleToleranceRadians]
-    if multiple: args = zip(curveToExtrude, distance, direction, basePoint, draftAngleRadians, cornerType, tolerance, angleToleranceRadians)
+    if multiple: args = list(zip(curveToExtrude, distance, direction, basePoint, draftAngleRadians, cornerType, tolerance, angleToleranceRadians))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -963,7 +967,7 @@ def CreateFromTaperedExtrude1(curveToExtrude, distance, direction, basePoint, dr
     url = "rhino/geometry/brep/createfromtaperedextrude-curve_double_vector3d_point3d_double_extrudecornertype"
     if multiple: url += "?multiple=true"
     args = [curveToExtrude, distance, direction, basePoint, draftAngleRadians, cornerType]
-    if multiple: args = zip(curveToExtrude, distance, direction, basePoint, draftAngleRadians, cornerType)
+    if multiple: args = list(zip(curveToExtrude, distance, direction, basePoint, draftAngleRadians, cornerType))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -990,7 +994,7 @@ def CreateFromTaperedExtrudeWithRef(curve, direction, distance, draftAngle, plan
     url = "rhino/geometry/brep/createfromtaperedextrudewithref-curve_vector3d_double_double_plane_double"
     if multiple: url += "?multiple=true"
     args = [curve, direction, distance, draftAngle, plane, tolerance]
-    if multiple: args = zip(curve, direction, distance, draftAngle, plane, tolerance)
+    if multiple: args = list(zip(curve, direction, distance, draftAngle, plane, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1018,7 +1022,7 @@ def CreateBlendSurface(face0, edge0, domain0, rev0, continuity0, face1, edge1, d
     url = "rhino/geometry/brep/createblendsurface-brepface_brepedge_interval_bool_blendcontinuity_brepface_brepedge_interval_bool_blendcontinuity"
     if multiple: url += "?multiple=true"
     args = [face0, edge0, domain0, rev0, continuity0, face1, edge1, domain1, rev1, continuity1]
-    if multiple: args = zip(face0, edge0, domain0, rev0, continuity0, face1, edge1, domain1, rev1, continuity1)
+    if multiple: args = list(zip(face0, edge0, domain0, rev0, continuity0, face1, edge1, domain1, rev1, continuity1))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1046,7 +1050,7 @@ def CreateBlendShape(face0, edge0, t0, rev0, continuity0, face1, edge1, t1, rev1
     url = "rhino/geometry/brep/createblendshape-brepface_brepedge_double_bool_blendcontinuity_brepface_brepedge_double_bool_blendcontinuity"
     if multiple: url += "?multiple=true"
     args = [face0, edge0, t0, rev0, continuity0, face1, edge1, t1, rev1, continuity1]
-    if multiple: args = zip(face0, edge0, t0, rev0, continuity0, face1, edge1, t1, rev1, continuity1)
+    if multiple: args = list(zip(face0, edge0, t0, rev0, continuity0, face1, edge1, t1, rev1, continuity1))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1071,7 +1075,7 @@ def CreateFilletSurface(face0, uv0, face1, uv1, radius, extend, tolerance, multi
     url = "rhino/geometry/brep/createfilletsurface-brepface_point2d_brepface_point2d_double_bool_double"
     if multiple: url += "?multiple=true"
     args = [face0, uv0, face1, uv1, radius, extend, tolerance]
-    if multiple: args = zip(face0, uv0, face1, uv1, radius, extend, tolerance)
+    if multiple: args = list(zip(face0, uv0, face1, uv1, radius, extend, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1099,7 +1103,7 @@ def CreateFilletSurface1(face0, uv0, face1, uv1, radius, trim, extend, tolerance
     url = "rhino/geometry/brep/createfilletsurface-brepface_point2d_brepface_point2d_double_bool_bool_double_breparray_breparray"
     if multiple: url += "?multiple=true"
     args = [face0, uv0, face1, uv1, radius, trim, extend, tolerance]
-    if multiple: args = zip(face0, uv0, face1, uv1, radius, trim, extend, tolerance)
+    if multiple: args = list(zip(face0, uv0, face1, uv1, radius, trim, extend, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -1124,7 +1128,7 @@ def CreateChamferSurface(face0, uv0, radius0, face1, uv1, radius1, extend, toler
     url = "rhino/geometry/brep/createchamfersurface-brepface_point2d_double_brepface_point2d_double_bool_double"
     if multiple: url += "?multiple=true"
     args = [face0, uv0, radius0, face1, uv1, radius1, extend, tolerance]
-    if multiple: args = zip(face0, uv0, radius0, face1, uv1, radius1, extend, tolerance)
+    if multiple: args = list(zip(face0, uv0, radius0, face1, uv1, radius1, extend, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1153,7 +1157,7 @@ def CreateChamferSurface1(face0, uv0, radius0, face1, uv1, radius1, trim, extend
     url = "rhino/geometry/brep/createchamfersurface-brepface_point2d_double_brepface_point2d_double_bool_bool_double_breparray_breparray"
     if multiple: url += "?multiple=true"
     args = [face0, uv0, radius0, face1, uv1, radius1, trim, extend, tolerance]
-    if multiple: args = zip(face0, uv0, radius0, face1, uv1, radius1, trim, extend, tolerance)
+    if multiple: args = list(zip(face0, uv0, radius0, face1, uv1, radius1, trim, extend, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -1177,7 +1181,7 @@ def CreateFilletEdges(brep, edgeIndices, startRadii, endRadii, blendType, railTy
     url = "rhino/geometry/brep/createfilletedges-brep_intarray_doublearray_doublearray_blendtype_railtype_double"
     if multiple: url += "?multiple=true"
     args = [brep, edgeIndices, startRadii, endRadii, blendType, railType, tolerance]
-    if multiple: args = zip(brep, edgeIndices, startRadii, endRadii, blendType, railType, tolerance)
+    if multiple: args = list(zip(brep, edgeIndices, startRadii, endRadii, blendType, railType, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1211,7 +1215,7 @@ def CreateOffsetBrep(brep, distance, solid, extend, tolerance, multiple=False):
     url = "rhino/geometry/brep/createoffsetbrep-brep_double_bool_bool_double_breparray_breparray"
     if multiple: url += "?multiple=true"
     args = [brep, distance, solid, extend, tolerance]
-    if multiple: args = zip(brep, distance, solid, extend, tolerance)
+    if multiple: args = list(zip(brep, distance, solid, extend, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -1248,7 +1252,7 @@ def CreateFromJoinedEdges(brep0, edgeIndex0, brep1, edgeIndex1, joinTolerance, m
     url = "rhino/geometry/brep/createfromjoinededges-brep_int_brep_int_double"
     if multiple: url += "?multiple=true"
     args = [brep0, edgeIndex0, brep1, edgeIndex1, joinTolerance]
-    if multiple: args = zip(brep0, edgeIndex0, brep1, edgeIndex1, joinTolerance)
+    if multiple: args = list(zip(brep0, edgeIndex0, brep1, edgeIndex1, joinTolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1276,7 +1280,7 @@ def CreateFromLoft(curves, start, end, loftType, closed, multiple=False):
     url = "rhino/geometry/brep/createfromloft-curvearray_point3d_point3d_lofttype_bool"
     if multiple: url += "?multiple=true"
     args = [curves, start, end, loftType, closed]
-    if multiple: args = zip(curves, start, end, loftType, closed)
+    if multiple: args = list(zip(curves, start, end, loftType, closed))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1306,7 +1310,7 @@ def CreateFromLoftRebuild(curves, start, end, loftType, closed, rebuildPointCoun
     url = "rhino/geometry/brep/createfromloftrebuild-curvearray_point3d_point3d_lofttype_bool_int"
     if multiple: url += "?multiple=true"
     args = [curves, start, end, loftType, closed, rebuildPointCount]
-    if multiple: args = zip(curves, start, end, loftType, closed, rebuildPointCount)
+    if multiple: args = list(zip(curves, start, end, loftType, closed, rebuildPointCount))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1336,7 +1340,7 @@ def CreateFromLoftRefit(curves, start, end, loftType, closed, refitTolerance, mu
     url = "rhino/geometry/brep/createfromloftrefit-curvearray_point3d_point3d_lofttype_bool_double"
     if multiple: url += "?multiple=true"
     args = [curves, start, end, loftType, closed, refitTolerance]
-    if multiple: args = zip(curves, start, end, loftType, closed, refitTolerance)
+    if multiple: args = list(zip(curves, start, end, loftType, closed, refitTolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1373,7 +1377,7 @@ def CreateFromLoft1(curves, start, end, StartTangent, EndTangent, StartTrim, End
     url = "rhino/geometry/brep/createfromloft-curvearray_point3d_point3d_bool_bool_breptrim_breptrim_lofttype_bool"
     if multiple: url += "?multiple=true"
     args = [curves, start, end, StartTangent, EndTangent, StartTrim, EndTrim, loftType, closed]
-    if multiple: args = zip(curves, start, end, StartTangent, EndTangent, StartTrim, EndTrim, loftType, closed)
+    if multiple: args = list(zip(curves, start, end, StartTangent, EndTangent, StartTrim, EndTrim, loftType, closed))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1394,7 +1398,7 @@ def CreatePlanarUnion(breps, plane, tolerance, multiple=False):
     url = "rhino/geometry/brep/createplanarunion-breparray_plane_double"
     if multiple: url += "?multiple=true"
     args = [breps, plane, tolerance]
-    if multiple: args = zip(breps, plane, tolerance)
+    if multiple: args = list(zip(breps, plane, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1416,7 +1420,7 @@ def CreatePlanarUnion1(b0, b1, plane, tolerance, multiple=False):
     url = "rhino/geometry/brep/createplanarunion-brep_brep_plane_double"
     if multiple: url += "?multiple=true"
     args = [b0, b1, plane, tolerance]
-    if multiple: args = zip(b0, b1, plane, tolerance)
+    if multiple: args = list(zip(b0, b1, plane, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1438,7 +1442,7 @@ def CreatePlanarDifference(b0, b1, plane, tolerance, multiple=False):
     url = "rhino/geometry/brep/createplanardifference-brep_brep_plane_double"
     if multiple: url += "?multiple=true"
     args = [b0, b1, plane, tolerance]
-    if multiple: args = zip(b0, b1, plane, tolerance)
+    if multiple: args = list(zip(b0, b1, plane, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1460,7 +1464,7 @@ def CreatePlanarIntersection(b0, b1, plane, tolerance, multiple=False):
     url = "rhino/geometry/brep/createplanarintersection-brep_brep_plane_double"
     if multiple: url += "?multiple=true"
     args = [b0, b1, plane, tolerance]
-    if multiple: args = zip(b0, b1, plane, tolerance)
+    if multiple: args = list(zip(b0, b1, plane, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1480,7 +1484,7 @@ def CreateBooleanUnion(breps, tolerance, multiple=False):
     url = "rhino/geometry/brep/createbooleanunion-breparray_double"
     if multiple: url += "?multiple=true"
     args = [breps, tolerance]
-    if multiple: args = zip(breps, tolerance)
+    if multiple: args = list(zip(breps, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1501,7 +1505,7 @@ def CreateBooleanUnion1(breps, tolerance, manifoldOnly, multiple=False):
     url = "rhino/geometry/brep/createbooleanunion-breparray_double_bool"
     if multiple: url += "?multiple=true"
     args = [breps, tolerance, manifoldOnly]
-    if multiple: args = zip(breps, tolerance, manifoldOnly)
+    if multiple: args = list(zip(breps, tolerance, manifoldOnly))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1522,7 +1526,7 @@ def CreateBooleanIntersection(firstSet, secondSet, tolerance, multiple=False):
     url = "rhino/geometry/brep/createbooleanintersection-breparray_breparray_double"
     if multiple: url += "?multiple=true"
     args = [firstSet, secondSet, tolerance]
-    if multiple: args = zip(firstSet, secondSet, tolerance)
+    if multiple: args = list(zip(firstSet, secondSet, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1544,7 +1548,7 @@ def CreateBooleanIntersection1(firstSet, secondSet, tolerance, manifoldOnly, mul
     url = "rhino/geometry/brep/createbooleanintersection-breparray_breparray_double_bool"
     if multiple: url += "?multiple=true"
     args = [firstSet, secondSet, tolerance, manifoldOnly]
-    if multiple: args = zip(firstSet, secondSet, tolerance, manifoldOnly)
+    if multiple: args = list(zip(firstSet, secondSet, tolerance, manifoldOnly))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1565,7 +1569,7 @@ def CreateBooleanIntersection2(firstBrep, secondBrep, tolerance, multiple=False)
     url = "rhino/geometry/brep/createbooleanintersection-brep_brep_double"
     if multiple: url += "?multiple=true"
     args = [firstBrep, secondBrep, tolerance]
-    if multiple: args = zip(firstBrep, secondBrep, tolerance)
+    if multiple: args = list(zip(firstBrep, secondBrep, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1587,7 +1591,7 @@ def CreateBooleanIntersection3(firstBrep, secondBrep, tolerance, manifoldOnly, m
     url = "rhino/geometry/brep/createbooleanintersection-brep_brep_double_bool"
     if multiple: url += "?multiple=true"
     args = [firstBrep, secondBrep, tolerance, manifoldOnly]
-    if multiple: args = zip(firstBrep, secondBrep, tolerance, manifoldOnly)
+    if multiple: args = list(zip(firstBrep, secondBrep, tolerance, manifoldOnly))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1608,7 +1612,7 @@ def CreateBooleanDifference(firstSet, secondSet, tolerance, multiple=False):
     url = "rhino/geometry/brep/createbooleandifference-breparray_breparray_double"
     if multiple: url += "?multiple=true"
     args = [firstSet, secondSet, tolerance]
-    if multiple: args = zip(firstSet, secondSet, tolerance)
+    if multiple: args = list(zip(firstSet, secondSet, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1630,7 +1634,7 @@ def CreateBooleanDifference1(firstSet, secondSet, tolerance, manifoldOnly, multi
     url = "rhino/geometry/brep/createbooleandifference-breparray_breparray_double_bool"
     if multiple: url += "?multiple=true"
     args = [firstSet, secondSet, tolerance, manifoldOnly]
-    if multiple: args = zip(firstSet, secondSet, tolerance, manifoldOnly)
+    if multiple: args = list(zip(firstSet, secondSet, tolerance, manifoldOnly))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1651,7 +1655,7 @@ def CreateBooleanDifference2(firstBrep, secondBrep, tolerance, multiple=False):
     url = "rhino/geometry/brep/createbooleandifference-brep_brep_double"
     if multiple: url += "?multiple=true"
     args = [firstBrep, secondBrep, tolerance]
-    if multiple: args = zip(firstBrep, secondBrep, tolerance)
+    if multiple: args = list(zip(firstBrep, secondBrep, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1673,7 +1677,7 @@ def CreateBooleanDifference3(firstBrep, secondBrep, tolerance, manifoldOnly, mul
     url = "rhino/geometry/brep/createbooleandifference-brep_brep_double_bool"
     if multiple: url += "?multiple=true"
     args = [firstBrep, secondBrep, tolerance, manifoldOnly]
-    if multiple: args = zip(firstBrep, secondBrep, tolerance, manifoldOnly)
+    if multiple: args = list(zip(firstBrep, secondBrep, tolerance, manifoldOnly))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1694,7 +1698,7 @@ def CreateBooleanSplit(firstBrep, secondBrep, tolerance, multiple=False):
     url = "rhino/geometry/brep/createbooleansplit-brep_brep_double"
     if multiple: url += "?multiple=true"
     args = [firstBrep, secondBrep, tolerance]
-    if multiple: args = zip(firstBrep, secondBrep, tolerance)
+    if multiple: args = list(zip(firstBrep, secondBrep, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1715,7 +1719,7 @@ def CreateBooleanSplit1(firstSet, secondSet, tolerance, multiple=False):
     url = "rhino/geometry/brep/createbooleansplit-breparray_breparray_double"
     if multiple: url += "?multiple=true"
     args = [firstSet, secondSet, tolerance]
-    if multiple: args = zip(firstSet, secondSet, tolerance)
+    if multiple: args = list(zip(firstSet, secondSet, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1737,7 +1741,7 @@ def CreateShell(brep, facesToRemove, distance, tolerance, multiple=False):
     url = "rhino/geometry/brep/createshell-brep_intarray_double_double"
     if multiple: url += "?multiple=true"
     args = [brep, facesToRemove, distance, tolerance]
-    if multiple: args = zip(brep, facesToRemove, distance, tolerance)
+    if multiple: args = list(zip(brep, facesToRemove, distance, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1758,7 +1762,7 @@ def JoinBreps(brepsToJoin, tolerance, multiple=False):
     url = "rhino/geometry/brep/joinbreps-breparray_double"
     if multiple: url += "?multiple=true"
     args = [brepsToJoin, tolerance]
-    if multiple: args = zip(brepsToJoin, tolerance)
+    if multiple: args = list(zip(brepsToJoin, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1780,7 +1784,7 @@ def MergeBreps(brepsToMerge, tolerance, multiple=False):
     url = "rhino/geometry/brep/mergebreps-breparray_double"
     if multiple: url += "?multiple=true"
     args = [brepsToMerge, tolerance]
-    if multiple: args = zip(brepsToMerge, tolerance)
+    if multiple: args = list(zip(brepsToMerge, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1802,7 +1806,7 @@ def CreateContourCurves(brepToContour, contourStart, contourEnd, interval, multi
     url = "rhino/geometry/brep/createcontourcurves-brep_point3d_point3d_double"
     if multiple: url += "?multiple=true"
     args = [brepToContour, contourStart, contourEnd, interval]
-    if multiple: args = zip(brepToContour, contourStart, contourEnd, interval)
+    if multiple: args = list(zip(brepToContour, contourStart, contourEnd, interval))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1822,7 +1826,7 @@ def CreateContourCurves1(brepToContour, sectionPlane, multiple=False):
     url = "rhino/geometry/brep/createcontourcurves-brep_plane"
     if multiple: url += "?multiple=true"
     args = [brepToContour, sectionPlane]
-    if multiple: args = zip(brepToContour, sectionPlane)
+    if multiple: args = list(zip(brepToContour, sectionPlane))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1842,7 +1846,7 @@ def CreateCurvatureAnalysisMesh(brep, state, multiple=False):
     url = "rhino/geometry/brep/createcurvatureanalysismesh-brep_rhino.applicationsettings.curvatureanalysissettingsstate"
     if multiple: url += "?multiple=true"
     args = [brep, state]
-    if multiple: args = zip(brep, state)
+    if multiple: args = list(zip(brep, state))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1877,7 +1881,7 @@ def GetWireframe(thisBrep, density, multiple=False):
     url = "rhino/geometry/brep/getwireframe-brep_int"
     if multiple: url += "?multiple=true"
     args = [thisBrep, density]
-    if multiple: args = zip(thisBrep, density)
+    if multiple: args = list(zip(thisBrep, density))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1896,7 +1900,7 @@ def ClosestPoint(thisBrep, testPoint, multiple=False):
     url = "rhino/geometry/brep/closestpoint-brep_point3d"
     if multiple: url += "?multiple=true"
     args = [thisBrep, testPoint]
-    if multiple: args = zip(thisBrep, testPoint)
+    if multiple: args = list(zip(thisBrep, testPoint))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToPoint3d(response)
     return response
@@ -1924,7 +1928,7 @@ def IsPointInside(thisBrep, point, tolerance, strictlyIn, multiple=False):
     url = "rhino/geometry/brep/ispointinside-brep_point3d_double_bool"
     if multiple: url += "?multiple=true"
     args = [thisBrep, point, tolerance, strictlyIn]
-    if multiple: args = zip(thisBrep, point, tolerance, strictlyIn)
+    if multiple: args = list(zip(thisBrep, point, tolerance, strictlyIn))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -1945,7 +1949,7 @@ def GetPointInside(thisBrep, tolerance, multiple=False):
     url = "rhino/geometry/brep/getpointinside-brep_double_point3d"
     if multiple: url += "?multiple=true"
     args = [thisBrep, tolerance]
-    if multiple: args = zip(thisBrep, tolerance)
+    if multiple: args = list(zip(thisBrep, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -1963,7 +1967,7 @@ def CapPlanarHoles(thisBrep, tolerance, multiple=False):
     url = "rhino/geometry/brep/capplanarholes-brep_double"
     if multiple: url += "?multiple=true"
     args = [thisBrep, tolerance]
-    if multiple: args = zip(thisBrep, tolerance)
+    if multiple: args = list(zip(thisBrep, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1985,7 +1989,7 @@ def Join(thisBrep, otherBrep, tolerance, compact, multiple=False):
     url = "rhino/geometry/brep/join-brep_brep_double_bool"
     if multiple: url += "?multiple=true"
     args = [thisBrep, otherBrep, tolerance, compact]
-    if multiple: args = zip(thisBrep, otherBrep, tolerance, compact)
+    if multiple: args = list(zip(thisBrep, otherBrep, tolerance, compact))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -2003,7 +2007,7 @@ def JoinNakedEdges(thisBrep, tolerance, multiple=False):
     url = "rhino/geometry/brep/joinnakededges-brep_double"
     if multiple: url += "?multiple=true"
     args = [thisBrep, tolerance]
-    if multiple: args = zip(thisBrep, tolerance)
+    if multiple: args = list(zip(thisBrep, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -2022,7 +2026,7 @@ def MergeCoplanarFaces(thisBrep, tolerance, multiple=False):
     url = "rhino/geometry/brep/mergecoplanarfaces-brep_double"
     if multiple: url += "?multiple=true"
     args = [thisBrep, tolerance]
-    if multiple: args = zip(thisBrep, tolerance)
+    if multiple: args = list(zip(thisBrep, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -2043,7 +2047,7 @@ def MergeCoplanarFaces1(thisBrep, tolerance, angleTolerance, multiple=False):
     url = "rhino/geometry/brep/mergecoplanarfaces-brep_double_double"
     if multiple: url += "?multiple=true"
     args = [thisBrep, tolerance, angleTolerance]
-    if multiple: args = zip(thisBrep, tolerance, angleTolerance)
+    if multiple: args = list(zip(thisBrep, tolerance, angleTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -2062,7 +2066,7 @@ def Split(thisBrep, cutter, intersectionTolerance, multiple=False):
     url = "rhino/geometry/brep/split-brep_brep_double"
     if multiple: url += "?multiple=true"
     args = [thisBrep, cutter, intersectionTolerance]
-    if multiple: args = zip(thisBrep, cutter, intersectionTolerance)
+    if multiple: args = list(zip(thisBrep, cutter, intersectionTolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -2084,7 +2088,7 @@ def Split1(thisBrep, cutter, intersectionTolerance, multiple=False):
     url = "rhino/geometry/brep/split-brep_brep_double_bool"
     if multiple: url += "?multiple=true"
     args = [thisBrep, cutter, intersectionTolerance]
-    if multiple: args = zip(thisBrep, cutter, intersectionTolerance)
+    if multiple: args = list(zip(thisBrep, cutter, intersectionTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -2103,7 +2107,7 @@ def Split2(thisBrep, cutters, intersectionTolerance, multiple=False):
     url = "rhino/geometry/brep/split-brep_breparray_double"
     if multiple: url += "?multiple=true"
     args = [thisBrep, cutters, intersectionTolerance]
-    if multiple: args = zip(thisBrep, cutters, intersectionTolerance)
+    if multiple: args = list(zip(thisBrep, cutters, intersectionTolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -2123,7 +2127,7 @@ def Split3(thisBrep, cutters, intersectionTolerance, multiple=False):
     url = "rhino/geometry/brep/split-brep_curvearray_double"
     if multiple: url += "?multiple=true"
     args = [thisBrep, cutters, intersectionTolerance]
-    if multiple: args = zip(thisBrep, cutters, intersectionTolerance)
+    if multiple: args = list(zip(thisBrep, cutters, intersectionTolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -2145,7 +2149,7 @@ def Split4(thisBrep, cutters, normal, planView, intersectionTolerance, multiple=
     url = "rhino/geometry/brep/split-brep_geometrybasearray_vector3d_bool_double"
     if multiple: url += "?multiple=true"
     args = [thisBrep, cutters, normal, planView, intersectionTolerance]
-    if multiple: args = zip(thisBrep, cutters, normal, planView, intersectionTolerance)
+    if multiple: args = list(zip(thisBrep, cutters, normal, planView, intersectionTolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -2171,7 +2175,7 @@ def Trim(thisBrep, cutter, intersectionTolerance, multiple=False):
     url = "rhino/geometry/brep/trim-brep_brep_double"
     if multiple: url += "?multiple=true"
     args = [thisBrep, cutter, intersectionTolerance]
-    if multiple: args = zip(thisBrep, cutter, intersectionTolerance)
+    if multiple: args = list(zip(thisBrep, cutter, intersectionTolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -2197,7 +2201,7 @@ def Trim1(thisBrep, cutter, intersectionTolerance, multiple=False):
     url = "rhino/geometry/brep/trim-brep_plane_double"
     if multiple: url += "?multiple=true"
     args = [thisBrep, cutter, intersectionTolerance]
-    if multiple: args = zip(thisBrep, cutter, intersectionTolerance)
+    if multiple: args = list(zip(thisBrep, cutter, intersectionTolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -2216,7 +2220,7 @@ def UnjoinEdges(thisBrep, edgesToUnjoin, multiple=False):
     url = "rhino/geometry/brep/unjoinedges-brep_intarray"
     if multiple: url += "?multiple=true"
     args = [thisBrep, edgesToUnjoin]
-    if multiple: args = zip(thisBrep, edgesToUnjoin)
+    if multiple: args = list(zip(thisBrep, edgesToUnjoin))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -2239,7 +2243,7 @@ def JoinEdges(thisBrep, edgeIndex0, edgeIndex1, joinTolerance, compact, multiple
     url = "rhino/geometry/brep/joinedges-brep_int_int_double_bool"
     if multiple: url += "?multiple=true"
     args = [thisBrep, edgeIndex0, edgeIndex1, joinTolerance, compact]
-    if multiple: args = zip(thisBrep, edgeIndex0, edgeIndex1, joinTolerance, compact)
+    if multiple: args = list(zip(thisBrep, edgeIndex0, edgeIndex1, joinTolerance, compact))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -2262,7 +2266,7 @@ def TransformComponent(thisBrep, components, xform, tolerance, timeLimit, useMul
     url = "rhino/geometry/brep/transformcomponent-brep_componentindexarray_transform_double_double_bool"
     if multiple: url += "?multiple=true"
     args = [thisBrep, components, xform, tolerance, timeLimit, useMultipleThreads]
-    if multiple: args = zip(thisBrep, components, xform, tolerance, timeLimit, useMultipleThreads)
+    if multiple: args = list(zip(thisBrep, components, xform, tolerance, timeLimit, useMultipleThreads))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -2298,7 +2302,7 @@ def GetArea1(thisBrep, relativeTolerance, absoluteTolerance, multiple=False):
     url = "rhino/geometry/brep/getarea-brep_double_double"
     if multiple: url += "?multiple=true"
     args = [thisBrep, relativeTolerance, absoluteTolerance]
-    if multiple: args = zip(thisBrep, relativeTolerance, absoluteTolerance)
+    if multiple: args = list(zip(thisBrep, relativeTolerance, absoluteTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -2334,7 +2338,7 @@ def GetVolume1(thisBrep, relativeTolerance, absoluteTolerance, multiple=False):
     url = "rhino/geometry/brep/getvolume-brep_double_double"
     if multiple: url += "?multiple=true"
     args = [thisBrep, relativeTolerance, absoluteTolerance]
-    if multiple: args = zip(thisBrep, relativeTolerance, absoluteTolerance)
+    if multiple: args = list(zip(thisBrep, relativeTolerance, absoluteTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -2354,7 +2358,7 @@ def RebuildTrimsForV2(thisBrep, face, nurbsSurface, multiple=False):
     url = "rhino/geometry/brep/rebuildtrimsforv2-brep_brepface_nurbssurface"
     if multiple: url += "?multiple=true"
     args = [thisBrep, face, nurbsSurface]
-    if multiple: args = zip(thisBrep, face, nurbsSurface)
+    if multiple: args = list(zip(thisBrep, face, nurbsSurface))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -2387,7 +2391,7 @@ def Repair(thisBrep, tolerance, multiple=False):
     url = "rhino/geometry/brep/repair-brep_double"
     if multiple: url += "?multiple=true"
     args = [thisBrep, tolerance]
-    if multiple: args = zip(thisBrep, tolerance)
+    if multiple: args = list(zip(thisBrep, tolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -2405,7 +2409,7 @@ def RemoveHoles(thisBrep, tolerance, multiple=False):
     url = "rhino/geometry/brep/removeholes-brep_double"
     if multiple: url += "?multiple=true"
     args = [thisBrep, tolerance]
-    if multiple: args = zip(thisBrep, tolerance)
+    if multiple: args = list(zip(thisBrep, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -2425,7 +2429,7 @@ def RemoveHoles1(thisBrep, loops, tolerance, multiple=False):
     url = "rhino/geometry/brep/removeholes-brep_componentindexarray_double"
     if multiple: url += "?multiple=true"
     args = [thisBrep, loops, tolerance]
-    if multiple: args = zip(thisBrep, loops, tolerance)
+    if multiple: args = list(zip(thisBrep, loops, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
