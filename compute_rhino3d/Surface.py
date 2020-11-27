@@ -1,4 +1,8 @@
 from . import Util
+try:
+    from itertools import izip as zip # python 2
+except ImportError:
+    pass # python 3
 
 
 def CreateRollingBallFillet(surfaceA, surfaceB, radius, tolerance, multiple=False):
@@ -17,7 +21,7 @@ def CreateRollingBallFillet(surfaceA, surfaceB, radius, tolerance, multiple=Fals
     url = "rhino/geometry/surface/createrollingballfillet-surface_surface_double_double"
     if multiple: url += "?multiple=true"
     args = [surfaceA, surfaceB, radius, tolerance]
-    if multiple: args = zip(surfaceA, surfaceB, radius, tolerance)
+    if multiple: args = list(zip(surfaceA, surfaceB, radius, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -41,7 +45,7 @@ def CreateRollingBallFillet1(surfaceA, flipA, surfaceB, flipB, radius, tolerance
     url = "rhino/geometry/surface/createrollingballfillet-surface_bool_surface_bool_double_double"
     if multiple: url += "?multiple=true"
     args = [surfaceA, flipA, surfaceB, flipB, radius, tolerance]
-    if multiple: args = zip(surfaceA, flipA, surfaceB, flipB, radius, tolerance)
+    if multiple: args = list(zip(surfaceA, flipA, surfaceB, flipB, radius, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -65,7 +69,7 @@ def CreateRollingBallFillet2(surfaceA, uvA, surfaceB, uvB, radius, tolerance, mu
     url = "rhino/geometry/surface/createrollingballfillet-surface_point2d_surface_point2d_double_double"
     if multiple: url += "?multiple=true"
     args = [surfaceA, uvA, surfaceB, uvB, radius, tolerance]
-    if multiple: args = zip(surfaceA, uvA, surfaceB, uvB, radius, tolerance)
+    if multiple: args = list(zip(surfaceA, uvA, surfaceB, uvB, radius, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -85,7 +89,7 @@ def CreateExtrusion(profile, direction, multiple=False):
     url = "rhino/geometry/surface/createextrusion-curve_vector3d"
     if multiple: url += "?multiple=true"
     args = [profile, direction]
-    if multiple: args = zip(profile, direction)
+    if multiple: args = list(zip(profile, direction))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -105,7 +109,7 @@ def CreateExtrusionToPoint(profile, apexPoint, multiple=False):
     url = "rhino/geometry/surface/createextrusiontopoint-curve_point3d"
     if multiple: url += "?multiple=true"
     args = [profile, apexPoint]
-    if multiple: args = zip(profile, apexPoint)
+    if multiple: args = list(zip(profile, apexPoint))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -125,7 +129,7 @@ def CreatePeriodicSurface(surface, direction, multiple=False):
     url = "rhino/geometry/surface/createperiodicsurface-surface_int"
     if multiple: url += "?multiple=true"
     args = [surface, direction]
-    if multiple: args = zip(surface, direction)
+    if multiple: args = list(zip(surface, direction))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -148,7 +152,7 @@ def CreatePeriodicSurface1(surface, direction, bSmooth, multiple=False):
     url = "rhino/geometry/surface/createperiodicsurface-surface_int_bool"
     if multiple: url += "?multiple=true"
     args = [surface, direction, bSmooth]
-    if multiple: args = zip(surface, direction, bSmooth)
+    if multiple: args = list(zip(surface, direction, bSmooth))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -177,7 +181,7 @@ def CreateSoftEditSurface(surface, uv, delta, uLength, vLength, tolerance, fixEn
     url = "rhino/geometry/surface/createsofteditsurface-surface_point2d_vector3d_double_double_double_bool"
     if multiple: url += "?multiple=true"
     args = [surface, uv, delta, uLength, vLength, tolerance, fixEnds]
-    if multiple: args = zip(surface, uv, delta, uLength, vLength, tolerance, fixEnds)
+    if multiple: args = list(zip(surface, uv, delta, uLength, vLength, tolerance, fixEnds))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -201,7 +205,7 @@ def Smooth(thisSurface, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundari
     url = "rhino/geometry/surface/smooth-surface_double_bool_bool_bool_bool_smoothingcoordinatesystem"
     if multiple: url += "?multiple=true"
     args = [thisSurface, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries, coordinateSystem]
-    if multiple: args = zip(thisSurface, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries, coordinateSystem)
+    if multiple: args = list(zip(thisSurface, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries, coordinateSystem))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -226,7 +230,7 @@ def Smooth1(thisSurface, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundar
     url = "rhino/geometry/surface/smooth-surface_double_bool_bool_bool_bool_smoothingcoordinatesystem_plane"
     if multiple: url += "?multiple=true"
     args = [thisSurface, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries, coordinateSystem, plane]
-    if multiple: args = zip(thisSurface, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries, coordinateSystem, plane)
+    if multiple: args = list(zip(thisSurface, smoothFactor, bXSmooth, bYSmooth, bZSmooth, bFixBoundaries, coordinateSystem, plane))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -249,7 +253,7 @@ def VariableOffset(thisSurface, uMinvMin, uMinvMax, uMaxvMin, uMaxvMax, toleranc
     url = "rhino/geometry/surface/variableoffset-surface_double_double_double_double_double"
     if multiple: url += "?multiple=true"
     args = [thisSurface, uMinvMin, uMinvMax, uMaxvMin, uMaxvMax, tolerance]
-    if multiple: args = zip(thisSurface, uMinvMin, uMinvMax, uMaxvMin, uMaxvMax, tolerance)
+    if multiple: args = list(zip(thisSurface, uMinvMin, uMinvMax, uMaxvMin, uMaxvMax, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -274,7 +278,7 @@ def VariableOffset1(thisSurface, uMinvMin, uMinvMax, uMaxvMin, uMaxvMax, interio
     url = "rhino/geometry/surface/variableoffset-surface_double_double_double_double_point2darray_doublearray_double"
     if multiple: url += "?multiple=true"
     args = [thisSurface, uMinvMin, uMinvMax, uMaxvMin, uMaxvMax, interiorParameters, interiorDistances, tolerance]
-    if multiple: args = zip(thisSurface, uMinvMin, uMinvMax, uMaxvMin, uMaxvMax, interiorParameters, interiorDistances, tolerance)
+    if multiple: args = list(zip(thisSurface, uMinvMin, uMinvMax, uMaxvMin, uMaxvMax, interiorParameters, interiorDistances, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -312,7 +316,7 @@ def ClosestSide(thisSurface, u, v, multiple=False):
     url = "rhino/geometry/surface/closestside-surface_double_double"
     if multiple: url += "?multiple=true"
     args = [thisSurface, u, v]
-    if multiple: args = zip(thisSurface, u, v)
+    if multiple: args = list(zip(thisSurface, u, v))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -333,7 +337,7 @@ def Extend(thisSurface, edge, extensionLength, smooth, multiple=False):
     url = "rhino/geometry/surface/extend-surface_isostatus_double_bool"
     if multiple: url += "?multiple=true"
     args = [thisSurface, edge, extensionLength, smooth]
-    if multiple: args = zip(thisSurface, edge, extensionLength, smooth)
+    if multiple: args = list(zip(thisSurface, edge, extensionLength, smooth))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -357,7 +361,7 @@ def Rebuild(thisSurface, uDegree, vDegree, uPointCount, vPointCount, multiple=Fa
     url = "rhino/geometry/surface/rebuild-surface_int_int_int_int"
     if multiple: url += "?multiple=true"
     args = [thisSurface, uDegree, vDegree, uPointCount, vPointCount]
-    if multiple: args = zip(thisSurface, uDegree, vDegree, uPointCount, vPointCount)
+    if multiple: args = list(zip(thisSurface, uDegree, vDegree, uPointCount, vPointCount))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -379,7 +383,7 @@ def RebuildOneDirection(thisSurface, direction, pointCount, loftType, refitToler
     url = "rhino/geometry/surface/rebuildonedirection-surface_int_int_lofttype_double"
     if multiple: url += "?multiple=true"
     args = [thisSurface, direction, pointCount, loftType, refitTolerance]
-    if multiple: args = zip(thisSurface, direction, pointCount, loftType, refitTolerance)
+    if multiple: args = list(zip(thisSurface, direction, pointCount, loftType, refitTolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -400,7 +404,7 @@ def ClosestPoint(thisSurface, testPoint, multiple=False):
     url = "rhino/geometry/surface/closestpoint-surface_point3d_double_double"
     if multiple: url += "?multiple=true"
     args = [thisSurface, testPoint]
-    if multiple: args = zip(thisSurface, testPoint)
+    if multiple: args = list(zip(thisSurface, testPoint))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -423,7 +427,7 @@ def LocalClosestPoint(thisSurface, testPoint, seedU, seedV, multiple=False):
     url = "rhino/geometry/surface/localclosestpoint-surface_point3d_double_double_double_double"
     if multiple: url += "?multiple=true"
     args = [thisSurface, testPoint, seedU, seedV]
-    if multiple: args = zip(thisSurface, testPoint, seedU, seedV)
+    if multiple: args = list(zip(thisSurface, testPoint, seedU, seedV))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -442,7 +446,7 @@ def Offset(thisSurface, distance, tolerance, multiple=False):
     url = "rhino/geometry/surface/offset-surface_double_double"
     if multiple: url += "?multiple=true"
     args = [thisSurface, distance, tolerance]
-    if multiple: args = zip(thisSurface, distance, tolerance)
+    if multiple: args = list(zip(thisSurface, distance, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -463,7 +467,7 @@ def Fit(thisSurface, uDegree, vDegree, fitTolerance, multiple=False):
     url = "rhino/geometry/surface/fit-surface_int_int_double"
     if multiple: url += "?multiple=true"
     args = [thisSurface, uDegree, vDegree, fitTolerance]
-    if multiple: args = zip(thisSurface, uDegree, vDegree, fitTolerance)
+    if multiple: args = list(zip(thisSurface, uDegree, vDegree, fitTolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -483,7 +487,7 @@ def InterpolatedCurveOnSurfaceUV(thisSurface, points, tolerance, multiple=False)
     url = "rhino/geometry/surface/interpolatedcurveonsurfaceuv-surface_point2darray_double"
     if multiple: url += "?multiple=true"
     args = [thisSurface, points, tolerance]
-    if multiple: args = zip(thisSurface, points, tolerance)
+    if multiple: args = list(zip(thisSurface, points, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -513,7 +517,7 @@ def InterpolatedCurveOnSurfaceUV1(thisSurface, points, tolerance, closed, closed
     url = "rhino/geometry/surface/interpolatedcurveonsurfaceuv-surface_point2darray_double_bool_int"
     if multiple: url += "?multiple=true"
     args = [thisSurface, points, tolerance, closed, closedSurfaceHandling]
-    if multiple: args = zip(thisSurface, points, tolerance, closed, closedSurfaceHandling)
+    if multiple: args = list(zip(thisSurface, points, tolerance, closed, closedSurfaceHandling))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -533,7 +537,7 @@ def InterpolatedCurveOnSurface(thisSurface, points, tolerance, multiple=False):
     url = "rhino/geometry/surface/interpolatedcurveonsurface-surface_point3darray_double"
     if multiple: url += "?multiple=true"
     args = [thisSurface, points, tolerance]
-    if multiple: args = zip(thisSurface, points, tolerance)
+    if multiple: args = list(zip(thisSurface, points, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -554,7 +558,7 @@ def ShortPath(thisSurface, start, end, tolerance, multiple=False):
     url = "rhino/geometry/surface/shortpath-surface_point2d_point2d_double"
     if multiple: url += "?multiple=true"
     args = [thisSurface, start, end, tolerance]
-    if multiple: args = zip(thisSurface, start, end, tolerance)
+    if multiple: args = list(zip(thisSurface, start, end, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -575,7 +579,7 @@ def Pushup(thisSurface, curve2d, tolerance, curve2dSubdomain, multiple=False):
     url = "rhino/geometry/surface/pushup-surface_curve_double_interval"
     if multiple: url += "?multiple=true"
     args = [thisSurface, curve2d, tolerance, curve2dSubdomain]
-    if multiple: args = zip(thisSurface, curve2d, tolerance, curve2dSubdomain)
+    if multiple: args = list(zip(thisSurface, curve2d, tolerance, curve2dSubdomain))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -595,7 +599,7 @@ def Pushup1(thisSurface, curve2d, tolerance, multiple=False):
     url = "rhino/geometry/surface/pushup-surface_curve_double"
     if multiple: url += "?multiple=true"
     args = [thisSurface, curve2d, tolerance]
-    if multiple: args = zip(thisSurface, curve2d, tolerance)
+    if multiple: args = list(zip(thisSurface, curve2d, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -616,7 +620,7 @@ def Pullback(thisSurface, curve3d, tolerance, multiple=False):
     url = "rhino/geometry/surface/pullback-surface_curve_double"
     if multiple: url += "?multiple=true"
     args = [thisSurface, curve3d, tolerance]
-    if multiple: args = zip(thisSurface, curve3d, tolerance)
+    if multiple: args = list(zip(thisSurface, curve3d, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -638,7 +642,7 @@ def Pullback1(thisSurface, curve3d, tolerance, curve3dSubdomain, multiple=False)
     url = "rhino/geometry/surface/pullback-surface_curve_double_interval"
     if multiple: url += "?multiple=true"
     args = [thisSurface, curve3d, tolerance, curve3dSubdomain]
-    if multiple: args = zip(thisSurface, curve3d, tolerance, curve3dSubdomain)
+    if multiple: args = list(zip(thisSurface, curve3d, tolerance, curve3dSubdomain))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response

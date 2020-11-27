@@ -1,4 +1,8 @@
 from . import Util
+try:
+    from itertools import izip as zip # python 2
+except ImportError:
+    pass # python 3
 
 
 def ToBrep(thisSubD, options, multiple=False):
@@ -7,8 +11,8 @@ def ToBrep(thisSubD, options, multiple=False):
 
     Args:
         options (SubDToBrepOptions): The SubD to Brep conversion options. Use SubDToBrepOptions.Default
-            for sensible defaults, currently packed faces and locally-G1
-            vertices in the output.
+            for sensible defaults. Currently, these return unpacked faces
+            and locally-G1 vertices in the output Brep.
 
     Returns:
         Brep: A new Brep if successful, or None on failure.
@@ -16,7 +20,7 @@ def ToBrep(thisSubD, options, multiple=False):
     url = "rhino/geometry/subd/tobrep-subd_subdtobrepoptions"
     if multiple: url += "?multiple=true"
     args = [thisSubD, options]
-    if multiple: args = zip(thisSubD, options)
+    if multiple: args = list(zip(thisSubD, options))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -55,7 +59,7 @@ def CreateFromMesh1(mesh, options, multiple=False):
     url = "rhino/geometry/subd/createfrommesh-mesh_subdcreationoptions"
     if multiple: url += "?multiple=true"
     args = [mesh, options]
-    if multiple: args = zip(mesh, options)
+    if multiple: args = list(zip(mesh, options))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -76,7 +80,7 @@ def Offset(thisSubD, distance, solidify, multiple=False):
     url = "rhino/geometry/subd/offset-subd_double_bool"
     if multiple: url += "?multiple=true"
     args = [thisSubD, distance, solidify]
-    if multiple: args = zip(thisSubD, distance, solidify)
+    if multiple: args = list(zip(thisSubD, distance, solidify))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -99,7 +103,7 @@ def CreateFromLoft(curves, closed, addCorners, addCreases, divisions, multiple=F
     url = "rhino/geometry/subd/createfromloft-nurbscurvearray_bool_bool_bool_int"
     if multiple: url += "?multiple=true"
     args = [curves, closed, addCorners, addCreases, divisions]
-    if multiple: args = zip(curves, closed, addCorners, addCreases, divisions)
+    if multiple: args = list(zip(curves, closed, addCorners, addCreases, divisions))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -126,7 +130,7 @@ def CreateFromSweep(rail1, shapes, closed, addCorners, roadlikeFrame, roadlikeNo
     url = "rhino/geometry/subd/createfromsweep-nurbscurve_nurbscurvearray_bool_bool_bool_vector3d"
     if multiple: url += "?multiple=true"
     args = [rail1, shapes, closed, addCorners, roadlikeFrame, roadlikeNormal]
-    if multiple: args = zip(rail1, shapes, closed, addCorners, roadlikeFrame, roadlikeNormal)
+    if multiple: args = list(zip(rail1, shapes, closed, addCorners, roadlikeFrame, roadlikeNormal))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -149,7 +153,7 @@ def CreateFromSweep1(rail1, rail2, shapes, closed, addCorners, multiple=False):
     url = "rhino/geometry/subd/createfromsweep-nurbscurve_nurbscurve_nurbscurvearray_bool_bool"
     if multiple: url += "?multiple=true"
     args = [rail1, rail2, shapes, closed, addCorners]
-    if multiple: args = zip(rail1, rail2, shapes, closed, addCorners)
+    if multiple: args = list(zip(rail1, rail2, shapes, closed, addCorners))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -167,7 +171,7 @@ def InterpolateSurfacePoints(thisSubD, surfacePoints, multiple=False):
     url = "rhino/geometry/subd/interpolatesurfacepoints-subd_point3darray"
     if multiple: url += "?multiple=true"
     args = [thisSubD, surfacePoints]
-    if multiple: args = zip(thisSubD, surfacePoints)
+    if multiple: args = list(zip(thisSubD, surfacePoints))
     response = Util.ComputeFetch(url, args)
     return response
 

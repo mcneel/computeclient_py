@@ -1,4 +1,8 @@
 from . import Util
+try:
+    from itertools import izip as zip # python 2
+except ImportError:
+    pass # python 3
 
 
 def GetBoundingBox(thisGeometryBase, accurate, multiple=False):
@@ -19,8 +23,9 @@ def GetBoundingBox(thisGeometryBase, accurate, multiple=False):
     url = "rhino/geometry/geometrybase/getboundingbox-geometrybase_bool"
     if multiple: url += "?multiple=true"
     args = [thisGeometryBase, accurate]
-    if multiple: args = zip(thisGeometryBase, accurate)
+    if multiple: args = list(zip(thisGeometryBase, accurate))
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToBoundingBox(response)
     return response
 
 
@@ -39,8 +44,9 @@ def GetBoundingBox1(thisGeometryBase, xform, multiple=False):
     url = "rhino/geometry/geometrybase/getboundingbox-geometrybase_transform"
     if multiple: url += "?multiple=true"
     args = [thisGeometryBase, xform]
-    if multiple: args = zip(thisGeometryBase, xform)
+    if multiple: args = list(zip(thisGeometryBase, xform))
     response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToBoundingBox(response)
     return response
 
 
@@ -62,7 +68,7 @@ def GeometryEquals(first, second, multiple=False):
     url = "rhino/geometry/geometrybase/geometryequals-geometrybase_geometrybase"
     if multiple: url += "?multiple=true"
     args = [first, second]
-    if multiple: args = zip(first, second)
+    if multiple: args = list(zip(first, second))
     response = Util.ComputeFetch(url, args)
     return response
 

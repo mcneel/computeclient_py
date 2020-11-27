@@ -2,7 +2,7 @@ import rhino3dm
 import json
 import requests
 
-__version__ = '0.12.1'
+__version__ = '0.12.2'
 
 url = 'https://compute.rhino3d.com/'
 authToken = ''
@@ -92,4 +92,12 @@ def DecodeToLine(item):
     start = DecodeToPoint3d(item['From'])
     end = DecodeToPoint3d(item['To'])
     return rhino3dm.Line(start,end)
+
+
+def DecodeToBoundingBox(item):
+    if item is None:
+        return None
+    if isinstance(item, list):
+        return [DecodeToBoundingBox(x) for x in item]
+    return rhino3dm.BoundingBox(item['Min']['X'], item['Min']['Y'], item['Min']['Z'], item['Max']['X'], item['Max']['Y'], item['Max']['Z'])
 

@@ -1,4 +1,8 @@
 from . import Util
+try:
+    from itertools import izip as zip # python 2
+except ImportError:
+    pass # python 3
 
 
 def MakeCompatible(curves, startPt, endPt, simplifyMethod, numPoints, refitTolerance, angleTolerance, multiple=False):
@@ -20,7 +24,7 @@ def MakeCompatible(curves, startPt, endPt, simplifyMethod, numPoints, refitToler
     url = "rhino/geometry/nurbscurve/makecompatible-curvearray_point3d_point3d_int_int_double_double"
     if multiple: url += "?multiple=true"
     args = [curves, startPt, endPt, simplifyMethod, numPoints, refitTolerance, angleTolerance]
-    if multiple: args = zip(curves, startPt, endPt, simplifyMethod, numPoints, refitTolerance, angleTolerance)
+    if multiple: args = list(zip(curves, startPt, endPt, simplifyMethod, numPoints, refitTolerance, angleTolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -41,7 +45,7 @@ def CreateParabolaFromVertex(vertex, startPoint, endPoint, multiple=False):
     url = "rhino/geometry/nurbscurve/createparabolafromvertex-point3d_point3d_point3d"
     if multiple: url += "?multiple=true"
     args = [vertex, startPoint, endPoint]
-    if multiple: args = zip(vertex, startPoint, endPoint)
+    if multiple: args = list(zip(vertex, startPoint, endPoint))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -62,7 +66,7 @@ def CreateParabolaFromFocus(focus, startPoint, endPoint, multiple=False):
     url = "rhino/geometry/nurbscurve/createparabolafromfocus-point3d_point3d_point3d"
     if multiple: url += "?multiple=true"
     args = [focus, startPoint, endPoint]
-    if multiple: args = zip(focus, startPoint, endPoint)
+    if multiple: args = list(zip(focus, startPoint, endPoint))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -82,7 +86,7 @@ def CreateFromArc(arc, degree, cvCount, multiple=False):
     url = "rhino/geometry/nurbscurve/createfromarc-arc_int_int"
     if multiple: url += "?multiple=true"
     args = [arc, degree, cvCount]
-    if multiple: args = zip(arc, degree, cvCount)
+    if multiple: args = list(zip(arc, degree, cvCount))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -120,7 +124,7 @@ def CreateHSpline1(points, startTangent, endTangent, multiple=False):
     url = "rhino/geometry/nurbscurve/createhspline-point3darray_vector3d_vector3d"
     if multiple: url += "?multiple=true"
     args = [points, startTangent, endTangent]
-    if multiple: args = zip(points, startTangent, endTangent)
+    if multiple: args = list(zip(points, startTangent, endTangent))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -145,7 +149,7 @@ def CreateSubDFriendly(points, interpolatePoints, periodicClosedCurve, multiple=
     url = "rhino/geometry/nurbscurve/createsubdfriendly-point3darray_bool_bool"
     if multiple: url += "?multiple=true"
     args = [points, interpolatePoints, periodicClosedCurve]
-    if multiple: args = zip(points, interpolatePoints, periodicClosedCurve)
+    if multiple: args = list(zip(points, interpolatePoints, periodicClosedCurve))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -185,7 +189,7 @@ def CreateSubDFriendly2(curve, pointCount, periodicClosedCurve, multiple=False):
     url = "rhino/geometry/nurbscurve/createsubdfriendly-curve_int_bool"
     if multiple: url += "?multiple=true"
     args = [curve, pointCount, periodicClosedCurve]
-    if multiple: args = zip(curve, pointCount, periodicClosedCurve)
+    if multiple: args = list(zip(curve, pointCount, periodicClosedCurve))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -205,7 +209,7 @@ def CreatePlanarRailFrames(thisNurbsCurve, parameters, normal, multiple=False):
     url = "rhino/geometry/nurbscurve/createplanarrailframes-nurbscurve_doublearray_vector3d"
     if multiple: url += "?multiple=true"
     args = [thisNurbsCurve, parameters, normal]
-    if multiple: args = zip(thisNurbsCurve, parameters, normal)
+    if multiple: args = list(zip(thisNurbsCurve, parameters, normal))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -223,7 +227,7 @@ def CreateRailFrames(thisNurbsCurve, parameters, multiple=False):
     url = "rhino/geometry/nurbscurve/createrailframes-nurbscurve_doublearray"
     if multiple: url += "?multiple=true"
     args = [thisNurbsCurve, parameters]
-    if multiple: args = zip(thisNurbsCurve, parameters)
+    if multiple: args = list(zip(thisNurbsCurve, parameters))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -242,7 +246,7 @@ def CreateFromCircle(circle, degree, cvCount, multiple=False):
     url = "rhino/geometry/nurbscurve/createfromcircle-circle_int_int"
     if multiple: url += "?multiple=true"
     args = [circle, degree, cvCount]
-    if multiple: args = zip(circle, degree, cvCount)
+    if multiple: args = list(zip(circle, degree, cvCount))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -264,7 +268,7 @@ def SetEndCondition(thisNurbsCurve, bSetEnd, continuity, point, tangent, multipl
     url = "rhino/geometry/nurbscurve/setendcondition-nurbscurve_bool_nurbscurveendconditiontype_point3d_vector3d"
     if multiple: url += "?multiple=true"
     args = [thisNurbsCurve, bSetEnd, continuity, point, tangent]
-    if multiple: args = zip(thisNurbsCurve, bSetEnd, continuity, point, tangent)
+    if multiple: args = list(zip(thisNurbsCurve, bSetEnd, continuity, point, tangent))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -286,7 +290,7 @@ def SetEndCondition1(thisNurbsCurve, bSetEnd, continuity, point, tangent, curvat
     url = "rhino/geometry/nurbscurve/setendcondition-nurbscurve_bool_nurbscurveendconditiontype_point3d_vector3d_vector3d"
     if multiple: url += "?multiple=true"
     args = [thisNurbsCurve, bSetEnd, continuity, point, tangent, curvature]
-    if multiple: args = zip(thisNurbsCurve, bSetEnd, continuity, point, tangent, curvature)
+    if multiple: args = list(zip(thisNurbsCurve, bSetEnd, continuity, point, tangent, curvature))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -304,7 +308,7 @@ def GrevillePoints(thisNurbsCurve, all, multiple=False):
     url = "rhino/geometry/nurbscurve/grevillepoints-nurbscurve_bool"
     if multiple: url += "?multiple=true"
     args = [thisNurbsCurve, all]
-    if multiple: args = zip(thisNurbsCurve, all)
+    if multiple: args = list(zip(thisNurbsCurve, all))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -323,7 +327,7 @@ def SetGrevillePoints(thisNurbsCurve, points, multiple=False):
     url = "rhino/geometry/nurbscurve/setgrevillepoints-nurbscurve_point3darray"
     if multiple: url += "?multiple=true"
     args = [thisNurbsCurve, points]
-    if multiple: args = zip(thisNurbsCurve, points)
+    if multiple: args = list(zip(thisNurbsCurve, points))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -354,7 +358,7 @@ def CreateSpiral(axisStart, axisDir, radiusPoint, pitch, turnCount, radius0, rad
     url = "rhino/geometry/nurbscurve/createspiral-point3d_vector3d_point3d_double_double_double_double"
     if multiple: url += "?multiple=true"
     args = [axisStart, axisDir, radiusPoint, pitch, turnCount, radius0, radius1]
-    if multiple: args = zip(axisStart, axisDir, radiusPoint, pitch, turnCount, radius0, radius1)
+    if multiple: args = list(zip(axisStart, axisDir, radiusPoint, pitch, turnCount, radius0, radius1))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -389,7 +393,7 @@ def CreateSpiral1(railCurve, t0, t1, radiusPoint, pitch, turnCount, radius0, rad
     url = "rhino/geometry/nurbscurve/createspiral-curve_double_double_point3d_double_double_double_double_int"
     if multiple: url += "?multiple=true"
     args = [railCurve, t0, t1, radiusPoint, pitch, turnCount, radius0, radius1, pointsPerTurn]
-    if multiple: args = zip(railCurve, t0, t1, radiusPoint, pitch, turnCount, radius0, radius1, pointsPerTurn)
+    if multiple: args = list(zip(railCurve, t0, t1, radiusPoint, pitch, turnCount, radius0, radius1, pointsPerTurn))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
