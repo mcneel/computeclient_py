@@ -140,7 +140,31 @@ def Compute6(brep, area, firstMoments, secondMoments, productMoments, multiple=F
     return response
 
 
-def Compute7(surface, multiple=False):
+def Compute7(brep, area, firstMoments, secondMoments, productMoments, relativeTolerance, absoluteTolerance, multiple=False):
+    """
+    Compute the AreaMassProperties for a single Brep.
+
+    Args:
+        brep (Brep): Brep to measure.
+        area (bool): True to calculate area.
+        firstMoments (bool): True to calculate area first moments, area, and area centroid.
+        secondMoments (bool): True to calculate area second moments.
+        productMoments (bool): True to calculate area product moments.
+        relativeTolerance (double): The relative tolerance used for the calculation. In overloads of this function where tolerances are not specified, 1.0e-6 is used.
+        absoluteTolerance (double): The absolute tolerancwe used for the calculation. In overloads of this function where tolerances are not specified, 1.0e-6 is used.
+
+    Returns:
+        AreaMassProperties: The AreaMassProperties for the given Brep or None on failure.
+    """
+    url = "rhino/geometry/areamassproperties/compute-brep_bool_bool_bool_bool_double_double"
+    if multiple: url += "?multiple=true"
+    args = [brep, area, firstMoments, secondMoments, productMoments, relativeTolerance, absoluteTolerance]
+    if multiple: args = list(zip(brep, area, firstMoments, secondMoments, productMoments, relativeTolerance, absoluteTolerance))
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def Compute8(surface, multiple=False):
     """
     Computes an AreaMassProperties for a surface.
 
@@ -158,7 +182,7 @@ def Compute7(surface, multiple=False):
     return response
 
 
-def Compute8(surface, area, firstMoments, secondMoments, productMoments, multiple=False):
+def Compute9(surface, area, firstMoments, secondMoments, productMoments, multiple=False):
     """
     Compute the AreaMassProperties for a single Surface.
 
@@ -180,7 +204,7 @@ def Compute8(surface, area, firstMoments, secondMoments, productMoments, multipl
     return response
 
 
-def Compute9(geometry, multiple=False):
+def Compute10(geometry, multiple=False):
     """
     Computes the Area properties for a collection of geometric objects.
     At present only Breps, Surfaces, Meshes and Planar Closed Curves are supported.
@@ -199,7 +223,7 @@ def Compute9(geometry, multiple=False):
     return response
 
 
-def Compute10(geometry, area, firstMoments, secondMoments, productMoments, multiple=False):
+def Compute11(geometry, area, firstMoments, secondMoments, productMoments, multiple=False):
     """
     Computes the AreaMassProperties for a collection of geometric objects.
     At present only Breps, Surfaces, Meshes and Planar Closed Curves are supported.

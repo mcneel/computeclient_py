@@ -3,6 +3,23 @@ Brep
 
 .. py:module:: compute_rhino3d.Brep
 
+.. py:function:: IsBox(thisBrep, multiple=False)
+
+   Verifies a Brep is in the form of a solid box.
+
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: True if the Brep is a solid box, False otherwise.
+   :rtype: bool
+.. py:function:: IsBox1(thisBrep, tolerance, multiple=False)
+
+   Verifies a Brep is in the form of a solid box.
+
+   :param float tolerance: The tolerance used to determine if faces are planar and to compare face normals.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: True if the Brep is a solid box, False otherwise.
+   :rtype: bool
 .. py:function:: ChangeSeam(face, direction, parameter, tolerance, multiple=False)
 
    Change the seam of a closed trimmed surface.
@@ -725,6 +742,29 @@ Brep
       surfaces that was supposed to join the offset to the original (if solid \
       is true).
    :rtype: rhino3dm.Brep[]
+.. py:function:: CreateOffsetBrep1(brep, distance, solid, extend, shrink, tolerance, multiple=False)
+
+   Offsets a Brep.
+
+   :param rhino3dm.Brep brep: The Brep to offset.
+   :param float distance: The distance to offset. This is a signed distance value with respect to \
+      face normals and flipped faces.
+   :param bool solid: If true, then the function makes a closed solid from the input and offset \
+      surfaces by lofting a ruled surface between all of the matching edges.
+   :param bool extend: If true, then the function maintains the sharp corners when the original \
+      surfaces have sharps corner. If False, then the function creates fillets \
+      at sharp corners in the original surfaces.
+   :param bool shrink: If true, then the function shrinks the underlying surfaces to their face's outer boundary loop.
+   :param float tolerance: The offset tolerance.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Array of Breps if successful. If the function succeeds in offsetting, a \
+      single Brep will be returned. Otherwise, the array will contain the \
+      offset surfaces, outBlends will contain the set of blends used to fill \
+      in gaps (if extend is false), and outWalls will contain the set of wall \
+      surfaces that was supposed to join the offset to the original (if solid \
+      is true).
+   :rtype: rhino3dm.Brep[]
 .. py:function:: RemoveFins(thisBrep, multiple=False)
 
    Recursively removes any Brep face with a naked edge. This function is only useful for non-manifold Breps.
@@ -1080,6 +1120,13 @@ Brep
 
    :return: True if meshes were created
    :rtype: rhino3dm.Mesh[]
+.. py:function:: DestroyRegionTopology(thisBrep, multiple=False)
+
+   Destroys a Brep's region topology information.
+
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :rtype: void
 .. py:function:: GetRegions(thisBrep, multiple=False)
 
    Gets an array containing all regions in this brep.

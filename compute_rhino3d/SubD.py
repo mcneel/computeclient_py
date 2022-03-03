@@ -5,6 +5,26 @@ except ImportError:
     pass # python 3
 
 
+def JoinSubDs(subdsToJoin, tolerance, joinedEdgesAreCreases, multiple=False):
+    """
+    Joins an enumeration of SubDs to form as few as possible resulting SubDs.
+    There may be more than one SubD in the result array.
+
+    Args:
+        subdsToJoin (IEnumerable<SubD>): An enumeration of SubDs to join.
+        tolerance (double): The join tolerance.
+        joinedEdgesAreCreases (bool): If true, merged boundary edges will be creases.
+            If false, merged boundary edges will be smooth.
+    """
+    url = "rhino/geometry/subd/joinsubds-subdarray_double_bool"
+    if multiple: url += "?multiple=true"
+    args = [subdsToJoin, tolerance, joinedEdgesAreCreases]
+    if multiple: args = list(zip(subdsToJoin, tolerance, joinedEdgesAreCreases))
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
 def ToBrep(thisSubD, options, multiple=False):
     """
     Create a Brep based on this SubD geometry.
@@ -21,6 +41,22 @@ def ToBrep(thisSubD, options, multiple=False):
     if multiple: url += "?multiple=true"
     args = [thisSubD, options]
     if multiple: args = list(zip(thisSubD, options))
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def ToBrep1(thisSubD, multiple=False):
+    """
+    Create a Brep based on this SubD geometry, based on SubDToBrepOptions.Default options.
+
+    Returns:
+        Brep: A new Brep if successful, or None on failure.
+    """
+    url = "rhino/geometry/subd/tobrep-subd"
+    if multiple: url += "?multiple=true"
+    args = [thisSubD]
+    if multiple: args = [[item] for item in thisSubD]
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -60,6 +96,27 @@ def CreateFromMesh1(mesh, options, multiple=False):
     if multiple: url += "?multiple=true"
     args = [mesh, options]
     if multiple: args = list(zip(mesh, options))
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreateFromSurface(surface, method, corners, multiple=False):
+    """
+    Create a SubD that approximates the surface. If the surface is a SubD
+    friendly NURBS surface and withCorners is true, then the SubD and input
+    surface will have the same geometry.
+
+    Args:
+        method (SubDFromSurfaceMethods): Selects the method used to calculate the SubD.
+        corners (bool): If the surface is open, then the corner vertices with be tagged as
+            VertexTagCorner. This makes the resulting SubD have sharp corners to
+            match the appearance of the input surface.
+    """
+    url = "rhino/geometry/subd/createfromsurface-surface_subdfromsurfacemethods_bool"
+    if multiple: url += "?multiple=true"
+    args = [surface, method, corners]
+    if multiple: args = list(zip(surface, method, corners))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -156,6 +213,46 @@ def CreateFromSweep1(rail1, rail2, shapes, closed, addCorners, multiple=False):
     if multiple: args = list(zip(rail1, rail2, shapes, closed, addCorners))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def MergeAllCoplanarFaces(thisSubD, tolerance, multiple=False):
+    """
+    Merges adjacent coplanar faces into single faces.
+
+    Args:
+        tolerance (double): Tolerance for determining when edges are adjacent.
+            When in doubt, use the document's ModelAbsoluteTolerance property.
+
+    Returns:
+        bool: True if faces were merged, False if no faces were merged.
+    """
+    url = "rhino/geometry/subd/mergeallcoplanarfaces-subd_double"
+    if multiple: url += "?multiple=true"
+    args = [thisSubD, tolerance]
+    if multiple: args = list(zip(thisSubD, tolerance))
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def MergeAllCoplanarFaces1(thisSubD, tolerance, angleTolerance, multiple=False):
+    """
+    Merges adjacent coplanar faces into single faces.
+
+    Args:
+        tolerance (double): Tolerance for determining when edges are adjacent.
+            When in doubt, use the document's ModelAbsoluteTolerance property.
+        angleTolerance (double): Angle tolerance, in radians, for determining when faces are parallel.
+            When in doubt, use the document's ModelAngleToleranceRadians property.
+
+    Returns:
+        bool: True if faces were merged, False if no faces were merged.
+    """
+    url = "rhino/geometry/subd/mergeallcoplanarfaces-subd_double_double"
+    if multiple: url += "?multiple=true"
+    args = [thisSubD, tolerance, angleTolerance]
+    if multiple: args = list(zip(thisSubD, tolerance, angleTolerance))
+    response = Util.ComputeFetch(url, args)
     return response
 
 

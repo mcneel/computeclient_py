@@ -5,6 +5,39 @@ except ImportError:
     pass # python 3
 
 
+def IsBox(thisBrep, multiple=False):
+    """
+    Verifies a Brep is in the form of a solid box.
+
+    Returns:
+        bool: True if the Brep is a solid box, False otherwise.
+    """
+    url = "rhino/geometry/brep/isbox-brep"
+    if multiple: url += "?multiple=true"
+    args = [thisBrep]
+    if multiple: args = [[item] for item in thisBrep]
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def IsBox1(thisBrep, tolerance, multiple=False):
+    """
+    Verifies a Brep is in the form of a solid box.
+
+    Args:
+        tolerance (double): The tolerance used to determine if faces are planar and to compare face normals.
+
+    Returns:
+        bool: True if the Brep is a solid box, False otherwise.
+    """
+    url = "rhino/geometry/brep/isbox-brep_double"
+    if multiple: url += "?multiple=true"
+    args = [thisBrep, tolerance]
+    if multiple: args = list(zip(thisBrep, tolerance))
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
 def ChangeSeam(face, direction, parameter, tolerance, multiple=False):
     """
     Change the seam of a closed trimmed surface.
@@ -1220,6 +1253,40 @@ def CreateOffsetBrep(brep, distance, solid, extend, tolerance, multiple=False):
     return response
 
 
+def CreateOffsetBrep1(brep, distance, solid, extend, shrink, tolerance, multiple=False):
+    """
+    Offsets a Brep.
+
+    Args:
+        brep (Brep): The Brep to offset.
+        distance (double): The distance to offset. This is a signed distance value with respect to
+            face normals and flipped faces.
+        solid (bool): If true, then the function makes a closed solid from the input and offset
+            surfaces by lofting a ruled surface between all of the matching edges.
+        extend (bool): If true, then the function maintains the sharp corners when the original
+            surfaces have sharps corner. If False, then the function creates fillets
+            at sharp corners in the original surfaces.
+        shrink (bool): If true, then the function shrinks the underlying surfaces to their face's outer boundary loop.
+        tolerance (double): The offset tolerance.
+
+    Returns:
+        Brep[]: Array of Breps if successful. If the function succeeds in offsetting, a
+        single Brep will be returned. Otherwise, the array will contain the
+        offset surfaces, outBlends will contain the set of blends used to fill
+        in gaps (if extend is false), and outWalls will contain the set of wall
+        surfaces that was supposed to join the offset to the original (if solid
+        is true).
+        outBlends (Brep[]): The results of the calculation.
+        outWalls (Brep[]): The results of the calculation.
+    """
+    url = "rhino/geometry/brep/createoffsetbrep-brep_double_bool_bool_bool_double_breparray_breparray"
+    if multiple: url += "?multiple=true"
+    args = [brep, distance, solid, extend, shrink, tolerance]
+    if multiple: args = list(zip(brep, distance, solid, extend, shrink, tolerance))
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
 def RemoveFins(thisBrep, multiple=False):
     """
     Recursively removes any Brep face with a naked edge. This function is only useful for non-manifold Breps.
@@ -1849,6 +1916,18 @@ def CreateCurvatureAnalysisMesh(brep, state, multiple=False):
     if multiple: args = list(zip(brep, state))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def DestroyRegionTopology(thisBrep, multiple=False):
+    """
+    Destroys a Brep's region topology information.
+    """
+    url = "rhino/geometry/brep/destroyregiontopology-brep"
+    if multiple: url += "?multiple=true"
+    args = [thisBrep]
+    if multiple: args = [[item] for item in thisBrep]
+    response = Util.ComputeFetch(url, args)
     return response
 
 

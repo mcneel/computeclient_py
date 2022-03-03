@@ -244,6 +244,30 @@ def CreateFromCylinder2(cylinder, vertical, around, capBottom, capTop, quadCaps,
     return response
 
 
+def CreateFromCylinder3(cylinder, vertical, around, capBottom, capTop, circumscribe, quadCaps, multiple=False):
+    """
+    Constructs a mesh cylinder.
+
+    Args:
+        vertical (int): Number of faces in the top-to-bottom direction.
+        around (int): Number of faces around the cylinder.
+        capBottom (bool): If True end at Cylinder.Height1 should be capped.
+        capTop (bool): If True end at Cylinder.Height2 should be capped.
+        circumscribe (bool): If True end polygons will circumscribe circle.
+        quadCaps (bool): If True and it's possible to make quad caps, i.e.. around is even, then caps will have quad faces.
+
+    Returns:
+        Mesh: Returns a mesh cylinder if successful, None otherwise.
+    """
+    url = "rhino/geometry/mesh/createfromcylinder-cylinder_int_int_bool_bool_bool_bool"
+    if multiple: url += "?multiple=true"
+    args = [cylinder, vertical, around, capBottom, capTop, circumscribe, quadCaps]
+    if multiple: args = list(zip(cylinder, vertical, around, capBottom, capTop, circumscribe, quadCaps))
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
 def CreateFromCone(cone, vertical, around, multiple=False):
     """
     Constructs a solid mesh cone.
@@ -745,7 +769,7 @@ def IsPointInside(thisMesh, point, tolerance, strictlyIn, multiple=False):
     Args:
         point (Point3d): 3d point to test.
         tolerance (double): (>=0) 3d distance tolerance used for ray-mesh intersection
-            and determining strict inclusion.
+            and determining strict inclusion. This is expected to be a tiny value.
         strictlyIn (bool): If strictlyIn is true, then point must be inside mesh by at least
             tolerance in order for this function to return true.
             If strictlyIn is false, then this function will return True if
@@ -1000,6 +1024,29 @@ def FileHole(thisMesh, topologyEdgeIndex, multiple=False):
     return response
 
 
+def MatchEdges(thisMesh, distance, rachet, multiple=False):
+    """
+    Moves face edges of an open mesh to meet adjacent face edges.
+    The method will first try to match vertices, and then then it will try to split edges to make the edges match.
+
+    Args:
+        distance (double): The distance tolerance. Use larger tolerances only if you select specific edges to close.
+        rachet (bool): If true, matching the mesh takes place in four passes starting at a tolerance that is smaller
+            than your specified tolerance and working up to the specified tolerance with successive passes.
+            This matches small edges first and works up to larger edges.
+            If false, then a single pass is made.
+
+    Returns:
+        bool: True of edges were matched, False otherwise.
+    """
+    url = "rhino/geometry/mesh/matchedges-mesh_double_bool"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, distance, rachet]
+    if multiple: args = list(zip(thisMesh, distance, rachet))
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
 def UnifyNormals(thisMesh, multiple=False):
     """
     Attempts to fix inconsistencies in the directions of mesh faces in a mesh. This function
@@ -1035,6 +1082,46 @@ def UnifyNormals1(thisMesh, countOnly, multiple=False):
     if multiple: url += "?multiple=true"
     args = [thisMesh, countOnly]
     if multiple: args = list(zip(thisMesh, countOnly))
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def MergeAllCoplanarFaces(thisMesh, tolerance, multiple=False):
+    """
+    Merges adjacent coplanar faces into single faces.
+
+    Args:
+        tolerance (double): Tolerance for determining when edges are adjacent.
+            When in doubt, use the document's ModelAbsoluteTolerance property.
+
+    Returns:
+        bool: True if faces were merged, False if no faces were merged.
+    """
+    url = "rhino/geometry/mesh/mergeallcoplanarfaces-mesh_double"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, tolerance]
+    if multiple: args = list(zip(thisMesh, tolerance))
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def MergeAllCoplanarFaces1(thisMesh, tolerance, angleTolerance, multiple=False):
+    """
+    Merges adjacent coplanar faces into single faces.
+
+    Args:
+        tolerance (double): Tolerance for determining when edges are adjacent.
+            When in doubt, use the document's ModelAbsoluteTolerance property.
+        angleTolerance (double): Angle tolerance, in radians, for determining when faces are parallel.
+            When in doubt, use the document's ModelAngleToleranceRadians property.
+
+    Returns:
+        bool: True if faces were merged, False if no faces were merged.
+    """
+    url = "rhino/geometry/mesh/mergeallcoplanarfaces-mesh_double_double"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, tolerance, angleTolerance]
+    if multiple: args = list(zip(thisMesh, tolerance, angleTolerance))
     response = Util.ComputeFetch(url, args)
     return response
 
@@ -1661,7 +1748,8 @@ def CollapseFacesByEdgeLength(thisMesh, bGreaterThan, edgeLength, multiple=False
         edgeLength (double): Length with which to compare to edge lengths.
 
     Returns:
-        int: Number of edges (faces) that were collapsed.
+        int: Number of edges (faces) that were collapsed, -1 for general failure (like bad topology or index out of range)
+        or -2 if all of the edges would be collapsed and the resulting mesh would be invalid.
     """
     url = "rhino/geometry/mesh/collapsefacesbyedgelength-mesh_bool_double"
     if multiple: url += "?multiple=true"
@@ -1805,6 +1893,24 @@ def WithEdgeSoftening(thisMesh, softeningRadius, chamfer, faceted, force, angleT
     if multiple: args = list(zip(thisMesh, softeningRadius, chamfer, faceted, force, angleThreshold))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreateVertexColorsFromBitmap(thisMesh, doc, mapping, xform, bitmap, multiple=False):
+    """
+    Populate the vertex colors from a bitmap image.
+
+    Args:
+        doc (RhinoDoc): The document associated with this operation for searching purposes.
+        mapping (TextureMapping): The texture mapping to be used on the mesh.  Surface parameter mapping is assumed if None - but surface parameters must be available on the mesh.
+        xform (Transform): Local mapping transform for the mesh mapping.  Use identity for surface parameter mapping.
+        bitmap (System.Drawing.Bitmap): The bitmap to use for the colors.
+    """
+    url = "rhino/geometry/mesh/createvertexcolorsfrombitmap-mesh_rhinodoc_texturemapping_transform_system.drawing.bitmap"
+    if multiple: url += "?multiple=true"
+    args = [thisMesh, doc, mapping, xform, bitmap]
+    if multiple: args = list(zip(thisMesh, doc, mapping, xform, bitmap))
+    response = Util.ComputeFetch(url, args)
     return response
 
 
@@ -2143,16 +2249,16 @@ def ComputeThickness2(meshes, maximumThickness, sharpAngle, cancelToken, multipl
 
 def CreateContourCurves(meshToContour, contourStart, contourEnd, interval, multiple=False):
     """
-    Constructs contour curves for a mesh, sectioned along a linear axis.
+    (Old call maintained for compatibility.)
 
     Args:
-        meshToContour (Mesh): A mesh to contour.
-        contourStart (Point3d): A start point of the contouring axis.
-        contourEnd (Point3d): An end point of the contouring axis.
-        interval (double): An interval distance.
+        meshToContour (Mesh): Avoid.
+        contourStart (Point3d): Avoid.
+        contourEnd (Point3d): Avoid.
+        interval (double): Avoid.
 
     Returns:
-        Curve[]: An array of curves. This array can be empty.
+        Curve[]: Avoid.
     """
     url = "rhino/geometry/mesh/createcontourcurves-mesh_point3d_point3d_double"
     if multiple: url += "?multiple=true"
@@ -2163,21 +2269,69 @@ def CreateContourCurves(meshToContour, contourStart, contourEnd, interval, multi
     return response
 
 
-def CreateContourCurves1(meshToContour, sectionPlane, multiple=False):
+def CreateContourCurves1(meshToContour, contourStart, contourEnd, interval, tolerance, multiple=False):
+    """
+    Constructs contour curves for a mesh, sectioned along a linear axis.
+
+    Args:
+        meshToContour (Mesh): A mesh to contour.
+        contourStart (Point3d): A start point of the contouring axis.
+        contourEnd (Point3d): An end point of the contouring axis.
+        interval (double): An interval distance.
+        tolerance (double): A tolerance value. If negative, the positive value will be used.
+            WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10.
+            See comments at
+
+    Returns:
+        Curve[]: An array of curves. This array can be empty.
+    """
+    url = "rhino/geometry/mesh/createcontourcurves-mesh_point3d_point3d_double_double"
+    if multiple: url += "?multiple=true"
+    args = [meshToContour, contourStart, contourEnd, interval, tolerance]
+    if multiple: args = list(zip(meshToContour, contourStart, contourEnd, interval, tolerance))
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreateContourCurves2(meshToContour, sectionPlane, multiple=False):
+    """
+    (Old call maintained for compatibility.)
+
+    Args:
+        meshToContour (Mesh): Avoid.
+        sectionPlane (Plane): Avoid.
+
+    Returns:
+        Curve[]: Avoid.
+    """
+    url = "rhino/geometry/mesh/createcontourcurves-mesh_plane"
+    if multiple: url += "?multiple=true"
+    args = [meshToContour, sectionPlane]
+    if multiple: args = list(zip(meshToContour, sectionPlane))
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreateContourCurves3(meshToContour, sectionPlane, tolerance, multiple=False):
     """
     Constructs contour curves for a mesh, sectioned at a plane.
 
     Args:
         meshToContour (Mesh): A mesh to contour.
         sectionPlane (Plane): A cutting plane.
+        tolerance (double): A tolerance value. If negative, the positive value will be used.
+            WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10.
+            See comments at
 
     Returns:
         Curve[]: An array of curves. This array can be empty.
     """
-    url = "rhino/geometry/mesh/createcontourcurves-mesh_plane"
+    url = "rhino/geometry/mesh/createcontourcurves-mesh_plane_double"
     if multiple: url += "?multiple=true"
-    args = [meshToContour, sectionPlane]
-    if multiple: args = list(zip(meshToContour, sectionPlane))
+    args = [meshToContour, sectionPlane, tolerance]
+    if multiple: args = list(zip(meshToContour, sectionPlane, tolerance))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response

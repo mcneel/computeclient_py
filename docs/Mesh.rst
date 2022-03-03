@@ -138,6 +138,20 @@ Mesh
 
    :return: Returns a mesh cylinder if successful, None otherwise.
    :rtype: rhino3dm.Mesh
+.. py:function:: CreateFromCylinder3(cylinder, vertical, around, capBottom, capTop, circumscribe, quadCaps, multiple=False)
+
+   Constructs a mesh cylinder.
+
+   :param int vertical: Number of faces in the top-to-bottom direction.
+   :param int around: Number of faces around the cylinder.
+   :param bool capBottom: If True end at Cylinder.Height1 should be capped.
+   :param bool capTop: If True end at Cylinder.Height2 should be capped.
+   :param bool circumscribe: If True end polygons will circumscribe circle.
+   :param bool quadCaps: If True and it's possible to make quad caps, i.e.. around is even, then caps will have quad faces.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Returns a mesh cylinder if successful, None otherwise.
+   :rtype: rhino3dm.Mesh
 .. py:function:: CreateFromCone(cone, vertical, around, multiple=False)
 
    Constructs a solid mesh cone.
@@ -416,7 +430,7 @@ Mesh
 
    :param rhino3dm.Point3d point: 3d point to test.
    :param float tolerance: (>=0) 3d distance tolerance used for ray-mesh intersection \
-      and determining strict inclusion.
+      and determining strict inclusion. This is expected to be a tiny value.
    :param bool strictlyIn: If strictlyIn is true, then point must be inside mesh by at least \
       tolerance in order for this function to return true. \
       If strictlyIn is false, then this function will return True if \
@@ -564,6 +578,20 @@ Mesh
 
    :return: True if successful, False otherwise.
    :rtype: bool
+.. py:function:: MatchEdges(thisMesh, distance, rachet, multiple=False)
+
+   Moves face edges of an open mesh to meet adjacent face edges.
+   The method will first try to match vertices, and then then it will try to split edges to make the edges match.
+
+   :param float distance: The distance tolerance. Use larger tolerances only if you select specific edges to close.
+   :param bool rachet: If true, matching the mesh takes place in four passes starting at a tolerance that is smaller \
+      than your specified tolerance and working up to the specified tolerance with successive passes. \
+      This matches small edges first and works up to larger edges. \
+      If false, then a single pass is made.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: True of edges were matched, False otherwise.
+   :rtype: bool
 .. py:function:: UnifyNormals(thisMesh, multiple=False)
 
    Attempts to fix inconsistencies in the directions of mesh faces in a mesh. This function
@@ -587,6 +615,28 @@ Mesh
 
    :return: If countOnly=false, the number of faces that were modified. If countOnly=true, the number of faces that would be modified.
    :rtype: int
+.. py:function:: MergeAllCoplanarFaces(thisMesh, tolerance, multiple=False)
+
+   Merges adjacent coplanar faces into single faces.
+
+   :param float tolerance: Tolerance for determining when edges are adjacent. \
+      When in doubt, use the document's ModelAbsoluteTolerance property.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: True if faces were merged, False if no faces were merged.
+   :rtype: bool
+.. py:function:: MergeAllCoplanarFaces1(thisMesh, tolerance, angleTolerance, multiple=False)
+
+   Merges adjacent coplanar faces into single faces.
+
+   :param float tolerance: Tolerance for determining when edges are adjacent. \
+      When in doubt, use the document's ModelAbsoluteTolerance property.
+   :param float angleTolerance: Angle tolerance, in radians, for determining when faces are parallel. \
+      When in doubt, use the document's ModelAngleToleranceRadians property.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: True if faces were merged, False if no faces were merged.
+   :rtype: bool
 .. py:function:: SplitDisjointPieces(thisMesh, multiple=False)
 
    Splits up the mesh into its unconnected pieces.
@@ -933,7 +983,8 @@ Mesh
    :param float edgeLength: Length with which to compare to edge lengths.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
-   :return: Number of edges (faces) that were collapsed.
+   :return: Number of edges (faces) that were collapsed, -1 for general failure (like bad topology or index out of range) \
+      or -2 if all of the edges would be collapsed and the resulting mesh would be invalid.
    :rtype: int
 .. py:function:: CollapseFacesByArea(thisMesh, lessThanArea, greaterThanArea, multiple=False)
 
@@ -1008,6 +1059,17 @@ Mesh
 
    :return: A new mesh with soft edges.
    :rtype: rhino3dm.Mesh
+.. py:function:: CreateVertexColorsFromBitmap(thisMesh, doc, mapping, xform, bitmap, multiple=False)
+
+   Populate the vertex colors from a bitmap image.
+
+   :param RhinoDoc doc: The document associated with this operation for searching purposes.
+   :param TextureMapping mapping: The texture mapping to be used on the mesh.  Surface parameter mapping is assumed if None - but surface parameters must be available on the mesh.
+   :param Transform xform: Local mapping transform for the mesh mapping.  Use identity for surface parameter mapping.
+   :param System.Drawing.Bitmap bitmap: The bitmap to use for the colors.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :rtype: bool
 .. py:function:: QuadRemeshBrep(brep, parameters, multiple=False)
 
    Create QuadRemesh from a Brep
@@ -1201,22 +1263,50 @@ Mesh
    :rtype: MeshThicknessMeasurement[]
 .. py:function:: CreateContourCurves(meshToContour, contourStart, contourEnd, interval, multiple=False)
 
+   (Old call maintained for compatibility.)
+
+   :param rhino3dm.Mesh meshToContour: Avoid.
+   :param rhino3dm.Point3d contourStart: Avoid.
+   :param rhino3dm.Point3d contourEnd: Avoid.
+   :param float interval: Avoid.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Avoid.
+   :rtype: rhino3dm.Curve[]
+.. py:function:: CreateContourCurves1(meshToContour, contourStart, contourEnd, interval, tolerance, multiple=False)
+
    Constructs contour curves for a mesh, sectioned along a linear axis.
 
    :param rhino3dm.Mesh meshToContour: A mesh to contour.
    :param rhino3dm.Point3d contourStart: A start point of the contouring axis.
    :param rhino3dm.Point3d contourEnd: An end point of the contouring axis.
    :param float interval: An interval distance.
+   :param float tolerance: A tolerance value. If negative, the positive value will be used. \
+      WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10. \
+      See comments at
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
    :return: An array of curves. This array can be empty.
    :rtype: rhino3dm.Curve[]
-.. py:function:: CreateContourCurves1(meshToContour, sectionPlane, multiple=False)
+.. py:function:: CreateContourCurves2(meshToContour, sectionPlane, multiple=False)
+
+   (Old call maintained for compatibility.)
+
+   :param rhino3dm.Mesh meshToContour: Avoid.
+   :param rhino3dm.Plane sectionPlane: Avoid.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: Avoid.
+   :rtype: rhino3dm.Curve[]
+.. py:function:: CreateContourCurves3(meshToContour, sectionPlane, tolerance, multiple=False)
 
    Constructs contour curves for a mesh, sectioned at a plane.
 
    :param rhino3dm.Mesh meshToContour: A mesh to contour.
    :param rhino3dm.Plane sectionPlane: A cutting plane.
+   :param float tolerance: A tolerance value. If negative, the positive value will be used. \
+      WARNING! Good tolerance values are in the magnitude of 10^-7, or RhinoMath.SqrtEpsilon*10. \
+      See comments at
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
    :return: An array of curves. This array can be empty.

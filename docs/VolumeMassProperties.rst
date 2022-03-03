@@ -47,7 +47,22 @@ VolumeMassProperties
 
    :return: The VolumeMassProperties for the given Brep or None on failure.
    :rtype: VolumeMassProperties
-.. py:function:: Compute4(surface, multiple=False)
+.. py:function:: Compute4(brep, volume, firstMoments, secondMoments, productMoments, relativeTolerance, absoluteTolerance, multiple=False)
+
+   Compute the VolumeMassProperties for a single Brep.
+
+   :param rhino3dm.Brep brep: Brep to measure.
+   :param bool volume: True to calculate volume.
+   :param bool firstMoments: True to calculate volume first moments, volume, and volume centroid.
+   :param bool secondMoments: True to calculate volume second moments.
+   :param bool productMoments: True to calculate volume product moments.
+   :param float relativeTolerance: The relative tolerance used for the calculation. In overloads of this function where tolerances are not specified, 1.0e-6 is used.
+   :param float absoluteTolerance: The absolute tolerancwe used for the calculation. In overloads of this function where tolerances are not specified, 1.0e-6 is used.
+   :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
+
+   :return: The VolumeMassProperties for the given Brep or None on failure.
+   :rtype: VolumeMassProperties
+.. py:function:: Compute5(surface, multiple=False)
 
    Compute the VolumeMassProperties for a single Surface.
 
@@ -56,7 +71,7 @@ VolumeMassProperties
 
    :return: The VolumeMassProperties for the given Surface or None on failure.
    :rtype: VolumeMassProperties
-.. py:function:: Compute5(surface, volume, firstMoments, secondMoments, productMoments, multiple=False)
+.. py:function:: Compute6(surface, volume, firstMoments, secondMoments, productMoments, multiple=False)
 
    Compute the VolumeMassProperties for a single Surface.
 
@@ -69,22 +84,22 @@ VolumeMassProperties
 
    :return: The VolumeMassProperties for the given Surface or None on failure.
    :rtype: VolumeMassProperties
-.. py:function:: Compute6(geometry, multiple=False)
+.. py:function:: Compute7(geometry, multiple=False)
 
    Computes the VolumeMassProperties for a collection of geometric objects.
    At present only Breps, Surfaces, and Meshes are supported.
 
-   :param list[rhino3dm.GeometryBase] geometry: Objects to include in the area computation.
+   :param list[rhino3dm.GeometryBase] geometry: Objects to include in the volume computation.
    :param bool multiple: (default False) If True, all parameters are expected as lists of equal length and input will be batch processed
 
    :return: The VolumeMassProperties for the entire collection or None on failure.
    :rtype: VolumeMassProperties
-.. py:function:: Compute7(geometry, volume, firstMoments, secondMoments, productMoments, multiple=False)
+.. py:function:: Compute8(geometry, volume, firstMoments, secondMoments, productMoments, multiple=False)
 
    Computes the VolumeMassProperties for a collection of geometric objects.
    At present only Breps, Surfaces, Meshes and Planar Closed Curves are supported.
 
-   :param list[rhino3dm.GeometryBase] geometry: Objects to include in the area computation.
+   :param list[rhino3dm.GeometryBase] geometry: Objects to include in the volume computation.
    :param bool volume: True to calculate volume.
    :param bool firstMoments: True to calculate volume first moments, volume, and volume centroid.
    :param bool secondMoments: True to calculate volume second moments.

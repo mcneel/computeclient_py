@@ -132,6 +132,54 @@ def CreateFilletCornersCurve(curve, radius, tolerance, angleTolerance, multiple=
     return response
 
 
+def JoinCurves(inputCurves, joinTolerance, preserveDirection, multiple=False):
+    """
+    Joins a collection of curve segments together.
+
+    Args:
+        inputCurves (IEnumerable<Curve>): An array, a list or any enumerable set of curve segments to join.
+        joinTolerance (double): Joining tolerance,
+            i.e. the distance between segment end-points that is allowed.
+        preserveDirection (bool): If true, curve endpoints will be compared to curve start points.If false, all start and endpoints will be compared and copies of input curves may be reversed in output.
+
+    Returns:
+        Curve[]: An array of joint curves. This array can be empty.
+    """
+    url = "rhino/geometry/curve/joincurves-curvearray_double_bool"
+    if multiple: url += "?multiple=true"
+    args = [inputCurves, joinTolerance, preserveDirection]
+    if multiple: args = list(zip(inputCurves, joinTolerance, preserveDirection))
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreateArcLineArcBlend(startPt, startDir, endPt, endDir, radius, multiple=False):
+    """
+    Creates an arc-line-arc blend curve between two curves.
+    The output is generally a PolyCurve with three segments: arc, line, arc.
+    In some cases, one or more of those segments will be absent because they would have 0 length.
+    If there is only a single segment, the result will either be an ArcCurve or a LineCurve.
+
+    Args:
+        startPt (Point3d): Start of the blend curve.
+        startDir (Vector3d): Start direction of the blend curve.
+        endPt (Point3d): End of the blend curve.
+        endDir (Vector3d): End direction of the arc blend curve.
+        radius (double): The radius of the arc segments.
+
+    Returns:
+        Curve: The blend curve if successful, False otherwise.
+    """
+    url = "rhino/geometry/curve/createarclinearcblend-point3d_vector3d_point3d_vector3d_double"
+    if multiple: url += "?multiple=true"
+    args = [startPt, startDir, endPt, endDir, radius]
+    if multiple: args = list(zip(startPt, startDir, endPt, endDir, radius))
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
 def CreateArcBlend(startPt, startDir, endPt, endDir, controlPointLengthRatio, multiple=False):
     """
     Creates a polycurve consisting of two tangent arc segments that connect two points and two directions.
@@ -268,6 +316,31 @@ def CreateBlendCurve2(curve0, t0, reverse0, continuity0, curve1, t1, reverse1, c
     if multiple: url += "?multiple=true"
     args = [curve0, t0, reverse0, continuity0, curve1, t1, reverse1, continuity1]
     if multiple: args = list(zip(curve0, t0, reverse0, continuity0, curve1, t1, reverse1, continuity1))
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToCommonObject(response)
+    return response
+
+
+def CreateMatchCurve(curve0, reverse0, continuity, curve1, reverse1, preserve, average, multiple=False):
+    """
+    Changes a curve end to meet a specified curve with a specified continuity.
+
+    Args:
+        curve0 (Curve): The open curve to change.
+        reverse0 (bool): Reverse the directon of the curve to change before matching.
+        continuity (BlendContinuity): The continuity at the curve end.
+        curve1 (Curve): The open curve to match.
+        reverse1 (bool): Reverse the directon of the curve to match before matching.
+        preserve (PreserveEnd): Prevent modification of the curvature at the end opposite the match for curves with fewer than six control points.
+        average (bool): Adjust both curves to match each other.
+
+    Returns:
+        Curve[]: The results of the curve matching, if successful, otherwise an empty array.
+    """
+    url = "rhino/geometry/curve/creatematchcurve-curve_bool_blendcontinuity_curve_bool_preserveend_bool"
+    if multiple: url += "?multiple=true"
+    args = [curve0, reverse0, continuity, curve1, reverse1, preserve, average]
+    if multiple: args = list(zip(curve0, reverse0, continuity, curve1, reverse1, preserve, average))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -412,68 +485,6 @@ def CreateTweenCurvesWithSampling1(curve0, curve1, numCurves, numSamples, tolera
     if multiple: url += "?multiple=true"
     args = [curve0, curve1, numCurves, numSamples, tolerance]
     if multiple: args = list(zip(curve0, curve1, numCurves, numSamples, tolerance))
-    response = Util.ComputeFetch(url, args)
-    response = Util.DecodeToCommonObject(response)
-    return response
-
-
-def JoinCurves(inputCurves, multiple=False):
-    """
-    Joins a collection of curve segments together.
-
-    Args:
-        inputCurves (IEnumerable<Curve>): Curve segments to join.
-
-    Returns:
-        Curve[]: An array of curves which contains.
-    """
-    url = "rhino/geometry/curve/joincurves-curvearray"
-    if multiple: url += "?multiple=true"
-    args = [inputCurves]
-    if multiple: args = [[item] for item in inputCurves]
-    response = Util.ComputeFetch(url, args)
-    response = Util.DecodeToCommonObject(response)
-    return response
-
-
-def JoinCurves1(inputCurves, joinTolerance, multiple=False):
-    """
-    Joins a collection of curve segments together.
-
-    Args:
-        inputCurves (IEnumerable<Curve>): An array, a list or any enumerable set of curve segments to join.
-        joinTolerance (double): Joining tolerance,
-            i.e. the distance between segment end-points that is allowed.
-
-    Returns:
-        Curve[]: An array of joint curves. This array can be empty.
-    """
-    url = "rhino/geometry/curve/joincurves-curvearray_double"
-    if multiple: url += "?multiple=true"
-    args = [inputCurves, joinTolerance]
-    if multiple: args = list(zip(inputCurves, joinTolerance))
-    response = Util.ComputeFetch(url, args)
-    response = Util.DecodeToCommonObject(response)
-    return response
-
-
-def JoinCurves2(inputCurves, joinTolerance, preserveDirection, multiple=False):
-    """
-    Joins a collection of curve segments together.
-
-    Args:
-        inputCurves (IEnumerable<Curve>): An array, a list or any enumerable set of curve segments to join.
-        joinTolerance (double): Joining tolerance,
-            i.e. the distance between segment end-points that is allowed.
-        preserveDirection (bool): If true, curve endpoints will be compared to curve start points.If false, all start and endpoints will be compared and copies of input curves may be reversed in output.
-
-    Returns:
-        Curve[]: An array of joint curves. This array can be empty.
-    """
-    url = "rhino/geometry/curve/joincurves-curvearray_double_bool"
-    if multiple: url += "?multiple=true"
-    args = [inputCurves, joinTolerance, preserveDirection]
-    if multiple: args = list(zip(inputCurves, joinTolerance, preserveDirection))
     response = Util.ComputeFetch(url, args)
     response = Util.DecodeToCommonObject(response)
     return response
@@ -1107,8 +1118,9 @@ def PlanarCurveCollision(curveA, curveB, testPlane, tolerance, multiple=False):
 
 def DuplicateSegments(thisCurve, multiple=False):
     """
-    Polylines will be exploded into line segments. ExplodeCurves will
-    return the curves in topological order.
+    Duplicates curve segments.
+    Explodes polylines, polycurves and G1 discontinuous NURBS curves.
+    Single segment curves, such as lines, arcs, unkinked NURBS curves, are duplicated.
 
     Returns:
         Curve[]: An array of all the segments that make up this curve.
@@ -1303,6 +1315,25 @@ def MakeClosed(thisCurve, tolerance, multiple=False):
         bool: True on success, False on failure.
     """
     url = "rhino/geometry/curve/makeclosed-curve_double"
+    if multiple: url += "?multiple=true"
+    args = [thisCurve, tolerance]
+    if multiple: args = list(zip(thisCurve, tolerance))
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def CombineShortSegments(thisCurve, tolerance, multiple=False):
+    """
+    Looks for segments that are shorter than tolerance that can be combined.
+    For NURBS of degree greater than 1, spans are combined by removing
+    knots. Similarly for NURBS segments of polycurves. Otherwise,
+    RemoveShortSegments() is called. Does not change the domain, but it will
+    change the relative parameterization.
+
+    Returns:
+        bool: True if short segments were combined or removed. False otherwise.
+    """
+    url = "rhino/geometry/curve/combineshortsegments-curve_double"
     if multiple: url += "?multiple=true"
     args = [thisCurve, tolerance]
     if multiple: args = list(zip(thisCurve, tolerance))

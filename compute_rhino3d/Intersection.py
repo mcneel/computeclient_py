@@ -478,7 +478,7 @@ def MeshRay1(mesh, ray, multiple=False):
 
 def MeshPolyline(mesh, curve, multiple=False):
     """
-    Finds the intersection of a mesh and a polyline. Points are not guaranteed to be sorted along the polyline.
+    Finds the intersection of a mesh and a polyline. Starting from version 7, points are always sorted along the polyline.
 
     Args:
         mesh (Mesh): A mesh to intersect.
@@ -526,13 +526,35 @@ def MeshLine(mesh, line, multiple=False):
 
     Returns:
         Point3d[]: An array of points: one for each face that was passed by the faceIds out reference.
-        faceIds (int[]): The indices of the intersecting faces. This out reference is assigned during the call.
+        Empty if no items are found.
+        faceIds (int[]): The indices of the intersecting faces. This out reference is assigned during the call. Empty if nothing is found.
     """
     url = "rhino/geometry/intersect/intersection/meshline-mesh_line_intarray"
     if multiple: url += "?multiple=true"
     args = [mesh, line]
     if multiple: args = list(zip(mesh, line))
     response = Util.ComputeFetch(url, args)
+    return response
+
+
+def MeshLine1(mesh, line, multiple=False):
+    """
+    Finds the intersections of a mesh and a line.
+
+    Args:
+        mesh (Mesh): A mesh to intersect
+        line (Line): The line to intersect with the mesh
+
+    Returns:
+        Point3d[]: An array of points: one for each face that was passed by the faceIds out reference.
+        Empty if no items are found.
+    """
+    url = "rhino/geometry/intersect/intersection/meshline-mesh_line"
+    if multiple: url += "?multiple=true"
+    args = [mesh, line]
+    if multiple: args = list(zip(mesh, line))
+    response = Util.ComputeFetch(url, args)
+    response = Util.DecodeToPoint3d(response)
     return response
 
 
@@ -546,7 +568,8 @@ def MeshLineSorted(mesh, line, multiple=False):
 
     Returns:
         Point3d[]: An array of points: one for each face that was passed by the faceIds out reference.
-        faceIds (int[]): The indices of the intersecting faces. This out reference is assigned during the call.
+        Empty if no items are found.
+        faceIds (int[]): The indices of the intersecting faces. This out reference is assigned during the call. Empty if nothing is found.
     """
     url = "rhino/geometry/intersect/intersection/meshlinesorted-mesh_line_intarray"
     if multiple: url += "?multiple=true"

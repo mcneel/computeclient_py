@@ -85,7 +85,31 @@ def Compute3(brep, volume, firstMoments, secondMoments, productMoments, multiple
     return response
 
 
-def Compute4(surface, multiple=False):
+def Compute4(brep, volume, firstMoments, secondMoments, productMoments, relativeTolerance, absoluteTolerance, multiple=False):
+    """
+    Compute the VolumeMassProperties for a single Brep.
+
+    Args:
+        brep (Brep): Brep to measure.
+        volume (bool): True to calculate volume.
+        firstMoments (bool): True to calculate volume first moments, volume, and volume centroid.
+        secondMoments (bool): True to calculate volume second moments.
+        productMoments (bool): True to calculate volume product moments.
+        relativeTolerance (double): The relative tolerance used for the calculation. In overloads of this function where tolerances are not specified, 1.0e-6 is used.
+        absoluteTolerance (double): The absolute tolerancwe used for the calculation. In overloads of this function where tolerances are not specified, 1.0e-6 is used.
+
+    Returns:
+        VolumeMassProperties: The VolumeMassProperties for the given Brep or None on failure.
+    """
+    url = "rhino/geometry/volumemassproperties/compute-brep_bool_bool_bool_bool_double_double"
+    if multiple: url += "?multiple=true"
+    args = [brep, volume, firstMoments, secondMoments, productMoments, relativeTolerance, absoluteTolerance]
+    if multiple: args = list(zip(brep, volume, firstMoments, secondMoments, productMoments, relativeTolerance, absoluteTolerance))
+    response = Util.ComputeFetch(url, args)
+    return response
+
+
+def Compute5(surface, multiple=False):
     """
     Compute the VolumeMassProperties for a single Surface.
 
@@ -103,7 +127,7 @@ def Compute4(surface, multiple=False):
     return response
 
 
-def Compute5(surface, volume, firstMoments, secondMoments, productMoments, multiple=False):
+def Compute6(surface, volume, firstMoments, secondMoments, productMoments, multiple=False):
     """
     Compute the VolumeMassProperties for a single Surface.
 
@@ -125,13 +149,13 @@ def Compute5(surface, volume, firstMoments, secondMoments, productMoments, multi
     return response
 
 
-def Compute6(geometry, multiple=False):
+def Compute7(geometry, multiple=False):
     """
     Computes the VolumeMassProperties for a collection of geometric objects.
     At present only Breps, Surfaces, and Meshes are supported.
 
     Args:
-        geometry (IEnumerable<GeometryBase>): Objects to include in the area computation.
+        geometry (IEnumerable<GeometryBase>): Objects to include in the volume computation.
 
     Returns:
         VolumeMassProperties: The VolumeMassProperties for the entire collection or None on failure.
@@ -144,13 +168,13 @@ def Compute6(geometry, multiple=False):
     return response
 
 
-def Compute7(geometry, volume, firstMoments, secondMoments, productMoments, multiple=False):
+def Compute8(geometry, volume, firstMoments, secondMoments, productMoments, multiple=False):
     """
     Computes the VolumeMassProperties for a collection of geometric objects.
     At present only Breps, Surfaces, Meshes and Planar Closed Curves are supported.
 
     Args:
-        geometry (IEnumerable<GeometryBase>): Objects to include in the area computation.
+        geometry (IEnumerable<GeometryBase>): Objects to include in the volume computation.
         volume (bool): True to calculate volume.
         firstMoments (bool): True to calculate volume first moments, volume, and volume centroid.
         secondMoments (bool): True to calculate volume second moments.
