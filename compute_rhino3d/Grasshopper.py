@@ -57,3 +57,34 @@ def EvaluateDefinition(definition, trees):
     response = Util.ComputeFetch(url, args)
     return response
 
+
+def GetDefinitionIO(definition):
+    """
+    Get input/output metadata for a grasshopper definition without executing it.
+
+    Args:
+        definition (str): path or URL to a grasshopper definition
+    Returns:
+        dict: Definition metadata including: Description, InputNames, OutputNames,
+        Icon, Inputs, Outputs, Warnings, Errors
+    """
+    url = "io"
+    args = {'algo': None, 'pointer': None}
+    if definition.startswith('http:') or definition.startswith('https:'):
+        args['pointer'] = definition
+    else:
+        encoded = None
+        if os.path.isfile(definition):
+            if(definition.endswith('gh')):
+                with open(definition, 'rb') as gh:
+                    content_bytes = gh.read()
+                    encoded = base64.b64encode(content_bytes)
+            else:
+                with io.open(definition, 'r', encoding='utf-8-sig') as ghx:
+                    definition = ghx.read()
+        if not encoded:
+            encoded = base64.b64encode(definition.encode('utf-8'))
+        args['algo'] = str(encoded, 'utf-8')
+
+    response = Util.ComputeFetch(url, args)
+    return response
