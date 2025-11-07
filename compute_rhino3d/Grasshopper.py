@@ -36,7 +36,7 @@ def EvaluateDefinition(definition, trees):
     Returns:
     """
     url = "grasshopper"
-    algo, pointer = encode_definition(definition)
+    algo, pointer = _encode_definition(definition)
     args = {
         'algo': algo,
         'pointer': pointer,
@@ -57,7 +57,7 @@ def GetDefinitionIO(definition):
         Icon, Inputs, Outputs, Warnings, Errors
     """
     url = "io"
-    algo, pointer = encode_definition(definition)
+    algo, pointer = _encode_definition(definition)
     args = {
         'algo': algo,
         'pointer': pointer
@@ -65,7 +65,7 @@ def GetDefinitionIO(definition):
     response = Util.ComputeFetch(url, args)
     return response
 
-def encode_definition(definition):
+def _encode_definition(definition):
     """
     Encodes a Grasshopper definition to prepare for Rhino.Compute.
 
